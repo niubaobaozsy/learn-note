@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+        <style>
+                .tooltip {
+                    margin-top: 5px;
+                    border: 2px solid gray;
+                    visibility: hidden; 
+                }
+                .tooltip::before {
+                    content: "";
+                    position: absolute;
+                    margin-top: -5px;
+                    left: 13px;
+                    padding: 3px;
+                    background-color: white;
+                    border: inherit;
+                    border-right: 0;
+                    border-bottom: 0;
+                    transform: rotate(45deg);
+                }
+                input {
+                    border-color: red;
+                }
+            </style>
+        </head>
+        <body>
+            <div>
+                <input placeholder='请输入文字' />
+                <div class='tooltip'>只能够输入英文字母、数字和下划线与中划线。</div>
+            <script>
+
+
+var arr = [0,1,2,3,4];
+var str = arr.map(function(i,index,arr){
+    i++;
+},this);
+console.log(str);  //结果为 [1,2,3,4,5]
+
+
+            </script>
+
+</body>
+</html>
