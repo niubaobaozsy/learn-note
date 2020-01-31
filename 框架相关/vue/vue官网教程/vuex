@@ -1,0 +1,37 @@
+# vuex
+
+![img](https://segmentfault.com/img/bVboglG?w=736&h=171)
+
+###### vuex直接修改state 与 用dispatch／commit来修改state的差异
+
+  1）共同点： 能够修改state里的变量，并且是响应式的（能触发视图更新）
+  2）不同点：
+      若将vue创建 store 的时候传入 strict: true, **开启严格模式**，那么任何修改state的操作，只要不经过
+
+​      mutation的函数，**vue就会  throw error** :    [vuex] Do not mutate vuex store state outside mutation handlers
+
+使用mutation更易管理
+
+#### getters
+
+![1565615174563](image/1565615174563.png)
+
+当这个getters属性很多组件都会用到，就可以放在store里面。getters相当于计算属性
+
+getters还可以是一个可以调用store数据的函数，使用mapGetter可以只暴露getters
+
+![1565615598324](image/1565615598324.png)
+
+所以action是用来处理异步操作，或者公用的一些操作
+
+![1565615691514](image/1565615691514.png)
+
+![1565615808495](image/1565615808495.png)
+
+#### module
+
+![1565853879356](image/1565853879356.png)
+
+![1565853974425](image/1565853974425.png)
+
+![1565853981153](image/1565853981153.png)
