@@ -80,42 +80,7 @@ http://10.18.2.199:5000/api/dc/product_model/product?currentPage=1&pageSize=10&c
 
 http://localhost:8082/api/product_model/product?currentPage=1&pageSize=10&condition=&tenantId=11111
 
----
 
-工作效率
-
-1. 去掉文件注释
-2. 
-
-----
-
-租户，刷新页面，状态已删除
-
-单位需要添加租户
-
-分类单点添加
-
-文本框中字体
-
-角色那边没分页
-
-树形结构全部收起来
-
-剑飞->未选择文件
-
-------
-
-对字典进行统一维护
-
-整理出业务场景
-
-1，formater
-
-2，遍历拿到中文，拿到key的英文
-
-确实可以用es6的数据结构来做
-
-看看
 
 ----
 
@@ -124,4 +89,6 @@ https://kdocs.cn/l/soW5khJH0?f=501
 地址：10.17.162.100
 用户：root
 密码：dC@2019Innov
+
+------
 
