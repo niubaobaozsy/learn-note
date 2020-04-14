@@ -122,9 +122,9 @@ js通过xmlhttprequest对象直接与服务器交互，通过httprequest接受we
 
 https://segmentfault.com/a/1190000012313105
 
-### 8，`**Object.assign()**` 方法用于将所有可枚举属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。
+8，`**Object.assign()**` 方法用于将所有可枚举属性的值从一个或多个源对象复制到目标对象。它将返回目标对象。
 
-### 9，用forEach遍历数组的话，不能用break跳出循环，也不能用return返回外层。
+9，用forEach遍历数组的话，不能用break跳出循环，也不能用return返回外层。
 
 
 

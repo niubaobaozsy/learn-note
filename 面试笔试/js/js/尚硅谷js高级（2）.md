@@ -46,9 +46,9 @@ fn2.a=yyy
 
 ![1534407984727](D:\MyData\zousy1\AppData\Local\Temp\1534407984727.png)
 
-当一个变量是一个function时，是不可以提升的
+**当一个变量是一个function时，只是这个变量提升了，但是函数没有**
 
-函数提升必须是声明的方式
+**函数提升必须是声明的方式**
 
 ![1534408134870](D:\MyData\zousy1\AppData\Local\Temp\1534408134870.png)
 
@@ -134,11 +134,7 @@ js和java不同的地方、
 
 ​	没有块作用域（ES6有了）
 
-![1534469086222](D:\MyData\zousy1\AppData\Local\Temp\1534469086222.png)
-
 > js能看到c，就没有块作用域。
-
-![1534469416291](D:\MyData\zousy1\AppData\Local\Temp\1534469416291.png)
 
 > 有多少个作用域：声明了多少个函数再加全局的函数。
 
@@ -172,21 +168,9 @@ js和java不同的地方、
 
 ​	函数上下文环境==》对应的函数作用域
 
-
-
 > 变量——》**当前作用域所在的函数执行上下文找**。找不到，去外部作用域执行上下文环境找。
 
-![1534474317419](D:\MyData\zousy1\AppData\Local\Temp\1534474317419.png)
 
-面试题：
-
-![1534474396926](D:\MyData\zousy1\AppData\Local\Temp\1534474396926.png)
-
-> 打印10
-
-![1534474691396](D:\MyData\zousy1\AppData\Local\Temp\1534474691396.png)
-
-![1534474706867](D:\MyData\zousy1\AppData\Local\Temp\1534474706867.png)
 
 
 
@@ -194,21 +178,13 @@ js和java不同的地方、
 
 #### 循环遍历加监听
 
-![1534474917271](D:\MyData\zousy1\AppData\Local\Temp\1534474917271.png)
-
 每个按钮点击后都是弹出“第4个按钮”
 
 > 原因：1、for中定义的i是全局变量。
 >
 > 2、函数执行，是在for循环完成之后被调用的。被调用时打印i，这时i为4。
 
-![1534475309486](D:\MyData\zousy1\AppData\Local\Temp\1534475309486.png)
-
-![1534475377637](D:\MyData\zousy1\AppData\Local\Temp\1534475377637.png)
-
 ### 闭包理解
-
-![1534558170470](D:\MyData\zousy1\AppData\Local\Temp\1534558170470.png)
 
 1、如何产生闭包？
 当一个嵌套的内部（子）函数引用了嵌套的外部（父）函数的变量（函数）时，就产生了闭包
@@ -243,23 +219,15 @@ js和java不同的地方、
 
 **每次函数调用都会产生一个新的执行上下文对象，也就会产生一个新的闭包。**
 
-![1534559868686](D:\MyData\zousy1\AppData\Local\Temp\1534559868686.png)
 
-![1534488389442](D:\MyData\zousy1\AppData\Local\Temp\1534488389442.png)
 
 这个时候，22行，闭包没有出现。因为函数定义未执行。
 
-![1534488655386](D:\MyData\zousy1\AppData\Local\Temp\1534488655386.png)
-
 #### 常见的闭包
-
-![1534554045441](D:\MyData\zousy1\AppData\Local\Temp\1534554045441.png)
 
 > fn1()是函数调用，是外部函数调用。当调用外部fn1()时，因为之前声明的时候就已经有了函数fu1（）里面的a是undefined，当调用fn1时，执行a=2再执行return fn2。因为外部函数执行了，a被重新赋值了，内部函数被创建了。闭包也被再次创建了。而f()执行了两次只是执行函数，内部函数没有被创建，所以只有一个闭包。这个闭包里的a一直保存着。所以输出是3 4
 >
 > 只有当内部函数被创建才会重新创建闭包。
-
-![1534581420993](D:\MyData\zousy1\AppData\Local\Temp\1534581420993.png)
 
 
 
@@ -269,11 +237,7 @@ js和java不同的地方、
 
 2、让函数外部都可以操作（读写）到函数内部的数据（变量/函数）
 
-![1534583419758](D:\MyData\zousy1\AppData\Local\Temp\1534583419758.png)
-
 闭包一直存在的原因，是因为变量f一直引用这对象fn3
-
-![1534583603598](D:\MyData\zousy1\AppData\Local\Temp\1534583603598.png)
 
 改成这样之后闭包不存在了。因为没有引用内部函数对象成为垃圾对象。
 
@@ -286,12 +250,6 @@ js和java不同的地方、
 > 内部函数相当于这个对象的操作。
 
 变着法的实现类
-
-![1534585421823](D:\MyData\zousy1\AppData\Local\Temp\1534585421823.png)
-
-![1534585528744](D:\MyData\zousy1\AppData\Local\Temp\1534585528744.png)
-
-![1534585689570](D:\MyData\zousy1\AppData\Local\Temp\1534585689570.png)
 
 
 
@@ -342,15 +300,11 @@ js和java不同的地方、
 ##### JS函数的参数声明中用 var 与不用 var的区别
 
 1、var 声明的变量,作用域是当前 function
-2、没有声明的变量,直接赋值的话, 会自动创建变量，但作用域是全局的.
-
-![1534745990012](D:\MyData\zousy1\AppData\Local\Temp\1534745990012.png)
+2、**没有声明的变量,直接赋值的话, 会自动创建变量，但作用域是全局的.**
 
 输出的是my object。
 
 因为that是 the object。是调用getNameFunc的对象。
-
-![1534746274810](D:\MyData\zousy1\AppData\Local\Temp\1534746274810.png)
 
 输出的是the window
 
@@ -358,9 +312,53 @@ js和java不同的地方、
 
 然后()就是执行这个函数。执行这个函数是window执行。
 
+```
+  function Foo() {
+    // console.log(getName) 报错，说明没有用var申明的变量，不会变量提升，扩散到全局
+      // console.log(getName) 
+      getName = 'a';
+      return this;
+  }
+  //  Foo() 函数没有调用之前，不会扩散到全局
+  Foo()
+  console.log(getName)
+```
 
 
 
+1.不用var申明的不会变量提升，因为没有声明
 
+```js
+  function Foo() {
+      getName = function () { alert (1); }; //全局的
+      return this;
+  }
 
+  Foo.getName = function () { alert (2);};
+  Foo.prototype.getName = function () { alert (3);};
+  var getName = function () { alert (4);};
+  function getName() { alert (5);}
+  
+  // //请写出以下输出结果：
+  Foo.getName(); 
+  getName();
+  Foo().getName();
+  getName();
+  new Foo.getName();
+  new Foo().getName();
+  new new Foo().getName(); // 1,foo里面中的getName是全局的，如果使用var定义的，也被prototype覆盖了
+
+getName() //oaoafly
+var getName = function() {
+console.log('wscat')
+}
+getName() //wscat
+function getName() {
+console.log('oaoafly')
+}
+getName() //wscat
+
+// 因为存在声明提升，当存在同名的函数和变量，函数优先。但在执行时变量getName的赋值语句开始执行，将函数getname覆盖
+// 所以打印出4，而不是5
+```
 

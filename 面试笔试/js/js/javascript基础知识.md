@@ -1,6 +1,6 @@
 # javascript基础语法和对象基础
 
-####JavaScript中一共有5种基本数据类型：
+#### avaScript中一共有5种基本数据类型：
 
  – 字符串型（ String）
 

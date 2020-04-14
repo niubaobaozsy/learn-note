@@ -1,4 +1,4 @@
-
+ 
 
 工作上，对分配的任务认真负责，按质按量按时，按时和并且自测完成工作。
 
@@ -30,34 +30,6 @@ apps/sc$Da20demo
 
 [^\x00-\xff]{1,50}
 
----
-
-1，美信打卡 1 11
-
-2，健康打卡 1 111
-
-2.2 打卡文档 1 1111
-
-3，金山库卡文档1 1111
-
-4，研发文档 1 11
-
-5，wiki  1 111
-
-6，rdm1 111
-
-7，工时 1 11 111
-
----
-
-上班
-
-1，健康打卡，文档
-
-2，美信打卡
-
-3. 
-
 -----
 
  ?userName=huozj&token=WnLptF3eYCULnWUnT-G848lvKR3Ik7fg&appId=null&projectId=8d741ba46bb948359e60f17aee244fd6&tenantId=6a0751c77dcb45cf89fefc85dcd76a24&lang=en
@@ -68,19 +40,7 @@ apps/sc$Da20demo
 /apps/cloud/front
 
 
-
-
-
-
 Request URL: 
-
-
-
-http://10.18.2.199:5000/api/dc/product_model/product?currentPage=1&pageSize=10&condition=&tenantId=11111
-
-http://localhost:8082/api/product_model/product?currentPage=1&pageSize=10&condition=&tenantId=11111
-
-
 
 ----
 
@@ -90,5 +50,5 @@ https://kdocs.cn/l/soW5khJH0?f=501
 用户：root
 密码：dC@2019Innov
 
-------
+----
 
