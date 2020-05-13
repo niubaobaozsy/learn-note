@@ -40,8 +40,6 @@ Array：一种特别的对象（数值下标，内部数据是有序的）
 
 一个函数的返回结果是一个函数，用 `b1.b3()()`  b3是一个函数（）调用，之后返回的还是一个函数，只有()最后调用返回“xfzhang”
 
-![1533866856476](D:\MyData\zousy1\AppData\Local\Temp\1533866856476.png)
-
 > ===  ：
 
 可以用来判断undefine和null（因为这两种类型只有一个值，所以可以用来判断类型）其他不行。
@@ -61,8 +59,6 @@ null定义并赋值了，只是值为null
 结束前，让对象成为垃圾对象
 
 内存
-
-![1533868076690](D:\MyData\zousy1\AppData\Local\Temp\1533868076690.png)
 
 
 
@@ -86,15 +82,11 @@ null定义并赋值了，只是值为null
 
 2、['属性名']：
 
-![1534082037098](D:\MyData\zousy1\AppData\Local\Temp\1534082037098.png)
-
 ### 函数
 
 js可以让一个函数成为指定任意对象的方法进行调用
 
 this.xxx = ‘atguigu’   因为修改的是obj的xxx属性。
-
-![1534209016505](D:\MyData\zousy1\AppData\Local\Temp\1534209016505.png)
 
 ### 回调函数
 
@@ -118,13 +110,9 @@ this.xxx = ‘atguigu’   因为修改的是obj的xxx属性。
 
 ### 匿名函数自调用
 
-![1534226104271](D:\MyData\zousy1\AppData\Local\Temp\1534226104271.png)
-
 ### 函数的this
 
 this就是调用当前函数的对象
-
-![1534232444322](D:\MyData\zousy1\AppData\Local\Temp\1534232444322.png)
 
 
 
@@ -140,10 +128,6 @@ alt + shfit+r重命名
 
 构造函数与原型对象相互引用关系
 
-![1534234034261](D:\MyData\zousy1\AppData\Local\Temp\1534234034261.png)
-
-
-
 > 每个函数都有一个prototype属性，它默认指向一个object空对象（即称为：原型对象0
 >
 > 原型对象中有一个属性constructor，它指向函数对象
@@ -152,17 +136,11 @@ alt + shfit+r重命名
 >
 > 作用：函数的所有实例对象自动拥有原型中的属性（方法）
 
-![1534234229207](D:\MyData\zousy1\AppData\Local\Temp\1534234229207.png)
-
 #### 显式原型与隐式原型
-
-![1534236541503](D:\MyData\zousy1\AppData\Local\Temp\1534236541503.png)
 
 函数对象（函数就是一个对象)有prototype属性，而实例对象有__proto__属性。
 
 ### 原型链
-
- ![1534323450714](D:\MyData\zousy1\AppData\Local\Temp\1534323450714.png)![1534323471031](D:\MyData\zousy1\AppData\Local\Temp\1534323497977.png)
 
 原型链：
 

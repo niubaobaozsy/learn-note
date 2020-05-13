@@ -6,12 +6,6 @@ font： 50px/200px “微软雅黑”；200px是行高
 
 1，transition：**在更改属性时控制动画速度的方法**过渡动画
 
-![1537148974332](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537148974332.png)
-
-![1537149321181](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537149321181.png)
-
-![1537149651934](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537149651934.png)
-
 ##### transition-property： background，width，height；
 
 ##### transition-duration： 5s，2s；
@@ -22,13 +16,7 @@ font： 50px/200px “微软雅黑”；200px是行高
 
 #### transition-timing-function 控制过渡动画的速度和速率
 
-![1537151152466](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537151152466.png)
-
-![1537151248491](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537151248491.png)
-
 #### transition-delay：
-
-![1537151335994](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537151335994.png)
 
 我在使用中的踩过的坑
 
@@ -42,25 +30,13 @@ font： 50px/200px “微软雅黑”；200px是行高
 
 属性维度的事件
 
-![1537151784771](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537151784771.png)
-
-![1537151822409](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537151822409.png)
-
 前端应该抛弃过程式思想
 
 js中的三行改变样式，是需要触发事件才会执行。不是所见即所得
 
 ## 过渡天坑
 
-![1537175516324](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537175516324.png)
-
 1，当hover上去的时候，第二个红框上的代码被解析，然后transition-property的值瞬间被改为height，鼠标移出之后又变回width。渲染比解析慢
-
-2，![1537176619291](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537176619291.png)
-
-![1537177003702](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537177003702.png)
-
-![1537177022341](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537177022341.png)
 
 ## css2D变换
 
@@ -70,25 +46,17 @@ js中的三行改变样式，是需要触发事件才会执行。不是所见即
 
 1，旋转： transform： rotate(360deg)；
 
-2，平移：![1537177548913](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537177548913.png)
+2，平移：
 
 3，斜切
 
-![1537177644449](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537177644449.png)
-
-![1537177710339](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537177710339.png)
-
 4，缩放
-
-![1537177837598](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537177837598.png)
 
 5，基点变化：transform-origin
 
 transform-origin：100% 100%；两个值可以为px也可以为百分比，也可以为top left  right bottom。参照点为左上点。
 
 #### 2d变换组合
-
-![1537181347427](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537181347427.png)
 
 也就是图形学中的平移
 
@@ -97,8 +65,6 @@ transform-origin：100% 100%；两个值可以为px也可以为百分比，也�
 1，在元素首次渲染还没有完成的情况下，是不会触发过渡的
 
 2，在绝大部分变换函数中，如果变换函数的**位置****个数**不相同的也不会触发过渡
-
-![1537182616209](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537182616209.png)
 
 
 
@@ -124,8 +90,6 @@ js事件冒泡
 
 https://www.cnblogs.com/bfgis/p/5460191.html（这篇文章中讲的很好，但是没有讲委托机制）之后可以写一篇博客将委托机制
 
-![1537233268751](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537233268751.png)
-
 3d变换的坐标
 
 #### 3d缩放
@@ -140,8 +104,6 @@ transform： rotate3d（1，0，0，angle）
 
 #### 3d平移
 
-![1537234279399](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537234279399.png)
-
  translateZ（）就是往z轴平移对应到距离，也就是和景深相关
 
 注意 ： translateZ（）不能写百分比，因为元素没有厚度
@@ -154,8 +116,6 @@ translate3d（100%，100%，100px）；
 
 除了下面的一种写法，还有自己单独的一个属性
 
-![1537233616662](G:\学习笔记\css\尚硅谷css3\image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537233616662.png)
-
 1，transform：perspective（depth）
 
 这样的写法则是加给后代元素，并且perspective（depth）函数必须位于transform的首位，不然不起作用（一般不用）
@@ -165,8 +125,6 @@ translate3d（100%，100%，100px）；
 3，景深原理
 
 1，灭点：景深越大，灭点越远，元素变形更小
-
-![1537235801811](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537235801811.png)
 
 2，景深基点
 
@@ -188,8 +146,6 @@ transform-style
 
 ​	尽量避免叠加
 
-![1537239426167](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537239426167.png)
-
 ### 立方体
 
 1，搭建3d舞台
@@ -198,11 +154,7 @@ transform-style
 
 是否显示背面
 
-![1537240423895](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537240423895.png)
-
 除去层级之后，背面显示出来了。backface-visibility：hidden之后不再显示
-
-![1537240501216](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537240501216.png)
 
 学到这个就行。最后html5项目学一下，并且跟着敲
 
@@ -239,21 +191,11 @@ animation-direaction：alternate；动画是from-to的方向
 
  
 
-![1537276102715](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537276102715.png)
-
-![1537276171967](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537276171967.png)
-
 百分比是指时间
-
-
 
 animation可以简写
 
-![1537405735153](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537405735153.png)
-
 加了animation-timing-function：step（1）；动画的节奏，一步一动。
-
-![1537406190203](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537406190203.png)
 
 就会瞬间完成一个动画帧之后就等一个delay秒
 
@@ -292,8 +234,6 @@ round() 方法可把一个数字舍入为最接近的整数。
 
 旧版
 
-![1537411955969](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537411955969.png)
-
 新版：
 
 display：flex；
@@ -304,10 +244,6 @@ flex-direction： column；
 
 老版本
 
-![1537412101872](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537412101872.png)
-
-![1537412173516](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537412173516.png)
-
 新版：display：flex；
 
 flex-direction： column-reverse；
@@ -315,8 +251,6 @@ flex-direction： column-reverse；
 3，富裕空间的管理
 
 老版本
-
-![1537412461675](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537412461675.png)
 
 start     富裕空间在主轴的右边（x）下面（y）
 
@@ -328,8 +262,6 @@ justify       富裕空间在项目的之间
 
 新版本：
 
-![1537413515954](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537413515954.png)
-
 flex-start     富裕空间在主轴的正方向
 
 flex-end		富裕空间在主轴的反方向
@@ -340,19 +272,13 @@ space-between 	富裕空间在项目的之间
 
 space-around（box  没有的）	富裕空间在项目的两边
 
-![1537413812312](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537413812312.png)
-
 侧轴富裕空间管理
 
 老版本
 
-![1537413863701](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537413863701.png)
-
-start  侧轴上面  end   侧轴下面  center 两边![1537413975040](G:\学习笔记\css\尚硅谷css3\image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537413975040.png)
+start  侧轴上面  end   侧轴下面  center 两边
 
 新版本
-
-![1537414248483](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537414248483.png)
 
 flex-start   富裕空间在侧轴的正方向
 
@@ -363,8 +289,6 @@ center		富裕空间在侧轴的两边
 baseline		按基线对齐（基本用不到）
 
 stretch		等高布局（如果高度没有设定，则会一样高）
-
-![1537414537001](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537414537001.png)
 
 ##### old项目：
 

@@ -8,8 +8,6 @@
 
 fn2.a=yyy
 
-![1534405083069](D:\MyData\zousy1\AppData\Local\Temp\1534405083069.png)
-
 3、方法一般定义在原型中，属性一般通过构造函数定义在对象本身上。
 
 #### 探索instanceof
@@ -44,13 +42,9 @@ fn2.a=yyy
 
 3、问题：变量提升和函数提升是如何产生的
 
-![1534407984727](D:\MyData\zousy1\AppData\Local\Temp\1534407984727.png)
-
 **当一个变量是一个function时，只是这个变量提升了，但是函数没有**
 
 **函数提升必须是声明的方式**
-
-![1534408134870](D:\MyData\zousy1\AppData\Local\Temp\1534408134870.png)
 
 #### 执行上下文
 
@@ -92,8 +86,6 @@ fn2.a=yyy
 >
 > 3、开始执行函数体代码
 
-![1534409906962](D:\MyData\zousy1\AppData\Local\Temp\1534409906962.png)
-
 js和java不同的地方、
 
 
@@ -106,15 +98,7 @@ js和java不同的地方、
 
 调用时才产生执行上下文
 
-![1534411114164](D:\MyData\zousy1\AppData\Local\Temp\1534411114164.png)
-
 每次函数执行完，只有对应函数执行作用域就会出栈消失。
-
-![1534411703018](D:\MyData\zousy1\AppData\Local\Temp\1534411703018.png)
-
-![1534412372018](D:\MyData\zousy1\AppData\Local\Temp\1534468547711.png)
-
-![1534468564762](D:\MyData\zousy1\AppData\Local\Temp\1534468564762.png)
 
 #### 作用域与作用域链
 
@@ -128,7 +112,7 @@ js和java不同的地方、
 
 2、分类
 
-​	全局作用域
+​	全局作用域	
 
 ​	函数作用域
 

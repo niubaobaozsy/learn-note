@@ -12,9 +12,9 @@
 
 我们使用es moudule模块引入方式更好，但是浏览器不认识，所以使用webpack来翻译文件。
 
-（里面用到了npm   还有es moudule  es5中语法，但是浏览器不认识，所以这是js熟悉度问题）
+~~（里面用到了npm   还有es moudule  es5中语法，但是浏览器不认识，所以这是js熟悉度问题）~~
 
-es moudule规定了导入的文件必须要有export
+**es moudule规定了导入的文件必须要有export**
 
 创建一个项目: npm init
 
@@ -24,7 +24,7 @@ es moudule规定了导入的文件必须要有export
 
 ![1581386923370](imge/1581386923370.png)
 
-webpack能识别任何一种模块引入方式
+**webpack能识别任何一种模块引入方式**
 
 ![1581387114790](imge/1581387114790.png)
 
@@ -84,11 +84,9 @@ module.exports = {
 
 webpack配置文件
 
-作业：开始的所有的知识点
-
 #### 2-5 浅谈webpack打包知识点
 
-mode: '' 有两种模式，一种是生产代码会压缩，一种是开发代码不会压缩
+mode: '' 有两种模式，一种是生产代码会压缩，一种是开发代码（不会压缩
 
 ![1582463097719](imge/1582463097719.png)
 
@@ -104,7 +102,7 @@ webpack有很多loader和插件，学不完，但是如果开发中遇到很复�
 
 file-loader虽然知道可以打包图片
 
-其实他是将图片搬到dist文件下，并返回文件地址。所以不只是图片，如果你想搬运文件并获得文件地址就可以用这个loader完成
+**其实他是将图片搬到dist文件下，并返回文件地址**。所以不只是图片，**如果你想搬运文件并获得文件地址**就可以用这个loader完成
 
 loader是什么：打包方案
 
@@ -112,9 +110,9 @@ loader是什么：打包方案
 
 有些代码还是比较陌生的
 
-webpack只能识别js
+**webpack只能识别js**
 
-loader就是打包不同的文件，重点关注，import出来的东西是什么，可以怎么用
+**loader就是打包不同的文件，重点关注，import出来的东西是什么，可以怎么用**
 
 #### 3-2 使用loader打包静态资源
 
@@ -148,9 +146,9 @@ style-loader： 将css文件挂在到html中的head里面
 
 ![1582465919643](imge/1582465919643.png)
 
-重要规则： webpack中loader是有先后顺序，从下到上一依次
+**重要规则： webpack中loader是有先后顺序，从下到上一依次**
 
-css需要默认加一些前缀，有loader会自动帮忙做这个：postcss-loader有个配置文件如下
+**css需要默认加一些前缀，有loader会自动帮忙做这个：postcss-loader有个配置文件如下**
 
 ![1582466135462](imge/1582466135462.png)
 
@@ -162,7 +160,7 @@ css需要默认加一些前缀，有loader会自动帮忙做这个：postcss-loa
 
 > 这个配置的意思，就是: 当你的sass文件又使用import来引入sass文件，理应当说，css文件里面的引入引出任务是css-loader来做，就不会回头在走sass-loader。这个配置就是告诉webpack，**当使用import引入是，也要使用前面两个loader来处理**
 
-让当前 文件下的css文件样式只作用于当前文件，而不是全局，css模块化
+**让当前 文件下的css文件样式只作用于当前文件，而不是全局，css模块化**
 
 ![1582466909507](imge/1582466909507.png)
 
@@ -176,7 +174,7 @@ css需要默认加一些前缀，有loader会自动帮忙做这个：postcss-loa
 
 ![1582467188082](imge/1582467188082.png)
 
-不知道图表的实现原理，这四个文件的作用
+不知道图标的实现原理，这四个文件的作用
 
 asset manage 静态资源管理
 
@@ -252,7 +250,7 @@ eval模式，就是将报错信息使用eval的形式添加到文件中，是最
 
 #### 3-8 使用 WebpackDevServer 提升开发效率，并且开启一个本地服务器
 
-当源代码发生变化，就会重新打包。webpackdevserver是现在业界用的最多的!!!
+当源代码发生变化，就会重新打包。**webpackdevserver**是现在业界用的最多的!!!
 
 比watch，会帮忙重新刷新浏览器，open会自动帮忙打开，**并让开一个web服务器**，通过http协议打开而不是file协议
 
@@ -268,7 +266,7 @@ eval模式，就是将报错信息使用eval的形式添加到文件中，是最
 
 #### 3-9 hot moudle replacement
 
-webpack-dev-serve 会把打包的dist文件放到电脑内存里面，这样提高我们的打包速度
+**webpack-dev-serve 会把打包的dist文件放到电脑内存里面，这样提高我们的打包速度**
 
 > 修改了webpack配置文件，应该重启
 
@@ -276,7 +274,7 @@ webpack-dev-serve 会把打包的dist文件放到电脑内存里面，这样提�
 
 ![1582967370617](imge/1582967370617.png)
 
-这边的hotOnly会让html失效的时候不重新刷新页面
+**这边的hotOnly会让html失效的时候不重新刷新页面**
 
 这里面的hot没讲清楚![1582967436368](imge/1582967436368.png)
 
@@ -284,7 +282,7 @@ css不用写这段代码，原因就是css-loader帮忙写了这段代码
 
 vue-loader也内置了这段代码，所以也不用自己添
 
-hotonly 没配，如果html发生变化了会重新刷新页面
+**hotonly 没配，如果html发生变化了会重新刷新页面**
 
 babel可以将es6代码抓换成es5。在babel官网中选择环境的教程安装
 
@@ -334,7 +332,9 @@ tree shaking只支持esmodule方式引入（improt），因为es是静态引入�
 
 **如何在现有项目中使用**？
 
-babel 中polly-fill里面就是给window绑定全局方法。**是不是导出任何内容**引入的时候。当要引入这个的时候在package.json中的sideEffects中添加这个文件，说明treeshaking的时候不要管这个文件。
+**babel 中polly-fill里面就是给window绑定全局方法**。**是不是导出任何内容**引入的时候。当要引入这个的时候在package.json中的sideEffects中添加这个文件，说明treeshaking的时候不要管这个文件。
+
+**因为引入css文件并不会导入如何东西，treeshaking会去掉**
 
 正常情况下，可以添加这些比如所有的css文件，引入的时候不要用treeshaking
 
@@ -360,6 +360,14 @@ webpack-merge
 
 代码分割
 
+代码分离是 webpack 中最引人注目的特性之一。此特性能够把代码分离到不同的 bundle 中，然后可以按需加载或并行加载这些文件。代码分离可以用于获取更小的 bundle，以及控制资源加载优先级，如果使用合理，会极大影响加载时间。
+
+关于文档中多次提到webpack代码分割的包，在浏览器中webpack runtime的包会自动异步加载代码分割的包，那么在react和vue应用中，如果这些代码分割包在页面初始化也会自动异步加载，那不是分包的作用不大？原因其实是我们上面例子执行了import()或require.ensure，而在应用中，写法是当请求路由的时候才执行import()或require.ensure，然后再异步加载，webpack遇到import()或require.ensure的配置的时候只会进行代码切割，这种思路就是按需加载的基础。
+
+https://juejin.im/post/5c8339ca51882501351d4b82
+
+https://juejin.im/post/5b304f1f51882574c72f19b0
+
 30节(一天6节)，周六周日做面试题和笔试题
 
 先保证我的视频能学完，再保证工作，why，先支付自己
@@ -372,7 +380,7 @@ webpack打包和代码分割的关系
 
 ![1583716575043](imge/1583716575043.png)
 
-在使用cleanwebpack来清理文件夹的时候，设置这个插件的根目录是上一层。就实现**了webpack操作上一级目录的功能**  lodash
+**在使用cleanwebpack来清理文件夹的时候**，设置这个插件的根目录是上一层。就实现**了webpack操作上一级目录的功能**  lodash
 
 ![1583717053837](imge/1583717053837.png)
 
@@ -410,15 +418,15 @@ webpack自带的插件会帮我们智能的做代码分割
 
 和上面学的一模一样，
 
-optimization配置，splitchucks插件
+**optimization配置，splitchucks插件**
 
 ![1583725271989](imge/1583725271989.png)
 
 同步的代码走cacheGroups
 
-cacheGroups叫做缓存组：符合上面的条件时，就会把他们打包到一起生成一个文件。
+**cacheGroups叫做缓存组：符合上面的条件时，就会把他们打包到一起生成一个文件。**
 
-现在图片中有两个组：vendors和default
+**现在图片中有两个组：vendors和default**
 
 minChunks中用到多少次的时候使用代码分割
 
@@ -430,13 +438,13 @@ reuseExistingChunk：表示之前打包过，再次被引用不需要再次打�
 
 #### 4-7 lazy loading和chunk是什么
 
-懒加载就是通过import异步加载模块
+**懒加载就是通过import异步加载模块**
 
 chunk：代码分割中，生成了多少个文件，我们都叫他chunk
 
 ![1583735804613](imge/1583735804613.png)
 
- minchunk： 到底生成的chunk文件中最少多少个用到了这个库文件
+ **minchunk： 到底生成的chunk文件中最少多少个用到了这个库文件**
 
 ![1583735918699](imge/1583735918699.png)
 
@@ -476,11 +484,19 @@ webpack打包会把css打包到js
 
 可以通过webpack官网了解
 
-现在学习shimming: 打包的兼容性问题
+**现在学习shimming: 打包的兼容性问题**
+
+shim 预置依赖
+
+`webpack` compiler 能够识别遵循 ES2015 模块语法、CommonJS 或 AMD 规范编写的模块。然而，一些 third party(第三方库) 可能会引用一些全局依赖（例如 `jQuery` 中的 `$`）。因此这些 library 也可能会创建一些需要导出的全局变量。这些 "broken modules(不符合规范的模块)" 就是 *shim(预置依赖)* 发挥作用的地方。
+
+> **我们不推荐使用全局依赖！**webpack 背后的整个理念是使前端开发更加模块化。也就是说，需要编写具有良好的封闭性(well contained)、不依赖于隐含依赖（例如，全局变量）的彼此隔离的模块。请只在必要的时候才使用这些特性。
+
+*shim* 另外一个极其有用的使用场景就是：当你希望 [polyfill](https://en.wikipedia.org/wiki/Polyfill_(programming) 扩展浏览器能力，来支持到更多用户时。在这种情况下，你可能只是想要将这些 polyfills 提供给需要修补(patch)的浏览器（也就是实现按需加载）。
 
 ![1583830714038](imge/1583830714038.png)
 
-一个模块中使用了$字符串，那webpack就会自动帮你引入jquery这个模块
+**一个模块中使用了$字符串，那webpack就会自动帮你引入jquery这个模块**
 
 当使用的这模块里面没有使用import方式引入，就可以用这个兼容，加载对应的模块
 
@@ -511,6 +527,8 @@ _join对应lodash中的join方法
 本章通过库文件打包，PWA项目打包，TypeScript打包支持等实战常见 Webpack 配置案例，带大家了解最新前端工程化常识，并在实例实现的过程中，巩固前三章节的基础知识点。同时章节末尾进行了 Webpack 打包性能优化的内容，帮助同学们了解如何在打包速度过慢时进行合理的打包过程优化
 
 #### library打包
+
+打包一个库文件，一般引入库的方式
 
 ![1583837090254](imge/1583837090254.png)
 
@@ -607,7 +625,7 @@ true等价于上面的配置
 
  #### 如何编写一个loader
 
-loader就是一个函数，并且不能是剪头函数，因为webpack会给这个函数绑定this。如果是剪头函数，就无法使用wbepack提供的一些方法。
+loader就是一个函数，并且不能是箭头函数，因为webpack会给这个函数绑定this。如果是箭头函数，就无法使用wbepack提供的一些方法。
 
 ![1583916474429](imge/1583916474429.png)![1583916535796](imge/1583916535796.png)
 

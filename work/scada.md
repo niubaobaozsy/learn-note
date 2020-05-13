@@ -52,3 +52,29 @@ https://kdocs.cn/l/soW5khJH0?f=501
 
 ----
 
+
+
+1，设备保养拉通，保养信息引用不成功
+
+2，保养信息设备管理接口
+
+http://10.18.2.199:4000/api/dc/product_model/product?tenantId=877ecc5e42d74f6a8a3cfb9d6826e1f8&pageSize=1000
+
+浏览器卡顿
+
+3，新增后，没有新添加一条记录
+
+-----
+
+1，维修记录--开始维修-点击确认接口500
+
+http://10.18.2.199:4000/api/dc/product_model/repair_bill_detail
+
+-----
+
+
+
+
+
+![image-20200507091202669](imge/image-20200507091202669.png)
+

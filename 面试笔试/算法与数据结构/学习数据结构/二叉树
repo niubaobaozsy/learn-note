@@ -1,0 +1,597 @@
+# 二叉树
+
+二叉树，就是分治+递归
+
+## 二叉树的js数据结构，二叉树的基本方法及规则
+
+注释部分为核心思想
+
+```js
+function Node(data, left, right) {
+    this.data = data;
+    this.left = left;
+    this.right = right;
+}
+
+Node.prototype = {
+    show: function () {
+        console.log(this.data);
+    }
+}
+
+function Tree() {
+    this.root = null; // 树中存储了root节点
+}
+
+Tree.prototype = {
+    insert: function (data) {
+        var node = new Node(data, null, null);
+        if (!this.root) {
+            this.root = node;
+            return;
+        }
+        // 两个变量的作用和意义 
+        // 生成的二叉树，所有左边的节点比中间节点小，右边的节点比中间节点大，
+        var current = this.root; // 每次都会被初始化为当前树的状态
+        var parent = null;
+        while (current) { //为null表示上次插入成功，inset（3）
+            parent = current;
+            if (data < parent.data) {
+                current = current.left; // 判断放在中间元素的左边还是右边，如果没有放成功，就把已经占位的元素作为中间的节点，再往下进行判断
+                if (!current) {
+                    parent.left = node;
+                    return;
+                }
+            } else {
+                current = current.right; // current为null
+                if (!current) {
+                    parent.right = node;
+                    return;
+                }
+            }
+        }
+    },
+        preOrder: function (node) {
+        if (node) {
+            node.show();
+            this.preOrder(node.left);
+            this.preOrder(node.right);
+        }
+    },
+    middleOrder: function (node) {
+        if (node) {
+            this.middleOrder(node.left);
+            node.show();
+            this.middleOrder(node.right);
+        }
+    },
+    laterOrder: function (node) {
+        if (node) {
+            this.laterOrder(node.left);
+            this.laterOrder(node.right);
+            node.show();
+        }
+    },
+    getMin: function () {
+        var current = this.root;
+        while(current){
+            if(!current.left){
+                return current;
+            }
+            current = current.left;
+        }
+    },
+    getMax: function () {
+        var current = this.root;
+        while(current){
+            if(!current.right){
+                return current;
+            }
+            current = current.right;
+        }
+    },
+    getDeep: function (node,deep) {
+      deep = deep || 0;
+      if(node == null){
+          return deep;
+      }
+      deep++;
+      var dleft = this.getDeep(node.left,deep);
+      var dright = this.getDeep(node.right,deep);
+      return Math.max(dleft,dright);
+  },
+  getNode: function (data, node) {
+      if (node) {
+          if (data === node.data) {
+              return node;
+          } else if (data < node.data) {
+              return this.getNode(data,node.left);
+          } else {
+              return this.getNode(data,node.right);
+          }
+      } else {
+          return null;
+      }
+  }
+}
+// 插入一个节点
+// 先序中序后序遍历
+// 得到最小最大元素
+// 深度遍历
+// 拿到某个节点
+var t = new Tree();
+t.insert(3);
+t.insert(8);
+t.insert(1);
+t.insert(2);
+t.insert(5);
+t.insert(7);
+t.insert(6);
+t.insert(0);
+console.log(t);
+console.log(t.middleOrder(t.root));
+console.log(t.getMin(), t.getMax());
+console.log(t.getDeep(t.root, 0));
+console.log(t.getNode(5,t.root));
+```
+
+## 中序，前序，后序遍历
+
+中序，递归，栈（递归也是用栈的方式实现的
+
+```js
+var inorderTraversal = function (root) {
+  const result = [];
+  const stack = [];
+  let current = root;
+  while (current || stack.length > 0) {
+    debugger
+    while (current) {
+      stack.push(current);
+      current = current.left;
+      debugger
+    }
+    current = stack.pop(); // 删除最后一个元素
+    result.push(current.data); //末尾加一个元素
+    current = current.right;
+  }
+  //核心思想： 找到最底层的左节点，然后从最后面网上逐一生成对应节点的中序遍历
+  return result;
+};
+console.log(inorderTraversal(t.root))
+```
+
+递归方法在上面有
+
+## 重构二叉树
+
+![image-20200426115445233](imge/image-20200426115445233.png)
+
+```js
+// 根据前序和中序，输出对应的树
+ function TreeNode(val) {
+    this.val = val;
+   this.left = this.right = null;
+ }
+function reConstructBinaryTree(pre, vin) {
+    if(pre.length === 0){
+        return null;
+    }
+    if(pre.length === 1){
+        return new TreeNode(pre[0]);
+    }
+    const value = pre[0];
+    const index = vin.indexOf(value);
+    const vinLeft = vin.slice(0,index);
+    const vinRight = vin.slice(index+1);
+    const preLeft = pre.slice(1,index+1);
+    const preRight = pre.slice(index+1);
+    const node = new TreeNode(value);
+   // 开始迭代
+    node.left = reConstructBinaryTree(preLeft, vinLeft);
+    node.right = reConstructBinaryTree(preRight, vinRight);
+    return node;
+}
+// [3,9,20,null,null,15,7] 层次遍历
+// 前序遍历知道那个是中心节点，中序遍历找到左右子树遍历，
+// 如果左右子树中，如果只有一个元素就直接返回
+```
+
+已知前序和中序求后序
+
+和上面题目的思路基本相同
+
+- 前序遍历找到根结点`root`
+- 找到`root`在中序遍历的位置 -> 左子树的长度和右子树的长度
+- 截取左子树的中序遍历、右子树的中序遍历
+- 截取左子树的前序遍历、右子树的前序遍历
+- 递归拼接二叉树的后序遍历
+
+----
+
+## 对称的二叉树
+
+```js
+    function isSymmetrical(pRoot) {
+      return isSymmetricalTree(pRoot, pRoot);
+    }
+
+    function isSymmetricalTree(node1, node2) {
+      if (!node1 && !node2) {
+        return true;
+      }
+      if (!node1 || !node2) {
+        return false;
+      }
+      if (node1.val != node2.val) {
+        return false;
+      }
+      return isSymmetricalTree(node1.left, node2.right) && isSymmetricalTree(node1.right, node2.left);
+    }
+```
+
+将一个二叉树，变成两份，a的左节点要等于b的右节点，a的右节点要等于b的左节点，
+
+## 二叉树的镜像
+
+操作给定的二叉树，将其变换为源二叉树的镜像。
+
+递归交换二叉树所有节点左右节点的位置。
+
+```js
+function Mirror(root)
+{
+    if(root){
+        const temp = root.right;
+        root.right = root.left;
+        root.left = temp;
+        Mirror(root.right);
+        Mirror(root.left);
+    }
+}
+```
+
+## 二叉树的第k小的节点
+
+```js
+// 给定一棵二叉搜索树，请找出其中的第k小的结点。 例如， （5，3，7，2，4，6，8） 中，按结点数值大小顺序第三小结点的值为4。
+
+// 二叉搜索树的中序遍历即排序后的节点，本题实际考察二叉树的遍历
+//递归实现
+function KthNode(pRoot, k) {
+  const arr = [];
+  loopThrough(pRoot, arr);
+  if (k > 0 && k <= arr.length) {
+    return arr[k - 1];
+  }
+  return null;
+}
+// 中序遍历之后的数组，就是排序后的数组 ！important
+function loopThrough(node, arr) {
+  if (node) {
+    loopThrough(node.left, arr);
+    arr.push(node);
+    loopThrough(node.right, arr);
+  }
+}
+console.log(KthNode(t.root,4))
+```
+
+---
+
+## 二叉搜素树的后序遍历
+
+![image-20200426161412234](imge/image-20200426161412234.png)
+
+![image-20200426161903422](imge/image-20200426161903422.png)
+
+```js
+ function TreeDepth(pRoot) {
+      return !pRoot ? 0 : Math.max(TreeDepth(pRoot.left), TreeDepth(pRoot.right)) + 1
+    }
+```
+
+最小深度
+
+深度优先 + 分治
+
+- 左右子树都不为空：左子树深度和右子树最小深度的最小值 + 1
+- 左树为空：右子树最小深度的最小值 + 1
+- 右树为空：左子树最小深度 + 1
+
+```js
+    var minDepth = function (root) {
+      if (!root) {
+        return 0;
+      }
+      if (!root.left) {
+        return 1 + minDepth(root.right);
+      }
+      if (!root.right) {
+        return 1 + minDepth(root.left);
+      }
+      return Math.min(minDepth(root.left), minDepth(root.right)) + 1
+    };
+```
+
+## 平衡二叉树
+
+输入一棵二叉树，判断该二叉树是否是平衡二叉树。
+
+> 平衡二叉树：每个子树的深度之差不超过1
+
+后续遍历二叉树
+
+在遍历二叉树每个节点前都会遍历其左右子树
+
+比较左右子树的深度，若差值大于1 则返回一个标记 -1表示当前子树不平衡
+
+左右子树有一个不是平衡的，或左右子树差值大于1，则整课树不平衡
+
+若左右子树平衡，返回当前树的深度（左右子树的深度最大值+1）
+
+```js
+    function IsBalanced_Solution(pRoot) {
+      return balanced(pRoot) != -1;
+    }
+
+    function balanced(node) {
+      if (!node) {
+        return 0;
+      }
+      const left = balanced(node.left);
+      const right = balanced(node.right);
+      if (left == -1 || right == -1 || Math.abs(left - right) > 1) {
+        return -1;
+      }
+      return Math.max(left, right) + 1;
+    }
+```
+
+## 二叉树中和为某一值的路径
+
+输入一颗二叉树的跟节点和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。
+
+遍历结束的条件是，当前节点，无左右子树，总路径为期待的路径
+
+```js
+// 回溯+深度遍历
+function FindPath(root, expectNumber) {
+      const result = [];
+      if (root) {
+        FindPathCore(root, expectNumber, [], 0, result);
+      }
+      return result;
+    }
+    function FindPathCore(node, expectNumber, stack, sum, result) {
+      // debugger
+      stack.push(node.data);
+      sum += node.data;
+      if (!node.left && !node.right && sum === expectNumber) {
+        result.push(stack.slice(0));
+      }
+      if (node.left) {
+        FindPathCore(node.left, expectNumber, stack, sum, result);
+      }
+      if (node.right) {
+        FindPathCore(node.right, expectNumber, stack, sum, result);
+      }
+      stack.pop();
+      debugger
+    }
+    console.log(FindPath(t.root,4))
+```
+
+用前序遍历，生成堆栈，这样出栈永远是最后出栈中间这个重要的父节点
+
+## 二叉搜索树与双向链表
+
+输入一棵二叉搜索树，将该二叉搜索树转换成一个排序的双向链表。要求不能创建任何新的结点，只能调整树中结点指针的指向。
+
+思路
+
+二叉搜索树的中序遍历即排序后的序列
+
+- 1.递归左子树，找到左子树的最后一个节点，根节点左侧连接到左子树的最后一个节点
+- 2.当前节点变为已经转换完成的链表的最后一个节点
+- 3.递归右子树，找到当前树的最后一个节点
+- 4.回溯到上一层，进行链接...
+
+```js
+    function Convert(pRootOfTree) {
+      if (!pRootOfTree) {
+        return null;
+      }
+      ConvertCore(pRootOfTree);
+      while (pRootOfTree.left) {
+        pRootOfTree = pRootOfTree.left;
+      }
+      return pRootOfTree;
+    }
+
+    function ConvertCore(node, last) {
+      if (node.left) {
+        last = ConvertCore(node.left, last)
+      }
+      node.left = last;
+      if (last) {
+        last.right = node;
+      }
+      last = node;
+      if (node.right) {
+        last = ConvertCore(node.right, last);
+      }
+      return last;
+    }
+```
+
+看不懂上面的，思路也没有讲明白
+
+现在认可的一种方法就是中序遍历成数组，然后依次链接数组中的每个元素
+
+递归，每个节点的左节点放前面，右节点放后面，先操作最左边，递归实现，每次递归保留last前面一个元素
+
+觉得这个递归很难实现啊
+
+ 深刻理解二叉树的遍历
+
+二叉树的遍历，会依次执行到每一个节点。所以递归，就应该按一个节点来做判断，
+
+递归返回结果适合用于叠加结果，可以为添加指针来解决，链表，保留一个指向上一个节点和中间节点的元素。
+
+就把二叉树的遍历，当做每个节点都走一遍，就没问题了
+
+```js
+let pre = undefined
+function Convert(node) {
+  debugger
+  if(!node)return
+  if(!node.left && !node.right && !pre){
+    pre = node
+    return
+  }
+  Convert(node.left);
+  node.last = pre
+  pre.next = node
+  pre = node
+  Convert(node.right);
+}
+console.log(Convert(t.root))
+console.log(t)
+```
+
+需要明确了解自己需要什么变量，这个变量能存储什么信息，在什么时候发生改变
+
+在代码中，局部全部变量都可以实现这点，入参，递归的入参会发生变化的，是根据当时的执行环境进行恢复的。所以在这里，需要一个指针，一直指向上一个元素,所以递归中的入参肯定不行的。
+
+链表最重要的是指针
+
+## 序列化二叉树
+
+你可以将以下二叉树：
+
+        1
+       / \
+      2   3
+         / \
+        4   5
+    
+    序列化为 "[1,2,3,null,null,4,5]"
+序列化，就是层次遍历
+
+层次遍历，使用队列，把一个节点的左右节点的孩子全部放入队列中，然后一次性弹出
+
+## 二叉树的下一个节点
+
+给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。
+
+分为多种情况
+
+![image-20200427170551780](imge/image-20200427170551780.png)
+
+中序遍历： CBDAEF
+
+- B - 右节点不为空，下一个节点为右节点D
+- C - 右节点为空，C是父节点的左节点，取父节点B
+- D - 右节点为空，D是父节点的右节点，再往上蹭分析，B是其父节点的左节点，取B的父节点A
+- F - 右节点为空，F是父节点的右节点，没有符合条件的节点，F为遍历的最后一个节点，返回null
+
+代码
+
+```js
+    /*function TreeLinkNode(x){
+        this.val = x;
+        this.left = null;
+        this.right = null;
+        this.next = null;
+    }*/
+    function GetNext(pNode) {
+      if (!pNode) {
+        return null;
+      }
+      if (pNode.right) {
+        pNode = pNode.right;
+        while (pNode.left) {
+          pNode = pNode.left;
+        }
+        return pNode;
+      } else {
+        while (pNode) {
+          if (!pNode.next) {
+            return null;
+          } else if (pNode == pNode.next.left) {
+            return pNode.next;
+          }
+          pNode = pNode.next;
+        }
+        return pNode;
+      }
+    }
+```
+
+一定在这几中情况下，左节点出来之后，立刻就知道对应的下一个节点是哪个。如果一直是父亲的右节点，就说明是最后一个
+
+## 树的子结构
+
+输入两棵二叉树`A`，`B`，判断`B`是不是`A`的子结构。（ps：我们约定空树不是任意一个树的子结构）
+
+1，递归找到b的根节点相同的a对应的节点
+
+2，找到之后，递归对比每一个元素是否相同
+
+```js
+    function HasSubtree(pRoot1, pRoot2) {
+      let result = false;
+      if (pRoot1 && pRoot2) {
+        if (pRoot1.val === pRoot2.val) {
+          result = compare(pRoot1, pRoot2);
+        }
+        if (!result) {
+          result = HasSubtree(pRoot1.right, pRoot2);
+        }
+        if (!result) {
+          result = HasSubtree(pRoot1.left, pRoot2);
+        }
+      }
+      return result;
+    }
+
+    function compare(pRoot1, pRoot2) {
+      if (pRoot2 === null) {
+        return true;
+      }
+      if (pRoot1 === null) {
+        return false;
+      }
+      if (pRoot1.val !== pRoot2.val) {
+        return false;
+      }
+      return compare(pRoot1.right, pRoot2.right) && compare(pRoot1.left, pRoot2.left);
+    }
+```
+
+---
+
+## 由二叉树的前序遍历和中序遍历生成后序遍历
+
+```js
+  function getlast(pre,mod,last){
+    if(pre.length==0 && mod.length==0) return
+    let first = pre[0]
+    let i = mod.indexOf(first)
+    // debugger
+    if(i>0){
+      getlast(pre.slice(1,i+1),mod.slice(0,i),last)
+    }
+    if(mod.length!=i+1){
+      getlast(pre.slice(i+1),mod.slice(i+1),last)
+    }
+    last.push(first)
+  }
+  let last =[]
+  console.log(getlast([3,1,0,2,8,5,7,6],[0,1,2,3,5,6,7,8],last))
+  console.log(last)
+  // 1,需要熟悉数组操作函数的每个参数的意思，slice（1，4）从索引1到3，不会取到4，左闭右开的一个集合
+  // 2，这是一个二叉树的遍历，第一个执行的是，二叉树中的最左边的第一个叶子节点（0）。所以二叉树三种遍历的第一个执行节点
+```
+

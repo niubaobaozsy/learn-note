@@ -1,0 +1,241 @@
+# 链表
+
+## 从尾到头打印链表
+
+```js
+/*function ListNode(x){
+    this.val = x;
+    this.next = null;
+}*/
+function printListFromTailToHead(head)
+{
+    const array = [];
+    while(head){
+        array.unshift(head.val);
+        head = head.next;
+    }
+    return array;
+}
+```
+
+## 输入一个链表，反转链表后，输出新链表的表头
+
+```js
+    var reverseList = function (head) {
+      let currentNode = null;
+      let headNode = head;
+      while (head && head.next) {
+        currentNode = head.next;
+        head.next = currentNode.next;
+        currentNode.next = headNode;
+        headNode = currentNode;
+      }
+      return headNode;
+    };
+```
+
+##  合并两个排序的链表
+
+```js
+function Merge(pHead1, pHead2) {
+  if (!pHead1) {
+    return pHead2;
+  }
+  if (!pHead2) {
+    return pHead1;
+  }
+  let head;
+  if (pHead1.val < pHead2.val) {
+    head = pHead1;
+    head.next = Merge(pHead1.next, pHead2);
+  } else {
+    head = pHead2;
+    head.next = Merge(pHead1, pHead2.next);
+  }
+  return head;
+}
+```
+
+使用变量let head来缓存每个递归函数返回的当前节点的值。递归是从最后一个节点开始返回一直到头节点。
+
+递归中的局部变量，可以存储每个递归的结果。需要保留递归结果的题目
+
+## 链表倒数第k个节点
+
+```js
+    function FindKthToTail(head, k) {
+      if (!head || !k) return null;
+      let front = head;
+      let behind = head;
+      let index = 1;
+      while (front.next) {
+        index++;
+        front = front.next;
+        if (index > k) {
+          behind = behind.next;
+        }
+      }
+      return (k <= index) && behind;
+    }
+```
+
+设定两个节点，间距相差k个节点，当前面的节点到达终点，取后面的节点。
+
+前面的节点到达k后，后面的节点才出发。
+
+两个指针开始都指向头，让第一个先走，等到他们两个距离刚好为k时，再两个同时出发。等第一个到了最后，第二个指向的就是倒数k的节点
+
+链表妙用双指针
+
+## 链表中环的入口节点
+
+给一个链表，若其中包含环，请找出该链表的环的入口结点，否则，输出null。
+
+![image-20200427212039195](imge/image-20200427212039195.png)
+
+```js
+function EntryNodeOfLoop(pHead) {
+      if (!pHead || !pHead.next) {
+        return null;
+      }
+      let P1 = pHead.next;
+      let P2 = pHead.next.next;
+      // 1.判断是否有环
+      while (P1 != P2) {
+        if (P2 === null || P2.next === null) {
+          return null;
+        }
+        P1 = P1.next;
+        P2 = P2.next.next;
+      }
+      // 2.获取环的长度
+      let temp = P1;
+      let length = 1;
+      P1 = P1.next;
+      while (temp != P1) {
+        P1 = P1.next;
+        length++;
+      }
+      // 3.找公共节点
+      P1 = P2 = pHead;
+      while (length-- > 0) {
+        P2 = P2.next;
+      }
+      while (P1 != P2) {
+        P1 = P1.next;
+        P2 = P2.next;
+      }
+      return P1;
+    }
+```
+
+
+
+## 两个链表的第一个公共节点
+
+![image-20200427215317221](imge/image-20200427215317221.png)
+
+找到两个链表第一个公用的节点（共用了一段）
+
+- .先找到两个链表的长度`length1`、`length2`
+- 2.让长一点的链表先走`length2-length1`步，让长链表和短链表起点相同
+- 3.两个链表一起前进，比较获得第一个相等的节点
+- 时间复杂度`O(length1+length2)` 空间复杂度`O(0)`
+
+``` 
+function FindFirstCommonNode(pHead1, pHead2) {
+      if (!pHead1 || !pHead2) { return null; }
+      // 获取链表长度
+      let length1 = getLength(pHead1);
+      let length2 = getLength(pHead2);
+      // 长链表先行
+      let lang, short, interval;
+      if (length1 > length2) {
+        lang = pHead1;
+        short = pHead2;
+        interval = length1 - length2;
+      } else {
+        lang = pHead2;
+        short = pHead1;
+        interval = length2 - length1;
+      }
+      while (interval--) {
+        lang = lang.next;
+      }
+      // 找相同节点
+      while (lang) {
+        if (lang === short) {
+          return lang;
+        }
+        lang = lang.next;
+        short = short.next;
+      }
+      return null;
+    }
+
+    function getLength(head) {
+      let current = head;
+      let result = 0;
+      while (current) {
+        result++;
+        current = current.next;
+      }
+      return result;
+    }
+```
+
+双指针，相差的个数为指针的相差位置
+
+## 圈圈中最后剩下的数字
+
+约瑟夫环
+
+![image-20200427221730133](imge/image-20200427221730133.png)
+
+```js
+function LastRemaining_Solution(n, m) {
+      if (n < 1 || m < 1) {
+        return -1;
+      } else {
+        return joseoh(n, m);
+      }
+
+    }
+
+    function joseoh(n, m) {
+      if (n === 1) {
+        return 0;
+      }
+      return (joseoh(n - 1, m) + m) % n;
+    }
+```
+
+数学，只能记公式了
+
+## 删除链表中的节点or重复的节点
+
+给定单链表的头指针和要删除的指针节点，在O(1)时间内删除该节点。
+
+- 1.删除的节点不是尾部节点 - 将next节点覆盖当前节点
+- 2.删除的节点是尾部节点且等于头节点，只剩一个节点 - 将头节点置为null
+- 3.删除的节点是尾节点且前面还有节点 - 遍历到末尾的前一个节点删除
+
+```js
+    var deleteNode = function (head, node) {
+      if (node.next) {
+        node.val = node.next.val;
+        node.next = node.next.next;
+      } else if (node === head) {
+        node = null;
+        head = null;
+      } else {
+        node = head;
+        while (node.next.next) {
+          node = node.next;
+        }
+        node.next = null;
+        node = null;
+      }
+      return node;
+    };
+```

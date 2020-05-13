@@ -6,3 +6,11 @@
 
 ![1585215243484](imge/1585215243484.png)
 
+ps -ef|grep nginx
+
+sudo su
+
+/etc/nginx/conf.d
+
+sc$Da20demo
+
