@@ -38,3 +38,35 @@
 
 ![1585042509694](imge/1585042509694.png)
 
+---
+
+## map && set
+
+map遍历
+
+```js
+let myMap = new Map();
+myMap.set(0, "zero");
+myMap.set(1, "one");
+for (let [key, value] of myMap) {
+  console.log(key + " = " + value);
+}
+myMap.forEach(function(value, key) {
+  console.log(key + " = " + value);
+})
+```
+
+另外，`NaN`和`undefined`都可以被存储在Set 中， `NaN`之间被视为相同的值（NaN被认为是相同的，尽管 NaN !== NaN）
+
+set的唯一性，除了nan其他用的是===。map中key是一个set
+
+```js
+let mySet = new Set();
+
+mySet.add(1); // Set [ 1 ]
+mySet.add(5); // Set [ 1, 5 ]
+mySet.add(5); // Set [ 1, 5 ]
+mySet.add("some text"); // Set [ 1, 5, "some text" ]
+```
+
+set是值的集合

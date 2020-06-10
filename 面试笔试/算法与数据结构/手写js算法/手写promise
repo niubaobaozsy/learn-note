@@ -1,0 +1,137 @@
+# 手写promise
+
+```js
+
+  const PENDING = 'pending';
+    const FULFILLED = 'fulfilled';
+    const REJECTED = 'rejected';
+function myPromise(executor){
+  this.state = PENDING
+  this.value = null
+  this.reason = null
+  this.onFulfilledCallbacks = [];
+  this.onRejectedCallbacks  = [];
+  const resolve = (value)=>{
+    if(this.state==PENDING){
+      this.state = FULFILLED
+      this.value = value
+      this.onFulfilledCallbacks.forEach(element => {
+        element()
+      });
+    }
+  }
+  const reject = (value)=>{
+    if(this.state==PENDING){
+      this.state = REJECTED
+      this.reason = value
+      this.onRejectedCallbacks.forEach(fun=>{
+        fun()
+      })
+    }
+  }
+  try {
+    executor(resolve,reject)
+  } catch(reason) {
+    reject(reason)
+  }
+}
+// 异步调用：状态还是PENDING，将onFulfilled、onRejected分别加入两个函数数组onFulfilledCallbacks、onRejectedCallbacks，
+// 当异步调用resolve和reject时，将两个数组中绑定的事件循环执行
+// 代码是同步的，new Promise（）.then()。会立刻执行，但是newpromise是个异步事件，会先执行then（）函数。所以需要用数组先把then中的函数存储起来
+new myPromise()
+myPromise.prototype.then = function(onFulfilled,onRejected){
+  switch (this.state){
+    case FULFILLED:
+    setTimeout(()=>{
+      onFulfilled(this.value)
+    },0)
+    break;
+    case REJECTED:
+    setTimeout(()=>{
+      onRejected(this.reason)
+    },0)
+    break;
+    case PENDING:
+    this.onFulfilledCallbacks.push(()=>[
+      setTimeout(()=>{
+        onFulfilled(this.value)
+      },0)
+    ])
+    this.onRejectedCallbacks.push(()=>{
+      setTimeout(() => {
+        try {
+          const x = onRejected(this.reason);
+          resolve(x);
+        } catch (reason) {
+          reject(reason);
+        }
+      }, 0);
+    })
+    break;
+  }
+
+}
+myPromise.prototype.catch = function(onRejected) {
+  return this.then(null,onRejected)
+}
+// 说明调用catch就相当于调用then，他只是让我们少去传null，reject的一步
+myPromise.prototype.finally = function(fn) {
+  return this.then(value=>{
+    fn()
+    return value
+  },reason=>{
+    fn()
+    throw reason
+  })
+}
+// finally也是用那个then来实现，让reject和resolve两个函数都调用finally中的函数
+myPromise.resolve = function(value){
+  return new myPromise((resolve,reject)=>{
+    resolve(value)
+  })
+}
+myPromise.reject = function(reason){
+  return new myPromise((resolve,reject)=>{
+    reject(reason)
+  })
+}
+myPromise.all = function(promises){
+  return new myPromise((resolve,reject)=>{
+    if(promises.length===0){
+      resolve([])
+    } else {
+      let result = []
+      let index = 0
+      for(let i=0;i<promises.length;i++){
+        promises[i].then(data=>{
+          result[i] = data;
+          if(++index===promises.length){
+            // 把前面所有的resolve的结果放到一个数组里面。如果该数组都被放满了，那么就执行resolve（结果数组）
+            resolve(result)
+          }
+        }, err=>{
+          reject(err);
+          return;
+        })
+      }
+    }
+  })
+}
+myPromise.race = function(promises){
+  return new myPromise(resolve,reject){
+    if(promises.length===0){
+      resolve([])
+    } else {
+      for(let i=0;i<promises.length;i++){
+        promises[i].then(value=>{
+          resolve(value)
+        },err=>{
+          reject(err)
+          return
+        })
+      }
+    }
+  }
+}
+```
+

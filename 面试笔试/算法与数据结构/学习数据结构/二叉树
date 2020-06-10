@@ -481,6 +481,42 @@ console.log(t)
 
 层次遍历，使用队列，把一个节点的左右节点的孩子全部放入队列中，然后一次性弹出
 
+```js
+初始化字符串 res
+初始化队列 queue，将 root 放入队列
+检查队列是否为空：
+队列不为空：取出队首节点，如果节点为 null，那么 res 更新为 res + '#,'；如果节点不是 null，那么 res 更新为 res + val，并且将节点的左右节点依次加入 queue。继续循环。
+队列为空：结束循环
+用队列来实现，先进先出，优先遍历当前层的节点
+var serialize = function(root) {
+    if (!root) {
+        return "[]";
+    }
+
+    let res = "";
+    let node = root;
+    const queue = [node];
+    while (queue.length) {
+        const front = queue.shift();
+        if (front) {
+            res += `${front.val},`;
+            queue.push(front.left);
+            queue.push(front.right);
+        } else {
+            res += "#,";
+        }
+    }
+
+    res = res.substring(0, res.length - 1); // 去掉最后一个逗号
+
+    return `[${res}]`;
+};
+    let a = []
+console.log(Serialize(t.root))
+```
+
+
+
 ## 二叉树的下一个节点
 
 给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。
