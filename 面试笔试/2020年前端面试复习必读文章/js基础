@@ -35,6 +35,10 @@ js引擎会维护一个调用栈，函数执行完之后，该执行上下文就
 
 ## 原型链
 
+![img](https://user-gold-cdn.xitu.io/2019/2/24/1691fc878b9beefa?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+
+
+
 
 
 ![image-20200510174007803](imge/image-20200510174007803.png)

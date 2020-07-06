@@ -11,7 +11,21 @@
 
 todo：http1.1中管道是什么
 
-
+> http中响应分块的 是使用 transfer-encoding来设置
+>
+> 、`Transfer-Encoding` 响应头用于告诉客户端服务器发送内容的编码格式。
+>
+> 其可选值有：
+>
+> - `chunked`：数据分块发送。此时应缺省 `Content-Length` 响应头。
+> - `compress`：使用 [Lempel-Ziv-Welch](http://en.wikipedia.org/wiki/LZW) 算法进行传输的格式，目前没有浏览器在支持。
+> - `deflate`：使用 [deflate](http://en.wikipedia.org/wiki/DEFLATE) 压缩算法 [zlib](http://en.wikipedia.org/wiki/Zlib) 结构。
+> - `gzip`：使用 [Lempel-Ziv coding](http://en.wikipedia.org/wiki/LZ77_and_LZ78#LZ77) 编码的压缩格式。
+> - `identity`：标识身份函数（e.g. no compression, nor modification）。
+>
+> 也可以同时指定多个值，用逗号分隔，像这样：`Transfer-Encoding: gzip, chunked`。
+>
+> http2是使用流来实现？
 
 ### 02 | HTTP是什么？HTTP又不是什么？
 
@@ -43,7 +57,7 @@ cdn
 
 ![image-20200503101510202](imge/image-20200503101510202.png)
 
-
+**cdn是内容分发服务网络，****cdn就是用来缓存很远的服务器的资源**缓存源站数据，找到离用户最近的节点
 
 ### 04 | HTTP世界全览（下）：与HTTP相关的各种协议
 
@@ -113,10 +127,10 @@ cdn
 首先要说的是Host字段，它属于请求字段，只能出现在请求头里，它同时也是唯一一个HTTP/1.1规范里要
 求必须出现的字段，也就是说，如果请求头里没有Host，那这就是一个错误的报文
 
-# [HTTP host头](https://www.cnblogs.com/amyzhu/p/8186516.html)
+# HTTP host头
 
 前几天，将一个host误配置为https，导致对方服务解析异常，排查半天，才发现是host导致，故整理一下HTTP host作用。
-**Host**：指定请求服务器的域名/IP地址和端口号。
+**Host**：**指定请求服务器的域名/IP地址和端口号**。
 作用：同一台机器上，可能部署多个app，通过解析host+端口，指定具体访问站点。
 host的要点：
 
@@ -450,7 +464,7 @@ Control”的用法了
 
 **ca给各个公钥进行签名**
 
-![image-20200504170032651](imge/image-20200504170032651.png)
+![ ](imge/image-20200504170032651.png)
 
 ![image-20200504170050910](imge/image-20200504170050910.png)
 

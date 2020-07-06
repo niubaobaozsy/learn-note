@@ -11,6 +11,8 @@
 - align-items
 - align-content
 
+align: 对齐方式
+
 flex-direction： row  column
 
 flex-wrap：wrap 排不下换不换行
@@ -62,3 +64,18 @@ auto | flex-start | flex-end | center | baseline | stretch;
 ```
 
 ![image-20200521170536284](imge/image-20200521170536284.png)
+
+---
+
+## 问为什么flex：1 能实现上线固定，中间自适应
+
+`flex-grow`的逻辑是对剩余空间分成。当前的屏幕宽度为`600px`，三个`span`标签的长度分别为`104px`、`104px`、`243.4px`，那么页面剩余空间为`(600-104-104-243.4)=148.6px`，根据分成的比例`1:1:1`(`flex-grow`对应的值)
+
+**因为：flex--grow来确定剩余空间分配，flex-grow默认为0，就是不管总宽度如何变化，0： 1：0，剩余空间都会给到中间这个自适应的元素**
+
+flex-grow: 1; flex-shrink: 1; flex-basis: 0%
+
+flex-basis是给flex来计算剩余空间，如果没设，那么就是根据width来计算
+
+flex-shrink表明是否放大
+

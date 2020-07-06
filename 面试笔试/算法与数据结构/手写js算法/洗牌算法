@@ -16,6 +16,7 @@
       return array;
     }
     console.log(disorder([2,5,1,3,7,0,4,6,8,10]))
+从最后一个元素开始，每次都和随机一个元素交换，
   </script>
 ```
 

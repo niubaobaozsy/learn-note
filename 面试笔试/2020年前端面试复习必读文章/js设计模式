@@ -1,0 +1,52 @@
+# js设计模式
+
+## 一：理解工厂模式
+
+ 工厂模式类似于现实生活中的工厂可以产生大量相似的商品，去做同样的事情，实现同样的效果;
+
+## 二：理解单体模式
+
+```js
+// 单体模式
+var Singleton = function(name){
+    this.name = name;
+    this.instance = null;
+};
+Singleton.prototype.getName = function(){
+    return this.name;
+}
+// 获取实例对象
+function getInstance(name) {
+    if(!this.instance) {
+        this.instance = new Singleton(name);
+    }
+    return this.instance;
+}
+// 测试单体模式的实例
+var a = getInstance("aa");
+var b = getInstance("bb");
+```
+
+**单体模式的优点是：**
+
+1. **可以用来划分命名空间，减少全局变量的数量。**
+2. **使用单体模式可以使代码组织的更为一致，使代码容易阅读和维护。**
+3. **可以被实例化，且实例化一次。**
+
+## 三：理解模块模式
+
+
+
+## 四：理解代理模式
+
+## 五：理解职责链模式
+
+## 六：命令模式的理解：
+
+## 七：模板方法模式
+
+## 八：理解javascript中的策略模式
+
+## 九：Javascript中理解发布--订阅模式
+
+## 十：理解中介者模式
