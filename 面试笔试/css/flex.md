@@ -1,5 +1,12 @@
 # flex
 
+[：弹性盒子中 flex: 0 1 auto 表示什么意思](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/380)
+
+三个参数分别对应的是 flex-grow, flex-shrink 和 flex-basis，默认值为0 1 auto。
+1.flex-grow属性定义项目的放大比例，默认为0，即如果存在剩余空间，也不放大。
+2.flex-shrink属性定义了项目的缩小比例，默认为1，即如果空间不足，该项目将缩小。
+3.flex-basis属性定义了在分配多余空间之前，项目占据的主轴空间（main size）。
+
 1，flex-grow:1
 
 这个div会自动填充剩余空间。这就是三栏布局中间那栏能自适应的原因

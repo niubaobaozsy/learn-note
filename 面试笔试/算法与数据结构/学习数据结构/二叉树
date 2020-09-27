@@ -232,11 +232,17 @@ function reConstructBinaryTree(pre, vin) {
 
 将一个二叉树，变成两份，a的左节点要等于b的右节点，a的右节点要等于b的左节点，
 
+
+
+![image-20200919144301273](imge/image-20200919144301273.png)
+
+
+
 ## 二叉树的镜像
 
-操作给定的二叉树，将其变换为源二叉树的镜像。
+**操作给定的二叉树，将其变换为源二叉树的镜像。**
 
-递归交换二叉树所有节点左右节点的位置。
+**递归交换二叉树所有节点左右节点的位置。**![image-20200919144331562](imge/image-20200919144331562.png)
 
 ```js
 function Mirror(root)
@@ -339,6 +345,7 @@ console.log(KthNode(t.root,4))
       if (!node) {
         return 0;
       }
+      // 重要
       const left = balanced(node.left);
       const right = balanced(node.right);
       if (left == -1 || right == -1 || Math.abs(left - right) > 1) {
@@ -348,6 +355,8 @@ console.log(KthNode(t.root,4))
     }
 ```
 
+最大深度，是否是平衡树，都要采用，let heightl = 递归(ndoe.left)的方式
+
 ## 二叉树中和为某一值的路径
 
 输入一颗二叉树的跟节点和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。路径定义为从树的根结点开始往下一直到叶结点所经过的结点形成一条路径。
@@ -355,7 +364,7 @@ console.log(KthNode(t.root,4))
 遍历结束的条件是，当前节点，无左右子树，总路径为期待的路径
 
 ```js
-// 回溯+深度遍历
+// 回溯+深度遍历dfs,复习dfs的时候来看看
 function FindPath(root, expectNumber) {
       const result = [];
       if (root) {
@@ -383,6 +392,38 @@ function FindPath(root, expectNumber) {
 ```
 
 用前序遍历，生成堆栈，这样出栈永远是最后出栈中间这个重要的父节点
+
+```js
+var pathSum = function(root, sum) {
+    if(!root) return []
+    let result = []
+    let arr = []
+    arr.push(root.val)
+    dfs(root,sum-root.val,result,arr)
+    return result
+};
+function dfs(root,sum,result,arr){
+    // 不存在不代表是叶子节点
+    if(!root.left && !root.right && sum===0){
+        result.push([...arr])
+        return 
+    }else if(!root.left && !root.right){
+        return
+    }
+    if(root.left){
+        arr.push(root.left.val)
+        dfs(root.left,sum-root.left.val,result,arr)
+        arr.pop()
+    }
+    if(root.right){
+        arr.push(root.right.val)
+        dfs(root.right,sum-root.right.val,result,arr)
+        arr.pop()
+    }
+}
+```
+
+**二叉树dfs总结**：判断是叶子节点，不是判断该节点存不存在，如果该节点不存在，那么只能说明其父节点的某个子节点不存在。所以这道题，**截止条件，是当前节点，left和right都不存在**。并且dfs中，**每个候选节点进入遍历的时候，都需要pop（）回到原来状况**
 
 ## 二叉搜索树与双向链表
 
@@ -427,7 +468,7 @@ function FindPath(root, expectNumber) {
 
 看不懂上面的，思路也没有讲明白
 
-现在认可的一种方法就是中序遍历成数组，然后依次链接数组中的每个元素
+**现在认可的一种方法就是中序遍历成数组，然后依次链接数组中的每个元素** ！important
 
 递归，每个节点的左节点放前面，右节点放后面，先操作最左边，递归实现，每次递归保留last前面一个元素
 
@@ -496,6 +537,7 @@ var serialize = function(root) {
     let res = "";
     let node = root;
     const queue = [node];
+    // 记住每一层的数量，把当前层节点的孩子节点放到队列后面
     while (queue.length) {
         const front = queue.shift();
         if (front) {

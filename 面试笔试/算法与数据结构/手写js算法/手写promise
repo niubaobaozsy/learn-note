@@ -135,3 +135,164 @@ myPromise.race = function(promises){
 }
 ```
 
+```
+
+ // 这个一定会在new promise之后执行，也就是等到new中resolve（val）调用了，才会执行then中第一个参数resolve函数
+// promise的关键，就是利用异步任务之间的顺序性。把then后面的操作，包装成一个异步任务，
+// 由于创建的顺序，new promise（异步任务）这个异步任务一定比then中要执行的任务晚.这样就达到了承诺的作用
+实现promise关键，是把then中的任务包装成异步，执行顺序，会让之前加入的异步任务先执行，这样实现promise功能
+then的链式调用，每调用一个then，都是一个新的promise。
+所以
+// 每个this单独的回调，所以，回调这中只需要一个元素就行
+console.log('then'+this.onFulfilledCallbacks.length)
+这个变量，只会有一个回调函数
+```
+
+![image-20200919110115686](imge/image-20200919110115686.png)
+
+## then的链式调用
+
+```js
+const PENDING = 'pending';
+    const FULFILLED = 'fulfilled';
+    const REJECTED = 'rejected';
+function myPromise(executor){
+  this.state = PENDING
+  this.value = null
+  this.reason = null
+  this.onFulfilledCallbacks = [];
+  this.onRejectedCallbacks  = [];
+  const resolve = (value)=>{
+    console.log(this.onFulfilledCallbacks.length+'resolve')
+    if(this.state==PENDING){
+      this.state = FULFILLED
+      this.value = value
+      this.onFulfilledCallbacks.forEach(element => {
+        element()
+      });
+    }
+  }
+  const reject = (value)=>{
+    console.log(this.onFulfilledCallbacks.length+'reject')
+    if(this.state==PENDING){
+      this.state = REJECTED
+      this.reason = value
+      this.onRejectedCallbacks.forEach(fun=>{
+        fun()
+      })
+    }
+  }
+  try {
+    executor(resolve,reject)
+  } catch(reason) {
+    reject(reason)
+  }
+}
+// 异步调用：状态还是PENDING，将onFulfilled、onRejected分别加入两个函数数组onFulfilledCallbacks、onRejectedCallbacks，
+// 当异步调用resolve和reject时，将两个数组中绑定的事件循环执行
+// 代码是同步的，new Promise（）.then()。会立刻执行，但是newpromise是个异步事件，会先执行then（）函数。所以需要用数组先把then中的函数存储起来
+// new myPromise()
+// myPromise.prototype.then = function(onFulfilled,onRejected){
+//   switch (this.state){
+//     case FULFILLED:
+//     setTimeout(()=>{
+//       onFulfilled(this.value)
+//     },0)
+//     break;
+//     case REJECTED:
+//     setTimeout(()=>{
+//       onRejected(this.reason)
+//     },0)
+//     break;
+//     case PENDING:
+//     this.onFulfilledCallbacks.push(()=>[
+//       // 这个一定会在new promise之后执行，也就是等到new中resolve（val）调用了，才会执行then中第一个参数resolve函数
+//       // promise的关键，就是利用异步任务之间的顺序性。把then后面的操作，包装成一个异步任务，
+//       // 由于创建的顺序，new promise（异步任务）这个异步任务一定比then中要执行的任务晚.这样就达到了承诺的作用
+//       setTimeout(()=>{
+//         onFulfilled(this.value)
+//       },0)
+//     ])
+//     this.onRejectedCallbacks.push(()=>{
+//       setTimeout(() => {
+//         try {
+//           // 这一步，保证返回的还是
+//           const x = onRejected(this.reason);
+//           // resolve(x);
+//         } catch (reason) {
+//           reject(reason);
+//         }
+//       }, 0);
+//     })
+//     break;
+//   }
+// }
+myPromise.prototype.then = function (onFulfilled, onRejected) {
+    // 执行了new 就是把promise参数中的这个函数执行了，
+      const promise2 = new myPromise((resolve, reject) => {
+        // console.log(this.state+'then')
+        switch (this.state) {
+          case FULFILLED:
+            setTimeout(() => {
+              try {
+                const x = onFulfilled(this.value);
+                resolve(x);
+              } catch (reason) {
+                reject(reason);
+              }
+            }, 0);
+            break;
+          case REJECTED:
+            setTimeout(() => {
+              try {
+                const x = onRejected(this.reason);
+                resolve(x);
+              } catch (reason) {
+                reject(reason);
+              }
+            }, 0);
+            break;
+          case PENDING:
+            this.onFulfilledCallbacks.push(() => {
+              setTimeout(() => {
+                try {
+                  const x = onFulfilled(this.value);
+                  resolve(x);
+                } catch (reason) {
+                  reject(reason);
+                }
+              }, 0);
+            })
+            this.onRejectedCallbacks.push(() => {
+              setTimeout(() => {
+                try {
+                  const x = onRejected(this.reason);
+                  resolve(x);
+                } catch (reason) {
+                  reject(reason);
+                }
+              }, 0);
+            })
+            break;
+        }
+      })
+      // 每个this单独的回调，所以，回调这中只需要一个元素就行
+    console.log('then'+this.onFulfilledCallbacks.length)
+      return promise2;
+    }
+// then是同步的，链式调用了几次，数组中就有几个，
+new myPromise((resolve,reject)=>{
+  setTimeout(()=>{
+    reject(1)
+  },3000)
+}).then(()=>{
+  console.log('resolve')
+  // promse1
+},()=>{
+  console.log('reject')
+}).then(()=>{
+  console.log(1)
+  // prmoes2
+})
+```
+

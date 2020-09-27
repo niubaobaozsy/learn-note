@@ -1,0 +1,446 @@
+找不到腾讯教育面经，那直接找腾讯面经吧
+
+----
+
+15.1 Node上如何处理异常情况？（Ps.我回答的是开发调试。。。找js文件）
+
+1，try catch
+
+2，domain收集错误，回调中收集异常
+
+15.2 已经上线的项目，出问题，怎么样去处理异常？
+
+
+
+收集异常，然后进行处理
+
+**3.Ajax发送请求的步骤？**
+
+3.1 xhr.open()
+
+3.2 xhr.send()
+
+3.3 callback()
+
+```js
+xhr.onload = function () {
+```
+
+
+
+圣杯布局是啥
+
+左右定宽，中间自适应
+
+css样式：
+
+```
+               .header {
+			width: 100%;
+			height: 30px;
+			background: red;
+		}
+
+		.content {
+			overflow: hidden;
+			padding: 0 100px;
+		}
+
+		.footer {
+			width: 100%;
+			height: 30px;
+			background: red;
+		}
+
+		.middle {
+			position:relative;			
+			width: 100%;
+			float: left;
+			height: 80px;
+			background: green;
+		}
+
+		.left {
+			position:relative;
+			width: 100px;
+			float: left;
+			left:-100px;
+			height: 80px;
+			margin-left: -100%;
+			background: yellow;
+		}
+
+		.right {
+			position:relative;			
+			width: 100px;
+			float: left;
+			right:-100px;
+			height: 80px;
+			margin-left: -100px;
+			background: pink
+		}
+复制代码
+```
+
+这里有几点需要留意：
+ 1: 先写middle,然后是left和right，因为需要先渲染middle
+ 2: left、right需设置`position:relative`以及相应的left、right值
+ 3:理解负边距的作用，left的`margin-left:-100%`使它上移一行，同时right向左移占据left原先位置，同理，right的`margin-left:-100px`使它上移并靠右
+
+flex
+
+postion relative 相对，相对自己
+
+absolute绝对，相对于父元素
+
+参照定位的元素必须加入position:relative;或者position:absolute;   
+
+```
+DNS查询的具体过程
+闭包、事件委托及其好处、跨域
+圣杯布局、position属性的值及其区别、display当中 inline 和 inline-block的区别
+兼容性
+XSS和CSRF如何进行防御
+```
+
+**问：事件模型**
+
+```
+事件触发过程分为 捕获阶段、处于目标阶段和冒泡阶段
+```
+
+**问：你知道具体的原理吗？就是怎么流动的**
+
+```
+就是一开始从document开始往下传递，此阶段为捕获阶段，到达target时，处于目标阶段，然后再冒泡上去至document，完成事件的传递
+```
+
+**问：你说一下闭包及其使用方法**
+
+```
+闭包从使用上来说，就是在一个函数里定义了另外一个函数，然后里面的函数可以使用到外层函数的变量。由于执行环境和作用域链的特性，在不做其他操作的前提下，内层函数总是只能访问到外层函数变量的最后一个值，所以当需要使用到外层函数变量值实时进行相关操作时，使用闭包将值传入立即执行。
+```
+
+**问：说一下原型链的构成**
+
+```
+原型模型的构成，我把下面的一张图给面试官说了一说
+```
+
+![原型链](http://www.ibm.com/developerworks/cn/web/1306_jiangjj_jsinstanceof/figure1.jpg)
+
+**问：兼容性了解得多不多？就是具体开发过程中有没有遇到过什么兼容性问题**
+
+```
+wtf，又问我兼容性的问题，不过的确我没有做太多兼容性的处理，所以真的也答不上什么来，的确是需要去学习学习兼容性的问题，在普遍较为多的面向群众较广的部门，他们都会要求做IE兼容，就是可能window 7 或者XP可能还有一定市场份额，IE的确也还有许多人在用，这部分我和面试官坦诚说不是特别系统的学习，之后要进行相关的学习和操作。
+然后，这部分的话，面试官没有纠结太多，就让我要去了解一下，以后如果有机会来，是要做这方面的兼容的。
+css样式兼容性，有些单写flex，有写浏览器不行会乱，网上搜了下加前缀，flex对应不同值，具体的没关注
+```
+
+**问：你说一些 性能优化 的方式**
+
+```
+我大致说了一下雅虎军规的，还有一些js脚本上的操作，还有根据渲染过程讲的一些优化措施，具体可以看看一些优化的方式
+```
+
+一些性能优化：
+https://developers.google.com/speed/docs/insights/rules?csw=1#header
+https://developer.yahoo.com/performance/rules.html 雅虎军规
+http://www.jianshu.com/p/268c7f3dd7a6 CSS选择器的优化
+https://www.ibm.com/developerworks/cn/web/1308_caiys_jsload/ JavaScript性能的优化
+
+画风突然一转
+
+面试官可爱的一说 “我问你一道智力题”
+
+戴表
+
+30/4+= 67.5
+
+**钟表上 5:15分的夹角是多少**
+
+```
+还好我以前看过类似的题，想了大概30s，然后告诉他答案 67.5°
+```
+
+**又问：那 7:45呢**
+
+```
+原理一样，37.5°
+```
+
+然后就问我，现在方不方便用电脑，因为我当时的确是不方便用电脑，没有电脑在身旁，他说想开远程然后让我写几道题目，我就和他商讨说，能不能等我回去之后找他，面试官也挺好的，说没关系，看你有空的时候就来面试，今晚或者明天都OK，于是乎，我和面试官又约了晚上19:30来进行编程题的面试
+
+------
+
+time to 19:30，面试官头像变亮，我主动找了面试官，然后开了远程桌面，啊擦 压力大，直播我打代码啊，天
+
+面试官说 90分钟，三道题，如下
+
+```
+1. 在页面内有一个正方形，实现其在页面内的拖拽和放下
+2. 在页面内实现右键菜单
+3. 实现大数相加
+```
+
+好吧，话不多说，直接上代码，因为有些代码过长，我先讲一下思路，然后代码都放在codepen上面吧
+
+**实现页面内的拖拽和放下**
+
+codepen地址：https://codepen.io/yacent/pen/JKPKdX
+
+```
+实现关键：
+1. 正方形随鼠标移动，所以其position属性设为absolute，可调整
+2. 记录mousedown、mousemove、mouseup
+    a. mousedown 记录点击处鼠标位置，并计算与目标边缘的差值
+    b. mousemove 实时修改其position属性的 top 和 left值
+    c. mouseup 将拖拽对象置为空
+```
+
+**实现页面右键菜单**
+
+codepen地址：http://codepen.io/yacent/pen/LZPggE
+
+```
+实现关键：
+1. HTML5事件 contextmenu 事件可自定义右键菜单
+2. 菜单默认不可见，事件中修改 display属性及 position属性的 top 和 left 值
+3. 取消默认的行为，取消默认的右键菜单的出现
+4. 点击页面其余位置，右键菜单消失
+```
+
+
+
+应该基本上和这个一样
+
+1. qq正则
+
+ngnix如何配置
+
+**简单说一说盒模型，W3C和IE怪异盒模型。**
+
+##### 1、自我介绍
+
+开场多半都是这样
+
+##### 2、询问你在大学学了哪些课程，你觉得你学得最好的是哪一门？
+
+这里的话，接下来的话题就会围绕你觉得学的最好的课程来展开
+
+##### 3、先用js手写一个冒泡排序
+
+这期间还问了时间复杂度和空间复杂度，空间复杂度与什么因素有关
+
+**时间复杂度：** `平均时间复杂度O(n*n) 、最好情况O(n)、最差情况O(n*n)`
+**空间复杂度：** O(1)
+
+##### 4、你知道打开https:www.qq.com经历了什么吗？
+
+dns解析，然后去建立链接tcp http  渲染
+
+这个就是关于输入网址到显示页面的步骤
+
+##### 5、js基本数据类型
+
+之前答的不是很好，面试官就回到了简单一点的题
+
+##### 6、Vue生命周期你有了解过吗？你用到过哪些？
+
+beforeCreate 、created 等等
+
+##### 7、你知道cookie吗？请描述一下 cookies，sessionStorage 和 localStorage 的区别？
+
+这里也问了cookies里面重要属性有哪些，有什么用
+
+如果**不设置过期时间**，则表示这个cookie生命周期为浏览器会话期间，**只要关闭浏览器窗口，cookie就消失了**。这种生命期为浏览会话期的cookie被称为会话cookie。会话cookie一般不保存在硬盘上而是保存在内存里
+
+##### 8、你了解SEO吗？知道怎么做吗？
+
+ssr，语义化，重定向
+
+这里我就答了html5一些，以及搭建hexo博客用的优化，还提及到了SEO有什么用
+
+##### 9、谈谈你对this的理解
+
+因为提及到了apply和call，面试官就反问了apply和call的知识
+
+##### 10、你了解跨域吗？
+
+我在谈及的时候，提及到了前后端分离模式，于是下一题…
+
+##### 11、说说你对前后端分离的理解
+
+我就从JSONP时代讲到了nginx反向代理，也从原本不需要考虑跨域问题谈到现在比较主流的前后端分离模式
+
+
+
+重点了解下jsonp
+
+nginx反向代理**正向代理代理客户端，反向代理代理服务器。**
+
+
+
+##### 12、你对浏览器的理解，本地打开浏览器经历了什么？（这个要看）
+
+再复习下浏览器 todo
+
+这个当时有点懵…
+
+##### 13、谈谈你所了解的前端性能优化？
+
+代码压缩，SEO、缓存等等
+
+##### 14、你知道gulp吗？
+
+流…，不了解，只知道是打包工具
+
+##### 15、你用过git吗？常见哪些指令？你知道回退是什么指令吗？
+
+ git reset HEAD <filename>
+
+##### 16、你了解React吗？
+
+因为不是很了解，这里我就谈及了mvvm和mvc的区别，也说明了为啥选择学习Vue，作为学生目前了解不是很深入
+
+##### 17、你知道怎么不传cookied吗？你了解过http:only吗？
+
+同一个域名，设置了才会携带cookie
+
+## ajax请求到底会不会带上cookie?
+
+默认情况下不会, 只有当设置了 `credentials` 时才会带上与请求同域的cookie, 并且服务端需要设置响应头 `Access-Control-Allow-Credentials: true`, 否则浏览器会报错, 拿不到响应
+
+
+
+这个我就有点熟悉，但不记得了
+
+##### 18、你了解Webpack吗？
+
+打包方面
+
+##### 19、对于之前打开本地浏览器那一块，你了解过dom树吗？
+
+好像他也想问AST语法树方面，但我也不记得了
+
+##### 20、你了解CDN吗？在哪里你用过
+
+cdn原理
+
+##### 21、说说你对原型链的理解？
+
+![深入原型和原型链· Issue #39 · amandakelake/blog · GitHub](https://user-images.githubusercontent.com/25027560/38067986-4bf5133e-3341-11e8-955c-ec57beca1c8c.png)
+
+
+
+##### 22、谈谈你对响应式原理的理解
+
+我提及到了Vue2.0和Vue3.0 区别 以及proxy还能做些什么
+
+（proxy深入理解下）
+
+##### 23、你了解闭包吗？
+
+
+
+##### 24、leetcode 电话号码的字母组合
+
+题目
+
+给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。
+给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
+
+![img](https://img-blog.csdnimg.cn/20200327100131518.png)
+
+示例:
+输入：“23”
+输出：[“ad”, “ae”, “af”, “bd”, “be”, “bf”, “cd”, “ce”, “cf”].
+
+##### 25、最后，出了4到题
+
+① 异步、事件循环方面，具体题不急得了，但你能把下面这道题做出来，基本上没问题
+
+原题地址及解析
+
+```
+<!DOCTYPE html>
+<html >
+<head>
+    <meta charset="UTF-8">
+    <title>挑战js面试题</title>
+</head>
+<body>
+    <script>
+        async function async1(){
+            console.log('async1 start');
+            await async2();
+            console.log('async1 end');
+        }
+        async function async2(){
+            console.log('async2');
+        }
+        console.log('script start');
+        setTimeout(function(){
+            console.log('setTimeout');
+        },0)
+        async1();
+        new Promise(function (resolve){
+            console.log('promise1');
+            resolve();
+        }).then(function(){
+            console.log('promise2');
+        });
+        console.log('script end');
+    </script>
+</body>
+</html>
+```
+
+② 你如何将arguments参数改变为数组
+
+[...arg]
+
+③ box-sizing中content和border的区别
+
+![image-20200920213502063](imge/image-20200920213502063.png)
+
+讲解各种盒模型：标准盒模型、IE（怪异）盒模型、flex、分列布局
+
+④ 请你用正则表达式来解析腾讯qq或者腾讯其它网页的域名
+
+`/^[1-9][0-9]{4,9}$/`
+
+`/^[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+.?$/`
+
+>  匹配前面一个表达式 0 次或者 1 次。等价于 `{0,1}`。例如，`/e?le?/` 匹配 "angel" 中的 'el'、"angle" 中的 'le' 以及 "oslo' 中的 'l'。如果**紧跟在任何量词 \*、 +、? 或 {} 的后面**，将会使量词变为**非贪婪**（匹配尽量少的字符），和缺省使用的**贪婪模式**（匹配尽可能多的字符）正好相反。例如，对 "123abc" 使用 `/\d+/` 将会匹配 "123"，而使用 `/\d+?/` 则只会匹配到 "1"。
+
+```
+// \/ 代表后面的pathname
+// \? 代表后面的querystring
+// # 代表后面的hash
+// : 代表后面的端口
+'https://www.baidu.com'.match(/^https?:\/\/[^\/\?#:]+/);
+DNS规定，域名中的标号都由英文字母和数字组成，每一个标号不超过63个字符，也不区分大小写字母。标号中除连字符（-）外不能使用其他的标点符号。级别最低的域名写在最左边，而级别最高的域名写在最右边。由多个标号组成的完整域名总共不超过255个字符。
+由此匹配完整域名的正则表达式：
+
+todo: 看不懂这一串：?=^.{3,255}$)，面试前一定要搞懂
+   ^(?=^.{3,255}$)[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+$
+例如：baidu.com 
+ 匹配网址：
+^(?=^.{3,255}$)(http(s)?:\/\/)?(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+\.\w+)*$
+例如： http://www.baidu.com
+```
+
+----
+
+1，正则表达式
+
+2，dom原生事件
+
+-----
+
+
+
+src:要加载的资源 href：外链
+
+​                                    

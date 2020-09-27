@@ -1,0 +1,267 @@
+# 函数柯里化
+
+函数柯里化是把接受多个参数的函数转变成接受一个单一参数(最初函数的第一个参数),并且返回接受余下的参数而且返回结果的新函数的技术
+
+柯里化其实本身是固定一个可以预期的参数，并返回一个特定的函数，处理批特定的需求。这增加了函数的适用性，但同时也降低了函数的适用范围。
+
+**（函数柯里化核心就是闭包）**
+
+## 柯里化
+
+**参数复用**
+
+柯里化（currying）指的是将一个多参数的函数拆分成一系列函数，每个拆分后的函数都只接受一个参数（unary）。
+
+```js
+function add (a, b) {  return a + b;}
+add(1, 1) // 2
+```
+
+上面代码中，函数`add`接受两个参数`a`和`b`。
+
+柯里化就是将上面的函数拆分成两个函数，每个函数都只接受一个参数。
+
+```js
+function add (a) {  return function (b) {    return a + b;  }}// 或者采用箭头函数写法const add = x => y => x + y;const f = add(1);f(1) // 2
+```
+
+### 2 延迟执行
+
+```js
+var add = function() {
+    var _this = this,
+    _args = arguments
+    return function() {
+        if (!arguments.length) {
+            var sum = 0;
+            for (var i = 0,c; c = _args[i++];){
+                sum += c;
+            }复制代码
+            return sum
+        } else {
+            Array.prototype.push.apply(_args, arguments) 
+            return arguments.callee
+        }
+    }
+}
+add(1)(2)(3)(4)();//10复制代码callee 是 arguments 对象的一个属性。它可以用于引用该函数的函数体内当前正在执行的函数。这在函数的名称是未知时很有用，例如在没有名称的函数表达式 (也称为“匿名函数”)内。
+var add = function() {
+    var _this = this,
+    _args = [...arguments]
+     function a() {
+        if (!arguments.length) {
+            var sum = 0;
+            for (var i = 0,c; c = _args[i++];){
+                sum += c;
+            }
+            return sum
+        } else {
+            _args.push(...arguments) 
+            return a
+        }
+    }
+    return a
+}
+console.log(add(1)(2)(3)(4)());//10复制代码
+```
+
+通用的写法：
+
+```
+var curry = function(fn) {
+    var _args = []
+    return function cb() {
+        if (arguments.length == 0) {
+            return fn.apply(this, _args)
+        }
+        Array.prototype.push.apply(_args, arguments);
+        return cb;
+    }
+}
+```
+
+**把函数的参数不断用闭包保留，如果没传递参数，就表示开始执行。就做到了延迟执行**
+
+## 3. 柯里化的常见用法
+
+### 3.1 参数复用
+
+通过柯里化方法，缓存参数到闭包内部参数，然后在函数内部将缓存的参数与传入的参数组合后apply/bind/call给函数执行，来实现参数的复用，降低适用范围，提高适用性。
+
+参看以下栗子，官员无论添加后续老婆，都能和合法老婆组合，通过柯里化方法，getWife方法就无需添加多余的合法老婆...
+
+```
+var currying = function(fn) {
+  var args = [].slice.call(arguments, 1)      // fn 指官员消化老婆的手段,args 指的是那个合法老婆
+  return function(...rest) {
+    var newArgs = args.concat(...rest)        // 已经有的老婆和新搞定的老婆们合成一体，方便控制
+    return fn.apply(null, newArgs)        // 这些老婆们用 fn 这个手段消化利用，完成韦小宝前辈的壮举并返回
+  }
+}
+
+var getWife = currying(function() {
+  console.log([...arguments].join(';'))          // allwife 就是所有的老婆的，包括暗渡陈仓进来的老婆
+}, '合法老婆')
+
+getWife('老婆1', '老婆2', '老婆3')      // 合法老婆;老婆1;老婆2;老婆3
+getWife('超越韦小宝的老婆')             // 合法老婆;超越韦小宝的老婆
+getWife('超级老婆')                    // 合法老婆;超级老婆
+复制代码
+```
+
+### 3.2 提高适用性
+
+**通用函数**解决了兼容性问题，但同时也会再来，使用的不便利性，不同的应用场景往，要传递很多参数，以达到解决特定问题的目的。有时候应用中，同一种规则可能会反复使用，这就可能会造成代码的重复性。
+
+```
+// 未柯里化前
+function square(i) { return i * i; }
+function dubble(i) { return i * 2; }
+function map(handler, list) { return list.map(handler); }
+
+map(square, [1, 2, 3, 4, 5]);        // 数组的每一项平方
+map(square, [6, 7, 8, 9, 10]);
+map(dubble, [1, 2, 3, 4, 5]);        // 数组的每一项加倍
+map(dubble, [6, 7, 8, 9, 10]);
+复制代码
+```
+
+同一规则重复使用，带来代码的重复性，因此可以使用上面的通用柯里化实现改造一下：
+
+```javascript
+// 柯里化后
+function square(i) { return i * i; }
+function dubble(i) { return i * 2; }
+function map(handler, ...list) { return list.map(handler); }
+
+var mapSQ = currying(map, square);
+mapSQ([1, 2, 3, 4, 5]);
+mapSQ([6, 7, 8, 9, 10]);
+
+var mapDB = currying(map, dubble);
+mapDB([1, 2, 3, 4, 5]);
+mapDB([6, 7, 8, 9, 10]);
+复制代码
+```
+
+可以看到这里柯里化方法的使用和偏函数比较类似，顺便回顾一下偏函数~
+
+```js
+  // 柯里化后
+function square(i) { return i * i; }
+function dubble(i) { return i * 2; }
+function map(handler, list) {
+  debugger
+   return list.map(handler); 
+}
+function currying(map, fn){
+  return (arg) => {
+    return map(fn,arg)
+  }
+}
+var mapSQ = currying(map, square);
+mapSQ([1, 2, 3, 4, 5]);
+let a = mapSQ([6, 7, 8, 9, 10]);
+console.log(a)
+参数复用
+```
+
+
+
+**偏函数**是创建一个调用另外一个部分(参数或变量已预制的函数)的函数，函数可以根据传入的参数来生成一个真正执行的函数。比如：
+
+```
+const isType = function(type) {
+  return function(obj) {
+    return Object.prototype.toString.call(obj) === `[object ${type}]`
+  }
+}
+const isString = isType('String')
+const isFunction = isType('Function')
+复制代码
+```
+
+这样就用偏函数快速创建了一组判断对象类型的方法~
+
+**偏函数**固定了函数的某个部分，通过传入的参数或者方法返回一个新的函数来接受剩余的参数，数量可能是一个也可能是多个 **柯里化**是把一个有n个参数的函数变成n个只有1个参数的函数，例如：`add = (x, y, z) => x + y + z`→`curryAdd = x => y => z => x + y + z` 当偏函数接受一个参数并且返回了一个只接受一个参数的函数，与两个接受一个参数的函数curry()()的柯里化函数，这时候两个概念类似。(个人理解不知道对不对)
+
+### 3.3 延迟执行
+
+柯里化的另一个应用场景是延迟执行。不断的柯里化，累积传入的参数，最后执行。例如累加：
+
+```
+const curryAdd = function(...rest) {
+  const _args = rest
+  return function cb(...rest) {
+    if (rest.length === 0) {
+      return _args.reduce((sum, single) => sum += single)
+    } else {
+      _args.push(...rest)
+      return cb
+    }
+  }
+}()                        // 为了保存添加的数，这里要返回一个闭包
+curryAdd(1)
+curryAdd(2)
+curryAdd(3)
+curryAdd(4)
+curryAdd()               // 最后计算输出:10
+复制代码
+```
+
+更通用的写法，将处理函数提取出来：
+
+```
+const curry = function(fn) {
+  const _args = []
+  return function cb(...rest) {
+    if (rest.length === 0) {
+      return fn.apply(this, _args)
+    }
+    _args.push(...rest)
+    return cb
+  }
+}
+
+const curryAdd = curry((...T) => 
+  T.reduce((sum, single) => sum += single)
+)
+curryAdd(1)
+curryAdd(2)
+curryAdd(3)
+curryAdd(4)
+curryAdd()               // 最后计算输出:10
+复制代码
+```
+
+## 4. Function.prototype.bind 方法也是柯里化应用
+
+与 call/apply 方法直接执行不同，bind 方法将第一个参数设置为函数执行的上下文，其他参数依次传递给调用方法（函数的主体本身不执行，可以看成是延迟执行），并动态创建返回一个新的函数， 这符合柯里化特点。
+
+```
+var foo = {x: 888};
+var bar = function () {
+    console.log(this.x);
+}.bind(foo);              // 绑定
+bar();                    // 888
+复制代码
+```
+
+下面是一个 bind 函数的模拟，testBind 创建并返回新的函数，在新的函数中将真正要执行业务的函数绑定到实参传入的上下文，延迟执行了。
+
+```js
+Function.prototype.testBind = function(scope) {
+  return () => this.apply(scope)
+}
+var foo = { x: 888 }
+var bar = function() {
+  console.log(this.x)
+}.testBind(foo)              // 绑定
+bar()                    // 888
+```
+
+
+作者：SHERlocked93
+链接：https://juejin.im/post/5ce027df518825259e2e4f35
+来源：掘金
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。

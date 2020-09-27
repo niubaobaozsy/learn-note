@@ -1,0 +1,848 @@
+# react中文文档---知道怎么用就行（2
+
+一共要看55节
+
+要好好的搞下这些，好好学习，准备投一些公司
+
+因为我之前学过vue，再看react，很熟悉，很容易理解，所以比较快，晚上看webpack原理类视频
+
+今天刚好没有工作，所以今天就把react好好学习下
+
+如果小米下班前美信没有问我，我就微信问一下，如果不去内部，明天能源不用认真交接，如果去，就好好听听，主要是开发流程
+
+还有三个小时，大概率是没有工作的，所以现在要好好珍惜
+
+安排下今天的学习量（一个小时4节，12节）那完了，有很多节知识点，还是需要抓紧时间好好学习
+
+## 核心概念
+
+### jsx
+
+Babel 会把 JSX 转译成一个名为 `React.createElement()` 函数调用。
+
+以下两种示例代码完全等效：
+
+```react
+const element = (
+  <h1 className="greeting">
+    Hello, world!
+  </h1>
+);
+const element = React.createElement(
+  'h1',
+  {className: 'greeting'},
+  'Hello, world!'
+);
+```
+
+我的效率好低啊，怎么办，学习效率很低
+
+ 规定时间去做一些事情，每25分钟做完一些事情
+
+四点前： 
+
+### 元素渲染
+
+React 只更新它需要更新的部分
+
+React DOM 会将元素和它的子元素与它们之前的状态进行比较，并只会进行必要的更新来使 DOM 达到预期的状态。
+
+**所有 React 组件都必须像纯函数一样保护它们的 props 不被更改。**
+
+都是用state来改变，因为子元素中一部分属性可以是父元素的state
+
+### 组件 & props
+
+通过调用 `ReactDOM.render()` 来修改我们想要渲染的元素：
+
+State 与 props 类似，但是 state 是私有的，并且完全受控于当前组件。
+
+通过以下五步将 `Clock` 的函数组件转成 class 组件：（函数组件转换成class组件）
+
+1. 创建一个同名的 [ES6 class](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Classes)，并且继承于 `React.Component`。
+2. 添加一个空的 `render()` 方法。
+3. 将函数体移动到 `render()` 方法之中。
+4. 在 `render()` 方法中使用 `this.props` 替换 `props`。
+5. 删除剩余的空函数声明。
+
+### state & 生命周期
+
+当 `Clock` 组件第一次被渲染到 DOM 中的时候，就为其[设置一个计时器](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setInterval)。这在 React 中被称为“挂载（mount）”。
+
+同时，当 DOM 中 `Clock` 组件被删除的时候，应该[清除计时器](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/clearInterval)。这在 React 中被称为“卸载（unmount）”。
+
+`componentDidMount()` 方法会在组件已经被渲染到 DOM 中后运行
+
+1. 当 `Clock` 的输出被插入到 DOM 中后，React 就会调用 `ComponentDidMount()` 生命周期方法。在这个方法中，`Clock` 组件向浏览器请求设置一个计时器来每秒调用一次组件的 `tick()` 方法。
+2. 浏览器每秒都会调用一次 `tick()` 方法。 在这方法之中，`Clock` 组件会通过调用 `setState()` 来计划进行一次 UI 更新。得益于 `setState()` 的调用，React 能够知道 state 已经改变了，然后会重新调用 `render()` 方法来确定页面上该显示什么。这一次，`render()` 方法中的 `this.state.date` 就不一样了，如此以来就会渲染输出更新过的时间。React 也会相应的更新 DOM。
+3. 一旦 `Clock` 组件从 DOM 中被移除，React 就会调用 `componentWillUnmount()` 生命周期方法，这样计时器就停止了。
+
+## 
+
+### 事件处理
+
+### State 的更新可能是异步的
+
+出于性能考虑，React 可能会把多个 `setState()` 调用合并成一个调用。
+
+因为 `this.props` 和 `this.state` 可能会异步更新，所以你不要依赖他们的值来更新下一个状态。
+
+#### 数据是向下流动的
+
+在 React 中另一个不同点是你不能通过返回 `false` 的方式阻止默认行为。你必须显式的使用 `preventDefault` 。例如，传统的 HTML 中阻止链接默认打开一个新页面，你可以这样写：
+
+```
+<a href="#" onclick="console.log('The link was clicked.'); return false">
+  Click me
+</a>
+```
+
+在 React 中，可能是这样的：
+
+```react
+function ActionLink() {
+  function handleClick(e) {    e.preventDefault();    console.log('The link was clicked.');  }
+  return (
+    <a href="#" onClick={handleClick}>      Click me
+    </a>
+  );
+}
+```
+
+### 条件渲染
+
+### 与运算符 &&
+
+通过花括号包裹代码，你可以[在 JSX 中嵌入任何表达式](https://reactjs.bootcss.com/docs/introducing-jsx.html#embedding-expressions-in-jsx)。这也包括 JavaScript 中的逻辑与 (&&) 运算符。它可以很方便地进行元素的条件渲染。
+
+```react
+function Mailbox(props) {
+  const unreadMessages = props.unreadMessages;
+  return (
+    <div>
+      <h1>Hello!</h1>
+      {unreadMessages.length > 0 &&        <h2>          You have {unreadMessages.length} unread messages.        </h2>      }    </div>
+  );
+}
+
+const messages = ['React', 'Re: React', 'Re:Re: React'];
+ReactDOM.render(
+  <Mailbox unreadMessages={messages} />,
+  document.getElementById('root')
+);
+```
+
+之所以能这样做，是因为在 JavaScript 中，`true && expression` 总是会返回 `expression`, 而 `false && expression` 总是会返回 `false`。
+
+因此，如果条件是 `true`，`&&` 右侧的元素就会被渲染，如果是 `false`，React 会忽略并跳过它。
+
+
+
+
+
+### 列表 & key
+
+### 渲染多个组件
+
+你可以通过使用 `{}` 在 JSX 内构建一个[元素集合](https://reactjs.bootcss.com/docs/introducing-jsx.html#embedding-expressions-in-jsx)。
+
+下面，我们使用 Javascript 中的 [`map()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/map) 方法来遍历 `numbers` 数组。将数组中的每个元素变成 `<li>` 标签，最后我们将得到的数组赋值给 `listItems`：
+
+```
+const numbers = [1, 2, 3, 4, 5];
+const listItems = numbers.map((number) =>  <li>{number}</li>);
+```
+
+我们把整个 `listItems` 插入到 `<ul>` 元素中，然后[渲染进 DOM](https://reactjs.bootcss.com/docs/rendering-elements.html#rendering-an-element-into-the-dom)：
+
+```
+ReactDOM.render(
+  <ul>{listItems}</ul>,  document.getElementById('root')
+);
+```
+
+
+
+### 表单
+
+如果列表项目的顺序可能会变化，我们不建议使用索引来用作 key 值，因为这样做会导致性能变差，还可能引起组件状态的问题。可以看看 Robin Pokorny 的[深度解析使用索引作为 key 的负面影响](https://medium.com/@robinpokorny/index-as-a-key-is-an-anti-pattern-e0349aece318)这一篇文章。如果你选择不指定显式的 key 值，那么 React 将默认使用索引用作为列表项目的 key 值。
+
+如果你想寻找包含验证、追踪访问字段以及处理表单提交的完整解决方案，使用 [Formik](https://jaredpalmer.com/formik) 是不错的选择。然而，它也是建立在受控组件和管理 state 的基础之上 —— 所以不要忽视学习它们。
+
+html是受控组件
+
+### 状态提升
+
+通常，多个组件需要反映相同的变化数据，这时我们建议将共享状态提升到最近的共同父组件中去。让我们看看它是如何运作的
+
+```js
+// Person为构造函数
+function Person (name, age) {
+    this.name = name,
+    this.age = age
+}
+
+// 在构造函数的原型上添加方法
+Person.prototype.getName = function () {
+    return this.name
+}
+
+// 构造一个实例
+var huhaha = new Person('huhaha', 21)
+// 在实例上调用该方法
+var myName = huhaha.getName()
+
+console.log(myname) // huhaha
+  那么在es6中怎么使用class去实现它呢，先看代码再解释～
+
+// 类中的this指向创建的实例
+class Person {
+    constructor (name, age) {
+        this.name = name
+        this.age = age
+    }
+
+    getName () {
+        return this.name
+    }
+}
+
+// 构造一个实例
+let huhaha = new Person('huhaha', 21)
+// 在实例上调用该方法
+const myName = huhaha.getName()
+
+console.log(myname) // huhaha
+```
+
+所以放在class里面的方法是静态方法，是原型上的方法
+
+constructor里面是实例的方法，所以，在react里会有在构造器里面绑定this的代码
+
+```react
+class TemperatureInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);// 在这个绑定this
+  }
+
+  handleChange(e) {
+    this.props.onTemperatureChange(e.target.value);
+  }
+
+  render() {
+    const temperature = this.props.temperature;
+    const scale = this.props.scale;
+    return (
+      <fieldset>
+        <legend>Enter temperature in {scaleNames[scale]}:</legend>
+        <input value={temperature}
+               onChange={this.handleChange} />
+      </fieldset>
+    );
+  }
+}
+```
+
+### 组合 vs 继承
+
+React 有十分强大的组合模式。我们推荐使用组合而非继承来实现组件间的代码重用。
+
+## 包含关系
+
+有些组件无法提前知晓它们子组件的具体内容。在 `Sidebar`（侧边栏）和 `Dialog`（对话框）等展现通用容器（box）的组件中特别容易遇到这种情况。
+
+我们建议这些组件使用一个特殊的 `children` prop 来将他们的子组件传递到渲染结果中：
+
+```react
+function FancyBorder(props) {
+  return (
+    <div className={'FancyBorder FancyBorder-' + props.color}>
+      {props.children}    </div>
+  );
+}
+```
+
+这使得别的组件可以通过 JSX 嵌套，将任意组件作为子组件传递给它们。
+
+```react
+function WelcomeDialog() {
+  return (
+    <FancyBorder color="blue">
+      <h1 className="Dialog-title">        Welcome      </h1>      <p className="Dialog-message">        Thank you for visiting our spacecraft!      </p>    </FancyBorder>
+  );
+}
+```
+
+和vue中的插槽相同
+
+具名插槽
+
+```react
+function SplitPane(props) {
+  return (
+    <div className="SplitPane">
+      <div className="SplitPane-left">
+        {props.left}
+      </div>
+      <div className="SplitPane-right">
+        {props.right}
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <SplitPane
+      left={
+        <Contacts />
+      }
+      right={
+        <Chat />
+      } />
+  );
+}
+```
+
+
+
+### react哲学
+
+#### 第五步：添加反向数据流
+
+参阅 [CodePen](https://codepen.io/) 上的 [React 哲学：第五步](https://codepen.io/gaearon/pen/LzWZvb)。
+
+到目前为止，我们已经借助自上而下传递的 props 和 state 渲染了一个应用。现在，我们将尝试让数据反向传递：处于较低层级的表单组件更新较高层级的 `FilterableProductTable` 中的 state。
+
+React 通过一种比传统的双向绑定略微繁琐的方法来实现反向数据传递。尽管如此，但这种需要显式声明的方法更有助于人们理解程序的运作方式。
+
+如果你在这时尝试在搜索框输入或勾选复选框，React 不会产生任何响应。这是正常的，因为我们之前已经将 `input` 的值设置为了从 `FilterableProductTable` 的 `state` 传递而来的固定值。
+
+让我们重新梳理一下需要实现的功能：每当用户改变表单的值，我们需要改变 state 来反映用户的当前输入。由于 state 只能由拥有它们的组件进行更改，`FilterableProductTable` 必须将一个能够触发 state 改变的回调函数（callback）传递给 `SearchBar`。我们可以使用输入框的 `onChange` 事件来监视用户输入的变化，并通知 `FilterableProductTable` 传递给 `SearchBar` 的回调函数。然后该回调函数将调用 `setState()`，从而更新应用。
+
+omg,很是醉了
+
+## 高级指引
+
+### 代码分割
+
+```
+import OtherComponent from './OtherComponent';
+```
+
+**使用之后：**
+
+```
+const OtherComponent = React.lazy(() => import('./OtherComponent'));
+```
+
+此代码将会在组件首次渲染时，自动导入包含 `OtherComponent` 组件的包。
+
+`React.lazy` 接受一个函数，这个函数需要动态调用 `import()`。它必须返回一个 `Promise`，该 Promise 需要 resolve 一个 `default` export 的 React 组件。
+
+然后应在 `Suspense` 组件中渲染 lazy 组件，如此使得我们可以使用在等待加载 lazy 组件时做优雅降级（如 loading 指示器等）。
+
+**todo： 组件懒加载，考点**
+
+这里是一个例子，展示如何在你的应用中使用 `React.lazy` 和 [React Router](https://react-router.docschina.org/) 这类的第三方库，来配置基于路由的代码分割。
+
+```react
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+const Home = lazy(() => import('./routes/Home'));
+const About = lazy(() => import('./routes/About'));
+
+const App = () => (
+  <Router>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Switch>
+        <Route exact path="/" component={Home}/>
+        <Route path="/about" component={About}/>
+      </Switch>
+    </Suspense>
+  </Router>
+);
+```
+
+#### Context
+
+Context 提供了一个无需为每层组件手动添加 props，就能在组件树间进行数据传递的方法。
+
+在一个典型的 React 应用中，数据是通过 props 属性自上而下（由父及子）进行传递的，但这种做法对于某些类型的属性而言是极其繁琐的（例如：地区偏好，UI 主题），这些属性是应用程序中许多组件都需要的。Context 提供了一种在组件之间共享此类值的方式，而不必显式地通过组件树的逐层传递 props。
+
+Context 设计目的是为了共享那些对于一个组件树而言是“全局”的数据，例如当前认证的用户、主题或首选语言。举个例子，在下面的代码中，我们通过一个 “theme” 属性手动调整一个按钮组件的样式：
+
+使用context
+
+## 何时使用 Context
+
+**Context 设计目的是为了共享那些对于一个组件树而言是“全局”的数据**，例如当前认证的用户、主题或首选语言。举个例子，在下面的代码中，我们通过一个 “theme” 属性手动调整一个按钮组件的样式：
+
+
+
+```react
+class App extends React.Component {
+  render() {
+    return <Toolbar theme="dark" />;
+  }
+}
+
+function Toolbar(props) {
+  // Toolbar 组件接受一个额外的“theme”属性，然后传递给 ThemedButton 组件。  // 如果应用中每一个单独的按钮都需要知道 theme 的值，这会是件很麻烦的事，  // 因为必须将这个值层层传递所有组件。  return (    <div>
+      <ThemedButton theme={props.theme} />
+    </div>  );
+}
+
+class ThemedButton extends React.Component {
+  render() {
+    return <Button theme={this.props.theme} />;
+  }
+}
+```
+
+
+
+使用 context, 我们可以避免通过中间元素传递 props：
+
+
+
+```react
+// Context 可以让我们无须明确地传遍每一个组件，就能将值深入传递进组件树。// 为当前的 theme 创建一个 context（“light”为默认值）。const ThemeContext = React.createContext('light');class App extends React.Component {
+  render() {
+    // 使用一个 Provider 来将当前的 theme 传递给以下的组件树。    // 无论多深，任何组件都能读取这个值。    // 在这个例子中，我们将 “dark” 作为当前的值传递下去。    return (
+      <ThemeContext.Provider value="dark">        <Toolbar />
+      </ThemeContext.Provider>
+    );
+  }
+}
+
+// 中间的组件再也不必指明往下传递 theme 了。function Toolbar() {  return (
+    <div>
+      <ThemedButton />
+    </div>
+  );
+}
+
+class ThemedButton extends React.Component {
+  // 指定 contextType 读取当前的 theme context。  // React 会往上找到最近的 theme Provider，然后使用它的值。  // 在这个例子中，当前的 theme 值为 “dark”。  static contextType = ThemeContext;
+  render() {
+    return <Button theme={this.context} />;  }
+}
+```
+
+`return <Button theme={this.context} />;`
+
+**使用的时候，用context来使用父父父组件定义的context**
+
+就是相当于可以在任意地方定义全局变量，这个全局是子组件，范围类型vue中的定义全局组件
+
+总结： 全局变量
+
+理解后写一句总结：一句话能知道这个是干什么，复习就这样
+
+#### 错误边界
+
+这种组件**可以捕获并打印发生在其子组件树任何位置的 JavaScript 错误，并且，它会渲染出备用 UI**，而不是渲染那些崩溃了的子组件树。错误边界在渲染期间、生命周期方法和整个组件树的构造函数中捕获错误。
+
+例如，Facebook Messenger 将侧边栏、信息面板、聊天记录以及信息输入框包装在单独的错误边界中。如果其中的某些 UI 组件崩溃，其余部分仍然能够交互。
+
+我们也鼓励使用 JS 错误报告服务（或自行构建），这样你能了解关于生产环境中出现的未捕获异常，并将其修复。
+
+**这是vue中没有的，错误机制**
+
+这估计就是虾皮他们为啥看中监控的原因
+
+错误边界保留了 React 的声明性质，其行为符合你的预期。例如，即使一个错误发生在 `componentDidUpdate` 方法中，并且由某一个深层组件树的 `setState` 引起，其仍然能够冒泡到最近的错误边界。
+
+错误边界**无法**捕获事件处理器内部的错误。
+
+React 不需要错误边界来捕获事件处理器中的错误。与 render 方法和生命周期方法不同，事件处理器不会在渲染期间触发。因此，如果它们抛出异常，React 仍然能够知道需要在屏幕上显示什么。
+
+如果你需要在事件处理器内部捕获错误，使用普通的 JavaScript `try` / `catch` 语句：
+
+事件处理函数不能被错误边界捕获
+
+用于捕获react中的一些错误
+
+#### Refs 转发
+
+还有34  context这些没有好好学，下面的api没有看
+
+用起来不直观
+
+没看懂这里
+
+类似vue中的ref，能拿到对应组件的实例
+
+#### Fragments
+
+React 中的一个常见模式是一个组件返回多个元素。Fragments 允许你将子列表分组，而无需向 DOM 添加额外节点。
+
+```react
+render() {
+  return (
+    <React.Fragment>
+      <ChildA />
+      <ChildB />
+      <ChildC />
+    </React.Fragment>
+  );
+}
+class Columns extends React.Component {
+  render() {
+    return (
+      <>
+        <td>Hello</td>
+        <td>World</td>
+      </>
+    );
+  }
+}
+```
+
+和vue中的template一样，不过，react的可以用key属性
+
+#### 高阶组件
+
+具体而言，**高阶组件是参数为组件，返回值为新组件的函数。**
+
+```
+const EnhancedComponent = higherOrderComponent(WrappedComponent);
+```
+
+组件是将 props 转换为 UI，而高阶组件是将组件转换为另一个组件。
+
+HOC 在 React 的第三方库中很常见，例如 Redux 的 [`connect`](https://github.com/reduxjs/react-redux/blob/master/docs/api/connect.md#connect) 和 Relay 的 [`createFragmentContainer`](http://facebook.github.io/relay/docs/en/fragment-container.html)。
+
+例子没有看
+
+接受一个组件，返回一个新的组件
+
+#### 与第三方库协同
+
+如何添加jquery插件，与第三方协同
+
+#### 深入 JSX
+
+实际上，JSX 仅仅只是 `React.createElement(component, props, ...children)` 函数的语法糖。如下 JSX 代码：
+
+jsx == js+html
+
+#### 性能优化
+
+## 虚拟化长列表
+
+如果你的应用渲染了长列表（上百甚至上千的数据），我们推荐使用“虚拟滚动”技术。这项技术会在有限的时间内仅渲染有限的内容，并奇迹般地降低重新渲染组件消耗的时间，以及创建 DOM 节点的数量。
+
+[react-window](https://react-window.now.sh/) 和 [react-virtualized](https://bvaughn.github.io/react-virtualized/) 是热门的虚拟滚动库。 它们提供了多种可复用的组件，用于展示列表、网格和表格数据。 如果你想要一些针对你的应用做定制优化，你也可以创建你自己的虚拟滚动组件，就像 [Twitter 所做的](https://medium.com/@paularmstrong/twitter-lite-and-high-performance-react-progressive-web-apps-at-scale-d28a00e780a3)。
+
+todo： 考点
+
+避免调停：实在是看不懂
+
+
+
+#### Portals
+
+## 通过 Portal 进行事件冒泡
+
+尽管 portal 可以被放置在 DOM 树中的任何地方，但在任何其他方面，其行为和普通的 React 子节点行为一致。由于 portal 仍存在于 *React 树*， 且与 *DOM 树* 中的位置无关，那么无论其子节点是否是 portal，像 context 这样的功能特性都是不变的。
+
+Portal 提供了一种将子节点渲染到存在于父组件以外的 DOM 节点的优秀的方案。
+
+不知道具体用处
+
+#### Profiler
+
+`Profiler` 测量渲染一个 React 应用多久渲染一次以及渲染一次的“代价”。 它的目的是识别出应用中渲染较慢的部分，或是可以使用[类似 memoization 优化](https://reactjs.bootcss.com/docs/hooks-faq.html#how-to-memoize-calculations)的部分，并从相关优化中获益。
+
+#### 不使用 ES6
+#### 不使用 JSX
+#### 协调
+
+## Diffing 算法
+
+当对比两颗树时，React 首先比较两棵树的根节点。不同类型的根节点元素会有不同的形态。
+
+### 对比不同类型的元素
+
+当根节点为不同类型的元素时，React 会拆卸原有的树并且建立起新的树。举个例子，当一个元素从 `<a>` 变成 `<img>`，从 `<Article>` 变成 `<Comment>`，或从 `<Button>` 变成 `<div>` 都会触发一个完整的重建流程。
+
+当拆卸一棵树时，对应的 DOM 节点也会被销毁。组件实例将执行 `componentWillUnmount()` 方法。当建立一棵新的树时，对应的 DOM 节点会被创建以及插入到 DOM 中。组件实例将执行 `componentWillMount()` 方法，紧接着 `componentDidMount()` 方法。所有跟之前的树所关联的 state 也会被销毁。
+
+在根节点以下的组件也会被卸载，它们的状态会被销毁。比如，当比对以下更变时：
+
+```
+<div>
+  <Counter />
+</div>
+
+<span>
+  <Counter />
+</span>
+```
+
+React 会销毁 `Counter` 组件并且重新装载一个新的组件。
+
+### 对比同一类型的元素
+
+当对比两个相同类型的 React 元素时，React 会保留 DOM 节点，仅比对及更新有改变的属性。比如：
+
+```
+<div className="before" title="stuff" />
+
+<div className="after" title="stuff" />
+```
+
+通过对比这两个元素，React 知道只需要修改 DOM 元素上的 `className` 属性。
+
+当更新 `style` 属性时，React 仅更新有所更变的属性。比如：
+
+```
+<div style={{color: 'red', fontWeight: 'bold'}} />
+
+<div style={{color: 'green', fontWeight: 'bold'}} />
+```
+
+通过对比这两个元素，React 知道只需要修改 DOM 元素上的 `color` 样式，无需修改 `fontWeight`。
+
+在处理完当前节点之后，React 继续对子节点进行递归。
+
+### 对比同类型的组件元素
+
+当一个组件更新时，组件实例保持不变，这样 state 在跨越不同的渲染时保持一致。React 将更新该组件实例的 props 以跟最新的元素保持一致，并且调用该实例的 `componentWillReceiveProps()` 和 `componentWillUpdate()` 方法。
+
+下一步，调用 `render()` 方法，diff 算法将在之前的结果以及新的结果中进行递归。
+
+### 对子节点进行递归
+
+在默认条件下，当递归 DOM 节点的子元素时，React 会同时遍历两个子元素的列表；当产生差异时，生成一个 mutation。
+
+在子元素列表末尾新增元素时，更新开销比较小。比如：
+
+```
+<ul>
+  <li>first</li>
+  <li>second</li>
+</ul>
+
+<ul>
+  <li>first</li>
+  <li>second</li>
+  <li>third</li>
+</ul>
+```
+
+React 会先匹配两个 `<li>first</li>` 对应的树，然后匹配第二个元素 `<li>second</li>` 对应的树，最后插入第三个元素的 `<li>third</li>` 树。
+
+如果只是简单的将新增元素插入到表头，那么更新开销会比较大。比如：
+
+```
+<ul>
+  <li>Duke</li>
+  <li>Villanova</li>
+</ul>
+
+<ul>
+  <li>Connecticut</li>
+  <li>Duke</li>
+  <li>Villanova</li>
+</ul>
+```
+
+React 不会意识到应该保留 `<li>Duke</li>` 和 `<li>Villanova</li>`，而是会重建每一个子元素 。这种情况会带来性能问题。
+
+### Keys
+
+为了解决以上问题，React 支持 `key` 属性。当子元素拥有 key 时，React 使用 key 来匹配原有树上的子元素以及最新树上的子元素。以下例子在新增 `key` 之后使得之前的低效转换变得高效：
+
+```
+<ul>
+  <li key="2015">Duke</li>
+  <li key="2016">Villanova</li>
+</ul>
+
+<ul>
+  <li key="2014">Connecticut</li>
+  <li key="2015">Duke</li>
+  <li key="2016">Villanova</li>
+</ul>
+```
+
+现在 React 知道只有带着 `'2014'` key 的元素是新元素，带着 `'2015'` 以及 `'2016'` key 的元素仅仅移动了。
+
+现实场景中，产生一个 key 并不困难。你要展现的元素可能已经有了一个唯一 ID，于是 key 可以直接从你的数据中提取：
+
+```
+<li key={item.id}>{item.name}</li>
+```
+
+当以上情况不成立时，你可以新增一个 ID 字段到你的模型中，或者利用一部分内容作为哈希值来生成一个 key。这个 key 不需要全局唯一，但在列表中需要保持唯一。
+
+最后，你也可以使用元素在数组中的下标作为 key。这个策略在元素不进行重新排序时比较合适，如果有顺序修改，diff 就会变得慢。
+
+当基于下标的组件进行重新排序时，组件 state 可能会遇到一些问题。由于组件实例是基于它们的 key 来决定是否更新以及复用，如果 key 是一个下标，那么修改顺序时会修改当前的 key，导致非受控组件的 state（比如输入框）可能相互篡改导致无法预期的变动。
+
+在 Codepen 有两个例子，分别为 [展示使用下标作为 key 时导致的问题](https://reactjs.bootcss.com/redirect-to-codepen/reconciliation/index-used-as-key)，以及[不使用下标作为 key 的例子的版本，修复了重新排列，排序，以及在列表头插入的问题](https://reactjs.bootcss.com/redirect-to-codepen/reconciliation/no-index-used-as-key) 。
+
+## 权衡
+
+请谨记协调算法是一个实现细节。React 可以在每个 action 之后对整个应用进行重新渲染，得到的最终结果也会是一样的。在此情境下，重新渲染表示在所有组件内调用 `render` 方法，这不代表 React 会卸载或装载它们。React 只会基于以上提到的规则来决定如何进行差异的合并。
+
+我们定期探索优化算法，让常见用例更高效地执行。在当前的实现中，可以理解为一棵子树能在其兄弟之间移动，但不能移动到其他位置。在这种情况下，算法会重新渲染整棵子树。
+
+由于 React 依赖探索的算法，因此当以下假设没有得到满足，性能会有所损耗。
+
+1. 该算法不会尝试匹配不同组件类型的子树。如果你发现你在两种不同类型的组件中切换，但输出非常相似的内容，建议把它们改成同一类型。在实践中，我们没有遇到这类问题。
+2. Key 应该具有稳定，可预测，以及列表内唯一的特质。不稳定的 key（比如通过 `Math.random()` 生成的）会导致许多组件实例和 DOM 节点被不必要地重新创建，这可能导致性能下降和子组件中的状态丢失。
+
+#### Refs & DOM
+
+### 何时使用 Refs
+
+下面是几个适合使用 refs 的情况：
+
+- 管理焦点，文本选择或媒体播放。
+- 触发强制动画。
+- 集成第三方 DOM 库。
+
+避免使用 refs 来做任何可以通过声明式实现来完成的事情。
+
+举个例子，避免在 `Dialog` 组件里暴露 `open()` 和 `close()` 方法，最好传递 `isOpen` 属性。
+
+Refs 是使用 `React.createRef()` 创建的，并通过 `ref` 属性附加到 React 元素。在构造组件时，通常将 Refs 分配给实例属性，以便可以在整个组件中引用它们
+
+和vue中的refs功能相同
+
+#### Render Props
+
+通过props传递render方法，然后就显示对应的render
+
+#### 静态类型检查
+
+像 [Flow](https://flow.org/) 和 [TypeScript](https://www.typescriptlang.org/) 等这些静态类型检查器，可以在运行前识别某些类型的问题。他们还可以通过增加自动补全等功能来改善开发者的工作流程。出于这个原因，我们建议在大型代码库中使用 Flow 或 TypeScript 来代替 `PropTypes`。
+
+就是类型检查
+
+#### 严格模式
+
+`StrictMode` 是一个用来突出显示应用程序中潜在问题的工具。与 `Fragment` 一样，`StrictMode` 不会渲染任何可见的 UI。它为其后代元素触发额外的检查和警告。
+
+把元素包在里面：就可能触发特定的检查，警告
+
+#### 使用 PropTypes 类型检查
+
+随着你的应用程序不断增长，你可以通过类型检查捕获大量错误。对于某些应用程序来说，你可以使用 [Flow](https://flow.org/) 或 [TypeScript](https://www.typescriptlang.org/) 等 JavaScript 扩展来对整个应用程序做类型检查。但即使你不使用这些扩展，React 也内置了一些类型检查的功能。要在组件的 props 上进行类型检查，你只需配置特定的 `propTypes` 属性：
+
+vue中也有，对props进行类型限定
+
+#### 非受控组件
+
+
+
+#### Web Components
+
+React 和 [Web Components](https://developer.mozilla.org/en-US/docs/Web/Web_Components) 为了解决不同的问题而生。Web Components 为可复用组件提供了强大的封装，而 React 则提供了声明式的解决方案，使 DOM 与数据保持同步。两者旨在互补。作为开发人员，可以自由选择在 Web Components 中使用 React，或者在 React 中使用 Web Components，或者两者共存。
+
+大多数开发者在使用 React 时，不使用 Web Components，但可能你会需要使用，尤其是在使用 Web Components 编写的第三方 UI 组件时。
+
+## API
+
+### React
+
+### React.Component
+### ReactDOM
+### ReactDOMServer
+### DOM 元素
+### 合成事件
+### Test Utilities
+
+`ReactTestUtils` 可搭配你所选的测试框架，轻松实现 React 组件测试。在 Facebook 内部，我们使用 [Jest](https://facebook.github.io/jest/) 来轻松实现 JavaScript 测试。你可以从 Jest 官网的 [React 教程](https://jestjs.io/docs/tutorial-react)中了解如何开始使用它。
+
+### Test Renderer
+
+这个 package 提供了一个 React 渲染器，用于将 React 组件渲染成纯 JavaScript 对象，无需依赖 DOM 或原生移动环境。
+
+### JavaScript 环境要求
+
+## CDN
+
+CDN 代表内容分发网络（Content Delivery Network）。CDN 会通过一个遍布全球的服务器网络来分发缓存的静态内容。
+
+### `props.children`
+
+每个组件都可以获取到 `props.children`。它包含组件的开始标签和结束标签之间的内容。例如：
+
+```
+<Welcome>Hello world!</Welcome>
+```
+
+在 `Welcome` 组件中获取 `props.children`，就可以得到字符串 `Hello world!`：
+
+```react
+function Welcome(props) {
+  return <p>{props.children}</p>;
+}
+```
+
+## HOOK
+
+*Hook* 是 React 16.8 的新增特性。它可以让你在不编写 class 的情况下使用 state 以及其他的 React 特性
+
+就是fuction创建的组件，也能用state
+
+
+
+高级指引 + hook + api
+
+够了，然后就可以去刷一下原理性的框架题
+
+# react使用---知道怎么用 （1，晚上看实践类的视
+
+# 频，
+
+找个实战的课程看看
+
+# react面试题---知道核心原理（2
+
+1. 把react和vue里面要看的文章看一遍
+2. react中的
+
+
+
+今天晚上先不看，好好看下webpack原理 
+
+
+
+
+
+------
+
+
+
+把原理性的知识点看明白
+
+然后vue面试题，=>框架面试题，深入vue（2
+
+这周看完
+
+下周webpack+模块化 
+
+11天计划（工作下周开始做）
+
+30节文档，一小时两节吧15小时，5 ，3，4，2 = 14个小时，
+
+看原理性的面试题
+
+三天一个周期：react中文文档（1），框架面试题，改简历（周六）
+
+周六周一周二：  webpack原理学习（周天） + 模块化及面试题 + webpack面试题
+
+周三周四周五性能优化 +cdn+计算机网络
+
+下周周末：  node + 性能监控  投简历，整体复习面试
+
+7-23： react文档看完api
+

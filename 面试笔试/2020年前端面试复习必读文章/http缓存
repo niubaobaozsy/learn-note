@@ -46,8 +46,6 @@ If-Modified-Since：
 
 ![img](https://user-gold-cdn.xitu.io/2017/8/22/a9f97f1bf78e39d0b5da940feeb07d46?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
-**很清晰，强制缓存，就是Expires  expires时间内，cache-control中的max-age。**
-
 **那么当时间过了，或者cache-control字段为no-cache时，需要协商验证缓存**
 
 **协商缓存有两种，一种是验证文件最后修改时间，一种是验证文件最后修改内容**
@@ -55,3 +53,4 @@ If-Modified-Since：
 **Etag（服务端响应） / If-None-Match （客户端请求）**
 
 **（优先级高于Last-Modified （服务端响应） / If-Modified-Since（客户端请求））**
+

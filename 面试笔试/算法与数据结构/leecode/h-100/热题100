@@ -1,0 +1,442 @@
+# 字典树
+
+![208_1.png](https://pic.leetcode-cn.com/6ce1a681ec7631880ecd9524b0e71cc18a7b3932a13a38ff02a49cb8111b4766-208_1.png)
+
+不停的构建这样的树的存储结构，然后就可以实现0（n）的线性查找
+
+```js
+var TrieNode = function() {
+    this.next = {};
+    this.isEnd = false;
+};
+
+/**
+ * Initialize your data structure here.
+ */
+var Trie = function() {
+    this.root = new TrieNode();
+};
+
+/**
+ * Inserts a word into the trie.
+ * @param {string} word
+ * @return {void}
+ */
+Trie.prototype.insert = function(word) {
+    if (!word) return false;
+
+    let node = this.root;
+    for (let i = 0; i < word.length; ++i) {
+        if (!node.next[word[i]]) {
+            node.next[word[i]] = new TrieNode();
+        }
+        node = node.next[word[i]];
+    }
+    node.isEnd = true;
+    return true;
+};
+
+/**
+ * Returns if the word is in the trie.
+ * @param {string} word
+ * @return {boolean}
+ */
+Trie.prototype.search = function(word) {
+    if (!word) return false;
+
+    let node = this.root;
+    for (let i = 0; i < word.length; ++i) {
+        if (node.next[word[i]]) {
+            node = node.next[word[i]];
+        } else {
+            return false;
+        }
+    }
+    return node.isEnd;
+};
+
+/**
+ * Returns if there is any word in the trie that starts with the given prefix.
+ * @param {string} prefix
+ * @return {boolean}
+ */
+Trie.prototype.startsWith = function(prefix) {
+    if (!prefix) return true;
+
+    let node = this.root;
+    for (let i = 0; i < prefix.length; ++i) {
+        if (node.next[prefix[i]]) {
+            node = node.next[prefix[i]];
+        } else {
+            return false;
+        }
+    }
+    return true;
+};
+let trie = new Trie();
+
+trie.insert("apple");
+trie.search("apple");   // 返回 true
+trie.search("app");     // 返回 false
+trie.startsWith("app"); // 返回 true
+trie.insert("app");   
+trie.search("app");     // 返回 true
+```
+
+-----
+
+每做一道就在这里记录下来，方面日后复习，热题100刷2遍
+
+## 买卖股票
+
+![309最佳买卖股票时机含冷冻期图解图.png](https://pic.leetcode-cn.com/7ae8b65cf80c5e9980ea33973abb6678f10098646aeac699cac12817b7e250ce-309%E6%9C%80%E4%BD%B3%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E6%97%B6%E6%9C%BA%E5%90%AB%E5%86%B7%E5%86%BB%E6%9C%9F%E5%9B%BE%E8%A7%A3%E5%9B%BE.png)
+
+状态转化的公式很难理清楚
+
+这种属于状态机，并不是按动态规划的思想，也可以强行理解成
+
+```js
+const maxProfit = (prices) => {
+  let rest = 0;
+  let sold = 0;
+  let hold = -Infinity; // 还没买入
+  for (let price of prices) {
+    let preSold = sold;
+    let preHold = hold;
+    hold = Math.max(preHold, rest - price);
+    sold = preHold + price;
+    rest = Math.max(rest, preSold);
+  }
+  return Math.max(rest, sold);
+};
+
+```
+
+--------
+
+## 最长有效括号
+
+```js
+var longestValidParentheses = function(s) {
+  let arr = s.split('')
+  let resultNum = 0
+  let result = []
+  let num = 0
+  let tem = undefined
+  while(arr.length>0){
+    tem = arr.shift()
+    if(result.length==0){
+      if(tem==')'){
+        resultNum = resultNum> num ? resultNum : num
+        num = 0
+      }else {
+        result.push(')')
+      }
+    }else {
+      if(result[result.length-1]==tem){
+        result.pop()
+        num +=2
+      } else {
+        if(tem==')'){
+          result.push('(')
+        }else {
+          result.push(')')
+        }
+      }
+    }
+  }
+  // for(let i = 0; i<arr.length; i++){
+
+  // }
+  return resultNum> num ? resultNum : num
+};
+console.log(longestValidParentheses("()(()"))
+```
+
+> 我的思路是按 ) 括号来将当前计数清零 但是 遇到 （） （（）会把中间的（忽略，然后算成4
+>
+> 答案是计算当前合成一对时，剩余栈低元素的序号-当前判断的元素序号
+>
+> https://leetcode-cn.com/problems/longest-valid-parentheses/solution/zui-chang-you-xiao-gua-hao-by-leetcode-solution/
+>
+> ![image-20200728154519895](imge/image-20200728154519895.png)
+
+这个问题还有动态规划解法，但是不想看，已经有一个o（n）解法了
+
+---
+
+## 数字全排列 --回溯模板
+
+```js
+function backtrack(list, tempList, nums) {
+    if (tempList.length === nums.length) return list.push([...tempList]);
+    for(let i = 0; i < nums.length; i++) {
+        if (tempList.includes(nums[i])) continue;
+        tempList.push(nums[i]);
+        backtrack(list, tempList, nums);
+        tempList.pop();
+    }
+}
+/**
+ * @param {number[]} nums
+ * @return {number[][]}
+ */
+var permute = function(nums) {
+    const list = [];
+    backtrack(list, [], nums)
+    return list
+};
+console.log(permute([1,2,3]))
+```
+
+能回溯
+
+123的时候，慢了
+
+pop掉一个
+
+然后回到[1,2]的状态，这个时候i=2，还有一轮判断，这个时候就会把剩余的装进去
+
+回溯就是在递归后，回到上次选择的状态
+
+---
+
+
+
+## 二叉树的层次遍历
+
+记住了要把当前层次节点的数量记住
+
+记住之后不是用来while的，使用来for的次数的
+
+每次都是把当前层元素放入结果数组中，并把下一次的孩子节点放入while循环栈中
+
+```js
+var levelOrder = function(root) {
+    const ret = [];
+    if (!root) return ret;
+
+    const q = [];
+    q.push(root);
+    while (q.length !== 0) {
+        const currentLevelSize = q.length;
+        ret.push([]);
+        for (let i = 1; i <= currentLevelSize; ++i) {
+            const node = q.shift();
+            ret[ret.length - 1].push(node.val);
+            if (node.left) q.push(node.left);
+            if (node.right) q.push(node.right);
+        }
+    }
+        
+    return ret;
+};
+console.log(permute([1,2,3]))
+var levelOrder = function(root) {
+    const ret = [];
+    if (!root) return ret;
+
+    const q = [];
+    q.push(root);
+    while(q.length>0){
+      let size = q.length
+      // ret.push([])
+      for(let i=0;i<q.length;i++){ // i<size
+        let cur = q.pop() // shift()
+        ret[ret.length-1].push(cur.value)
+        if(cur.left) q.push(cur.left)
+        if(cur.right) q.push(cur.right)
+      }
+    }
+
+    return ret;
+};
+```
+
+----
+
+## 二叉树序列化 && 反序列化
+
+序列化和反序列化有两种方法，不一定要结果一样
+
+一种层次遍历，一种深度遍历
+
+深度遍历更好理解
+
+```js
+const serialize = (root) => {
+  if (root == null) return 'X,'                 // 遇到null节点
+  const leftSerialized = serialize(root.left)   //左子树的序列化字符串
+  const rightSerialized = serialize(root.right) //右子树的序列化字符串
+  return root.val + ',' + leftSerialized + rightSerialized // 根|左|右
+}
+
+/**
+ * Decodes your encoded data to tree.
+ *
+ * @param {string} data
+ * @return {TreeNode}
+ */
+const buildTree = (list) => {        // dfs函数
+  const nodeVal = list.shift()       // 当前考察的节点
+  if (nodeVal == 'X') return null    // 是X，返回null给父调用
+  const node = new TreeNode(nodeVal) // 创建node节点
+  node.left = buildTree(list)        // 构建node的左子树
+  node.right = buildTree(list)       // 构建node的右子树
+  return node                        // 返回以node为根节点的子树给父调用
+}
+const deserialize = (data) => {
+  const list = data.split(',')       // 转成list数组
+  return buildTree(list)             // 构建树，dfs的入口
+}
+```
+
+深度遍历，就是递归一整个树
+
+看看层次遍历序列化
+
+层次遍历序列化，可以用我之前学的那个列表，记住当前层的数量，然后没有子节点就用x代替
+
+反序列化
+
+```js
+const deserialize = (data) => {
+  if (data == 'X') return null       // 就一个'X'，只有一个null
+  const list = data.split(',')       // 序列化字符串转成list数组
+  const root = new TreeNode(list[0]) //首项是根节点值，为它创建节点
+  const queue = [root]                // 队列初始放入root
+  let cursor = 1                      // 从list第二项开始遍历
+  while (cursor < list.length) {      // 指针越界就退出
+    const node = queue.shift()        // 父节点出列考察
+    const leftVal = list[cursor]      // 获取左子节点值
+    const rightVal = list[cursor + 1] // 获取右子节点值
+    if (leftVal !== 'X') {   // 左子节点值是有效值
+      const leftNode = new TreeNode(leftVal) // 创建节点
+      node.left = leftNode   // 成为当前出列节点的左子节点
+      queue.push(leftNode)   // 它是未来的爸爸，入列等待考察
+    }
+    if (rightVal !== 'X') {  // 右子节点值是有效值
+      const rightNode = new TreeNode(rightVal) // 创建节点
+      node.right = rightNode // 成为当前出列节点的右子节点
+      queue.push(rightNode)  // 它是未来的爸爸，入列等待考察
+    }
+    cursor += 2              // 指针前进2位
+  }
+  return root // 返回根节点
+}
+```
+
+类似之前那个最长有效括号算法一样
+
+可以用指针指向当前栈顶，栈低是当前没处理的右节点
+
+
+
+-----
+
+## 链表排序
+
+重点是选择归并排序，
+
+因为归并是分成两半，不断分，然后合并两个链表
+
+合并两个链表有可解决的办法，分成两半，也简单，找到中间的节点，断开链接，分成两个链表
+
+```js
+// 归并排序
+// 若分裂后的两个链表长度不为 1，则继续分裂
+// 直到分裂后的链表长度都为 1，
+// 然后合并小链表
+let mergeSortRec = function (head) {
+    if(!head || !head.next) {
+        return head
+    }
+
+    // 获取中间节点
+    let middle = middleNode(head)
+    // 分裂成两个链表
+    let temp = middle.next
+    middle.next = null
+    let left = head, right = temp
+    // 继续分裂（递归分裂）
+    left = mergeSortRec(left)
+    right = mergeSortRec(right)
+    // 合并两个有序链表
+    return mergeTwoLists(left, right)
+}
+
+// 获取中间节点
+// - 如果链表长度为奇数，则返回中间节点
+// - 如果链表长度为偶数，则有两个中间节点，这里返回第一个
+let middleNode = function(head) {
+    let fast = head, slow = head
+    while(fast && fast.next && fast.next.next) {
+        slow = slow.next
+        fast = fast.next.next
+    }
+    return slow
+}
+
+// 合并两个有序链表
+let mergeTwoLists = function(l1, l2) {
+    let preHead = new ListNode(-1);
+    let cur = preHead;
+    while(l1 && l2){
+        if(l1.val < l2.val){
+            cur.next = l1;
+            l1 = l1.next;
+        }else{
+            cur.next = l2;
+            l2 = l2.next;
+        }
+        cur = cur.next;
+    }
+    cur.next = l1 || l2;
+    return preHead.next;
+}
+```
+
+---
+
+## 爬楼梯
+
+```js
+var climbStairs = function(n) {
+    return climb(n,new Map())
+};
+var climb = function(n,dp) {
+  if(n==1)return 1
+  if(n==2)return 2
+  if(dp.get(n)){
+    return dp.get(n)
+  }else {
+     //要设置，搞忘记了 ！important
+    dp.set(n,climb(n-1,dp) + climb(n-2,dp))
+  }
+  return dp.get(n)
+};
+console.log(climbStairs(2))
+```
+
+问题，利用缓存的话，返回的是缓存数组中元素，在添加缓存元素中进行递归
+
+错误版本
+
+```js
+var climbStairs = function(n,dp) {
+  if(n==1)return 1
+  if(n==0)return 0
+  if(dp.get(n)){
+    return dp.get(n)
+  }else {
+    dp.set(n,climbStairs(n,dp))
+  }
+  return climbStairs(n-1,dp) + climbStairs(n-2,dp)
+};
+console.log(climbStairs(3,new Map()))
+```
+
+
+
+----
+

@@ -1,0 +1,599 @@
+## 第 81 - 90 题
+
+### 第 81 题：打印出 1 - 10000 之间的所有对称数
+
+> 例如：121、1331 等
+
+解析：[第 81 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/131)
+
+```js
+var result = [];
+for (let i = 1; i <= 10000; i++) {
+	let origin = '' + i;
+	let reverse = origin.split('').reverse().join('');
+	if(origin === reverse) {
+		result.push(i);
+	}
+}
+```
+
+
+
+### 第 82 题：周一算法题之「移动零」
+
+> 给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
+>
+> 示例:
+>
+> ```
+> 输入: [0,1,0,3,12]
+> 输出: [1,3,12,0,0]
+> ```
+>
+> 说明:
+>
+> 1. 必须在原数组上操作，不能拷贝额外的数组。
+> 2. 尽量减少操作次数。
+
+解析：[第 82 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/132)
+
+```js
+for (let i = 0; i < nums.length; i++){
+  if (nums[i] === 0){
+    nums.push(0);
+    nums.splice(i,1);
+  }
+};
+```
+
+
+
+### 第 83 题：var、let 和 const 区别的实现原理是什么
+
+解析：[第 83 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/133)
+
+
+
+### 第 84 题：请实现一个 add 函数，满足以下功能。
+
+> ```
+> add(1); 			// 1
+> add(1)(2);  	// 3
+> add(1)(2)(3)；// 6
+> add(1)(2, 3); // 6
+> add(1, 2)(3); // 6
+> add(1, 2, 3); // 6
+> ```
+
+解析：[第 84 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/134)
+
+```js
+function curry (fn) {
+  const finalLen = fn.length
+  let args = [].slice.call(this,1)
+  return function currying () {
+    args = args.concat(Array.from(arguments))
+    const len = args.length
+    return len >= fn.length ? fn.apply(this, args) : currying
+  }
+}
+function add (a,b,c) {
+  return a+b+c
+}
+const add1 = curry(add)
+console.log(add1(1, 2)(3))
+```
+
+todo: 这题没搞懂
+
+### 第 85 题：react-router 里的 `<Link>` 标签和 `<a>` 标签有什么区别
+
+> 如何禁掉 `<a>` 标签默认事件，禁掉之后如何实现跳转。
+
+解析：[第 85 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/135)
+
+从最终渲染的 DOM 来看，这两者都是链接，都是 `<a>` 标签，区别是：
+`<Link>` 是 react-router 里实现路由跳转的链接，一般配合 `<Route>` 使用，react-router 接管了其默认的链接跳转行为，区别于传统的页面跳转，`<Link>` 的“跳转”行为只会触发相匹配的 `<Route>` 对应的页面内容更新，而不会刷新整个页面。
+而 `<a>` 标签就是普通的超链接了，用于从当前页面跳转到 href 指向的另一个页面（非锚点情况）。
+
+### 第 86 题：（京东、快手）周一算法题之「两数之和」
+
+给定一个整数数组和一个目标值，找出数组中和为目标值的两个数。
+
+你可以假设每个输入只对应一种答案，且同样的元素不能被重复利用。
+
+示例：
+
+```
+给定 nums = [2, 7, 11, 15], target = 9
+
+因为 nums[0] + nums[1] = 2 + 7 = 9
+所以返回 [0, 1]
+```
+
+解析：[第 86 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/136)
+
+思路：固定一个数字，循环遍历看看是否剩余的元素中包含9-arr[i]
+
+```js
+function sum(arr, target) {
+  const res = []
+  for (let i = 0; i < arr.length; i++){
+    const a = target - arr[i]
+    const index = arr.indexOf(a,i)
+    if (index>=0) {
+      res.push(i, index)
+    }
+  }
+  return res
+}
+```
+
+
+
+### 第 87 题：在输入框中如何判断输入的是一个正确的网址。
+
+解析：[第 87 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/138)
+
+`(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]`
+
+### 第 88 题：实现 convert 方法，把原始 list 转换成树形结构，要求尽可能降低时间复杂度
+
+以下数据结构中，id 代表部门编号，name 是部门名称，parentId 是父部门编号，为 0 代表一级部门，现在要求实现一个 convert 方法，把原始 list 转换成树形结构，parentId 为多少就挂载在该 id 的属性 children 数组下，结构如下：
+
+```
+// 原始 list 如下
+let list =[
+    {id:1,name:'部门A',parentId:0},
+    {id:2,name:'部门B',parentId:0},
+    {id:3,name:'部门C',parentId:1},
+    {id:4,name:'部门D',parentId:1},
+    {id:5,name:'部门E',parentId:2},
+    {id:6,name:'部门F',parentId:3},
+    {id:7,name:'部门G',parentId:2},
+    {id:8,name:'部门H',parentId:4}
+];
+const result = convert(list, ...);
+
+// 转换后的结果如下
+let result = [
+    {
+      id: 1,
+      name: '部门A',
+      parentId: 0,
+      children: [
+        {
+          id: 3,
+          name: '部门C',
+          parentId: 1,
+          children: [
+            {
+              id: 6,
+              name: '部门F',
+              parentId: 3
+            }, {
+              id: 16,
+              name: '部门L',
+              parentId: 3
+            }
+          ]
+        },
+        {
+          id: 4,
+          name: '部门D',
+          parentId: 1,
+          children: [
+            {
+              id: 8,
+              name: '部门H',
+              parentId: 4
+            }
+          ]
+        }
+      ]
+    },
+  ···
+];
+```
+
+解析：[第 88 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/139)
+
+```js
+function convert(list) {
+	const res = []
+	const map = list.reduce((res, v) => (res[v.id] = v, res), {})
+    //reduce有两个参数，第一个是callback  第二个是给callback的第一个参数
+    // callback有四个参数，第一个是累加值，第二个是当前值 当前index 数组
+	for (const item of list) {
+		if (item.parentId === 0) {
+			res.push(item)
+			continue
+		}
+		if (item.parentId in map) {
+			const parent = map[item.parentId]
+			parent.children = parent.children || []
+			parent.children.push(item)
+		}
+	}
+	return res
+}
+```
+
+
+
+### 第 89 题：设计并实现 Promise.race()
+
+解析：[第 89 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/140)
+
+背一下 all和race的区别
+
+all： 全部都成功就成功，有一个失败就失败，接受一个`promise`数组，当所有`promise`状态`resolve`后，执行`resolve`
+
+```js
+    MyPromise.all = function (promises) {
+      return new Promise((resolve, reject) => {
+        if (promises.length === 0) {
+          resolve([]);
+        } else {
+          let result = [];
+          let index = 0;
+          for (let i = 0; i < promises.length; i++) {
+            promises[i].then(data => {
+              result[i] = data;
+              if (++index === promises.length) {
+                resolve(result);
+              }
+            }, err => {
+              reject(err);
+              return;
+            });
+          }
+        }
+      });
+    }
+```
+
+
+
+race： 第一个成功就返回，接受一个`promise`数组，当有一个`promise`状态`resolve`后，执行`resolve`
+
+```js
+    MyPromise.race = function (promises) {
+      return new Promise((resolve, reject) => {
+        if (promises.length === 0) {
+          resolve();
+        } else {
+          let index = 0;
+          for (let i = 0; i < promises.length; i++) {
+            promises[i].then(data => {
+              resolve(data);
+            }, err => {
+              reject(err);
+              return;
+            });
+          }
+        }
+      });
+    }
+```
+
+
+
+### 第 90 题：实现模糊搜索结果的关键词高亮显示
+
+[![img](https://camo.githubusercontent.com/04b42514c38adb9e853c08f5d32b5dfa223f85ae/68747470733a2f2f7773332e73696e61696d672e636e2f6c617267652f303036744e6337396c793167343364796b616363756a333075303168633439732e6a7067)](https://camo.githubusercontent.com/04b42514c38adb9e853c08f5d32b5dfa223f85ae/68747470733a2f2f7773332e73696e61696d672e636e2f6c617267652f303036744e6337396c793167343364796b616363756a333075303168633439732e6a7067)
+
+解析：[第 90 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/141)
+
+```html
+let panter = new RegExp(关键词, 'g')
+该行字符串.replace(panter, '<b style="color: #2D7BFF">' + 关键词 + '</b>')
+```
+
+## 第 91 - 100 题
+
+### 第 91 题：介绍下 HTTPS 中间人攻击
+
+解析：[第 91 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/142)
+
+https协议由 http + ssl 协议构成，具体的链接过程可参考[SSL或TLS握手的概述](https://github.com/lvwxx/blog/issues/3)
+
+中间人攻击过程如下：
+
+1. 服务器向客户端发送公钥。
+2. 攻击者截获公钥，保留在自己手上。
+3. 然后攻击者自己生成一个【伪造的】公钥，发给客户端。
+4. 客户端收到伪造的公钥后，生成加密hash值发给服务器。
+5. 攻击者获得加密hash值，用自己的私钥解密获得真秘钥。
+6. 同时生成假的加密hash值，发给服务器。
+7. 服务器用私钥解密获得假秘钥。
+8. 服务器用加秘钥加密传输信息
+
+防范方法：
+
+1. 服务端在发送浏览器的公钥中加入CA证书，浏览器可以验证CA证书的有效性
+
+
+
+问题在于： 客户端拿到的公钥不能确定是对应服务器端拿到的
+
+### 第 92 题：已知数据格式，实现一个函数 fn 找出链条中所有的父级 id
+
+> ```
+> const value = '112'
+> const fn = (value) => {
+> ...
+> }
+> fn(value) // 输出 [1， 11， 112]
+> ```
+
+[![img](https://camo.githubusercontent.com/1472815be120f5698e48fde791848d3d5e0e02bc/68747470733a2f2f7773312e73696e61696d672e636e2f6c617267652f303036744e6337396779316734356130346e7474746a33306b323077656e30312e6a7067)](https://camo.githubusercontent.com/1472815be120f5698e48fde791848d3d5e0e02bc/68747470733a2f2f7773312e73696e61696d672e636e2f6c617267652f303036744e6337396779316734356130346e7474746a33306b323077656e30312e6a7067)
+
+解析：[第 92 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/143)
+
+回溯吗
+
+```js
+let list = [{
+    id: '1',
+    children: [{
+        id: '11',
+        children: [{
+            id: '111'
+        }, {
+            id: '112'
+        }]
+    }]
+}];
+
+function fn(value) {
+    // 回溯的标记
+    let _p = Symbol('parent');
+    // 找到子节点
+    let result;
+    function _fn(arr, p) {
+        for (let i = 0; i < arr.length; i++) {
+            arr[i][_p] = p;
+            if (arr[i].id === value) {
+                result = arr[i];
+                return;
+            }
+            !result && arr[i].children && _fn(arr[i].children, arr[i])
+        }
+        if (result) return;
+    }
+    _fn(list, null);
+    let tmp = [];
+    if (!result) return null;
+    while (result) {
+        tmp.unshift(result.id);
+        result = result[_p];
+    }
+    return tmp;
+}
+```
+
+
+
+----做到这个地方
+
+### 第 93 题：给定两个大小为 m 和 n 的有序数组 nums1 和 nums2。请找出这两个有序数组的中位数。要求算法的时间复杂度为 O(log(m+n))。
+
+示例 1：
+
+```
+nums1 = [1, 3]
+nums2 = [2]
+```
+
+中位数是 2.0
+
+示例 2：
+
+```
+nums1 = [1, 2]
+nums2 = [3, 4]
+```
+
+中位数是(2 + 3) / 2 = 2.5
+
+解析：[第 93 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/144)
+
+两个指针扫，排序，排到中位数 ，返回结果
+
+### 第 94 题：vue 在 v-for 时给每项元素绑定事件需要用事件代理吗？为什么？
+
+解析：[第 94 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/145)
+
+vue本身不做事件代理
+
+1. 普通html元素和在组件上挂了`.native`修饰符的事件。最终`EventTarget.addEventListener()`挂载事件
+2. 组件上的，vue组件实例上的自定义事件（不包括`.native`）会调用原型上的`$on,$emit`（包括一些其他api `$off,$once`等等）
+
+### 第 95 题：模拟实现一个深拷贝，并考虑对象相互引用以及 Symbol 拷贝的情况
+
+解析：[第 95 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/148)
+
+```js
+function deepCopy(target, cache = new Set()) {
+  if (typeof target !== 'object' || cache.has(target)) {
+    return target
+  }
+  if (Array.isArray(target)) {
+    target.map(t => {
+      cache.add(t)
+      return t
+    })
+  } else {
+    return [...Object.keys(target), ...Object.getOwnPropertySymbols(target)].reduce((res, key) => {
+      cache.add(target[key])
+      res[key] = deepCopy(target[key], cache)
+      return res
+    }, target.constructor !== Object ? Object.create(target.constructor.prototype) : {})
+  }
+}
+```
+
+
+
+### 第 96 题：介绍下前端加密的常见场景和方法
+
+解析：[第 96 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/150)
+
+#### 场景-密码传输
+
+前端密码传输过程中如果不加密，在日志中就可以拿到用户的明文密码，对用户安全不太负责。
+这种加密其实相对比较简单，可以使用 PlanA-前端加密、后端解密后计算密码字符串的MD5/MD6存入数据库；也可以 PlanB-直接前端使用一种稳定算法加密成唯一值、后端直接将加密结果进行MD5/MD6，全程密码明文不出现在程序中。
+
+**PlanA**
+使用 Base64 / Unicode+1 等方式加密成非明文，后端解开之后再存它的 MD5/MD6 。
+
+**PlanB**
+直接使用 MD5/MD6 之类的方式取 Hash ，让后端存 Hash 的 Hash 。
+
+#### 场景-数据包加密
+
+应该大家有遇到过：打开一个正经网站，网站底下蹦出个不正经广告——比如X通的流量浮层，X信的插入式广告……（我没有针对谁）
+但是这几年，我们会发现这种广告逐渐变少了，其原因就是大家都开始采用 HTTPS 了。
+被人插入这种广告的方法其实很好理解：你的网页数据包被抓取->在数据包到达你手机之前被篡改->你得到了带网页广告的数据包->渲染到你手机屏幕。
+而 HTTPS 进行了包加密，就解决了这个问题。严格来说我认为从手段上来看，它不算是一种前端加密场景；但是从解决问题的角度来看，这确实是前端需要知道的事情。
+
+**Plan**
+全面采用 HTTPS
+
+#### 场景-展示成果加密
+
+经常有人开发网页爬虫爬取大家辛辛苦苦一点一点发布的数据成果，有些会影响你的竞争力，有些会降低你的知名度，甚至有些出于恶意爬取你的公开数据后进行全量公开……比如有些食谱网站被爬掉所有食谱，站点被克隆；有些求职网站被爬掉所有职位，被拿去卖信息；甚至有些小说漫画网站赖以生存的内容也很容易被爬取。
+
+**Plan**
+将文本内容进行展示层加密，利用字体的引用特点，把拿给爬虫的数据变成“乱码”。
+举个栗子：正常来讲，当我们拥有一串数字“12345”并将其放在网站页面上的时候，其实网站页面上显示的并不是简单的数字，而是数字对应的字体的“12345”。这时我们打乱一下字体中图形和字码的对应关系，比如我们搞成这样：
+
+> 图形：1 2 3 4 5
+> 字码：2 3 1 5 4
+
+这时，如果你想让用户看到“12345”，你在页面中渲染的数字就应该是“23154”。这种手段也可以算作一种加密。
+具体的实现方法可以看一下《[Web 端反爬虫技术方案](https://juejin.im/post/5b6d579cf265da0f6e51a7e0)》。
+
+### 第 97 题：React 和 Vue 的 diff 时间复杂度从 O(n^3) 优化到 O(n) ，那么 O(n^3) 和 O(n) 是如何计算出来的？
+
+解析：[第 97 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/151)
+
+由于树是一种递归的数据结构，因此最简单的树的比较算法是递归处理。
+
+详细描述这个算法可以写一篇很长的论文，这里不赘述。
+大家想看代码的，这里有[一份](https://github.com/DatabaseGroup/tree-similarity/tree/develop)
+我希望没有吓到你。
+
+确切地说，树的最小距离编辑算法的时间复杂度是`O(n^2m(1+logmn))`,
+我们假设`m 与 n 同阶`， 就会变成 `O(n^3)`。
+
+### 第 98 题：（京东）写出如下代码的打印结果
+
+```js
+function changeObjProperty(o) {
+  o.siteUrl = "http://www.baidu.com"
+  o = new Object()
+  o.siteUrl = "http://www.google.com"
+} 
+let webSite = new Object();
+changeObjProperty(webSite);
+console.log(webSite.siteUrl);
+```
+
+解析：[第 98 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/152)
+
+参数相当于，let o = website
+
+
+
+### 第 99 题：（bilibili）编程算法题
+
+> 用 JavaScript 写一个函数，输入 int 型，返回整数逆序后的字符串。如：输入整型 1234，返回字符串“4321”。要求必须使用递归函数调用，不能用全局变量，输入函数必须只有一个参数传入，必须返回字符串。
+
+解析：[第 99 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/153)
+
+```js
+function myReverse(num){ 
+  let str = num.toString()
+  let num2 = parseInt(str.slice(1))
+  
+  if(str.length >1){
+    return myReverse(num2) + str[0]
+  }else {
+    return str
+  } 
+}
+
+console.log(myReverse(1234))
+```
+
+
+
+### 第 100 题：（京东）请写出如下代码的打印结果
+
+> ```js
+> function Foo() {
+>     Foo.a = function() {
+>         console.log(1)
+>     }
+>     this.a = function() {
+>         console.log(2)
+>     }
+> }
+> Foo.prototype.a = function() {
+>     console.log(3)
+> }
+> Foo.a = function() {
+>     console.log(4)
+> }
+> Foo.a(); 4
+> let obj = new Foo();
+> obj.a(); 3 2
+> Foo.a(); 4 1
+> ```
+
+解析：[第 100 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/155)
+
+```js
+function Foo() {
+    Foo.a = function() {
+        console.log(1)
+    }
+    this.a = function() {
+        console.log(2)
+    }
+}
+// 以上只是 Foo 的构建方法，没有产生实例，此刻也没有执行
+
+Foo.prototype.a = function() {
+    console.log(3)
+}
+// 现在在 Foo 上挂载了原型方法 a ，方法输出值为 3
+
+Foo.a = function() {
+    console.log(4)
+}
+// 现在在 Foo 上挂载了直接方法 a ，输出值为 4
+
+Foo.a();
+// 立刻执行了 Foo 上的 a 方法，也就是刚刚定义的，所以
+// # 输出 4
+
+let obj = new Foo();
+/* 这里调用了 Foo 的构建方法。Foo 的构建方法主要做了两件事：
+1. 将全局的 Foo 上的直接方法 a 替换为一个输出 1 的方法。
+2. 在新对象上挂载直接方法 a ，输出值为 2。
+*/
+
+obj.a();
+// 因为有直接方法 a ，不需要去访问原型链，所以使用的是构建方法里所定义的 this.a，
+// # 输出 2
+
+Foo.a();
+// 构建方法里已经替换了全局 Foo 上的 a 方法，所以
+// # 输出 1
+
+```
+
+就没做对过

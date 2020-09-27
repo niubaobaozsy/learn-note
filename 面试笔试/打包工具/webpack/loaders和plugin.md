@@ -57,7 +57,7 @@ module.exports = {
 - 插件实例在获取到 compiler 对象后，就可以通过 compiler.plugin(事件名称, 回调函数) 监听到 Webpack 广播出来的事件。
 - 并且可以通过 compiler 对象去操作 webpack。
 
-> 看到这里可能会问compiler是啥，compilation又是啥？
+> 看到这里可能会问compiler是啥，compilation又是啥？、
 
 - **Compiler 对象包含了 Webpack 环境所有的的配置信息**，包含 options，loaders，plugins 这些信息，这个对象在 Webpack 启动时候被实例化，它是全局唯一的，可以简单地把它理解为 Webpack 实例；
 - **Compilation 对象包含了当前的模块资源、编译生成资源、变化的文件等**。当 Webpack 以开发模式运行时，每当检测到一个文件变化，一次新的 Compilation 将被创建。Compilation 对象也提供了很多事件回调供插件做扩展。通过 Compilation 也能读取到 Compiler 对象。
@@ -160,7 +160,7 @@ OK 开始！
 
 CssPathTransfor.js
 
-```
+```js
 class CssPathTransfor {
   apply (compiler) {
     compiler.plugin('emit', (compilation, callback) => {
@@ -231,7 +231,7 @@ loaders是处理项目中文件的，
 
 reverse-loader.js
 
-```
+```js
 module.exports = function (src) {
   if (src) {
     console.log('--- reverse-loader input:', src)
@@ -240,6 +240,7 @@ module.exports = function (src) {
   }
   return src;
 }
+loaders必须是一个函数，不能是剪头函数，因为webpack要给他绑定this
 ```
 
 源代码需要做一些填充就可以自己编写loader

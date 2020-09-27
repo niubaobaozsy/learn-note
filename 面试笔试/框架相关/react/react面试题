@@ -1,0 +1,184 @@
+# react面试题
+
+# 你真的理解$nextTick么
+
+首先明确nextTick是一个微任务，在明确微任务和宏任务之间的执行顺序的情况下
+
+要问，为什么nextTick能拿到更新后的dom？？
+
+- 执行一个**宏任务**（首次执行的主代码块或者**任务队列**中的回调函数）
+
+- 执行过程中如果遇到**微任务**，就将它添加到**微任务**的任务队列中
+
+- **宏任务**执行完毕后，立即执行当前**微任务** 队列中的所有任务（依次执行）
+
+- **JS引擎线程**挂起，**GUI线程**执行渲染
+
+- **GUI线程**渲染完毕后挂起，**JS引擎线程**执行**任务队列**中的下一个**宏任务**
+
+推测nextTick其实拿到是已经更新完的dom，但是这个dom还没有渲染，要等到微任务完成之后再更新
+
+nextTick主要功能就是改变数据后让回调函数作用于dom更新后
+
+这一块其实很简单，众所周知，Event Loop分为宏任务（macro task）以及微任务（ micro task），不管执行宏任务还是微任务，完成后都会进入下一个tick，并在两个tick之间执行UI渲染。
+
+首先，检测浏览器是否支持setImmediate，不支持就使用MessageChannel，再不支持只能使用效率最差但是兼容性最好的setTimeout了。
+
+之后，检测浏览器是否支持Promise，如果支持，则使用Promise来执行回调函数队列，毕竟微任务速度大于宏任务。如果不支持的话，就只能使用宏任务来执行回调函数队列
+
+宏任务： script （主代码块）、`setTimeout` 、`setInterval` 、`setImmediate` 、I/O 、UI rendering
+
+微任务：`process.nextTick`（Nodejs） 、`Promise` 、`Object.observe` 、`MutationObserver`
+
+**本文从这样一个问题开始探索：vue如何检测到DOM更新完毕呢？**
+
+**能监听到DOM改动的API好像只有MutationObserver了**
+
+**MutationObserver是HTML5新增的属性，用于监听DOM修改事件，能够监听到节点的属性、文本内容、子节点等的改动，是一个功能强大的利器，基本用法如下**
+
+**简单解释一下，如果检测到浏览器支持MO，则创建一个文本节点，监听这个文本节点的改动事件，以此来触发nextTickHandler（也就是DOM更新完毕回调）的执行。后面的代码中，会执行手工修改文本节点属性，这样就能进入到回调函数了。**
+
+**microtask的这一特性，简直是做队列控制的最佳选择啊！vue进行DOM更新内部也是调用nextTick来做异步队列控制。而当我们自己调用nextTick的时候，它就在更新DOM的那个microtask后追加了我们自己的回调函数，从而确保我们的代码在DOM更新后执行，同时也避免了setTimeout可能存在的多次执行问题。**
+
+**常见的microtask有：Promise、MutationObserver、Object.observe(废弃)，以及nodejs中的process.nextTick.**
+
+**咦？好像看到了MutationObserver，难道说vue用MO是想利用它的microtask特性，而不是想做DOM监听？对喽，就是这样的。核心是microtask，用不用MO都行的。事实上，vue在2.5版本中已经删去了MO相关的代码，因为它是HTML5新增的特性，在iOS上尚有bug。**
+
+**那么最优的microtask策略就是Promise了，而令人尴尬的是，Promise是ES6新增的东西，也存在兼容问题呀~ 所以vue就面临一个降级策略。**
+
+这个就是核心
+
+`它就在更新DOM的那个microtask后追加了我们自己的回调函数`，渲染dom在为微任务和宏任务之间
+
+那么更新dom的那个微任务是那个微任务？？？？
+
+在vue2.5的源码中，macrotask降级的方案依次是：setImmediate、MessageChannel、setTimeout.
+
+上面我们讲到了，队列控制的最佳选择是microtask，而microtask的最佳选择是Promise.但如果当前环境不支持Promise，vue就不得不降级为macrotask来做队列控制了。
+
+1. vue用异步队列的方式来控制DOM更新和nextTick回调先后执行
+2. microtask因为其高优先级特性，能确保队列中的微任务在一次事件循环前被执行完毕
+3. 因为兼容性问题，vue不得不做了microtask向macrotask的降级方案
+
+-----
+
+
+
+## **所以nextTick是如何拿到更新后的dom1，在更新dom的那个微任务中，追加了nextTick的回调队列**
+
+而当我们自己调用nextTick的时候，它就在更新DOM的那个microtask后追加了我们自己的回调函数
+
+那么更新dom的那个微任务是那个微任务？？？？
+
+![img](https://user-gold-cdn.xitu.io/2019/5/13/16ab1b0523456e8a?imageslim)
+
+**下面这两个框框，vue会遍历所有待更新的watcher，执行update方法，将新的数据设置到dom上，然后执行nextTick的微任务，这个时候就拿到了更新的dom，但是还没有渲染。**
+
+https://mp.weixin.qq.com/s/mCcW4OYj3p3471ghMBylBw
+
+在看不懂的时候，带着问题去理解，就能把看不懂的全看懂，真棒
+
+----
+
+## react中的生命周期
+
+- 当首次装载组件时，按顺序执行 getDefaultProps、getInitialState、componentWillMount、render 和 componentDidMount；
+- 当卸载组件时，执行 componentWillUnmount；
+- 当重新装载组件时，此时按顺序执行 getInitialState、componentWillMount、render 和 componentDidMount，但并不执行 getDefaultProps；
+- 当再次渲染组件时，组件接受到更新状态，此时按顺序执行 componentWillReceiveProps、shouldComponentUpdate、componentWillUpdate、render 和 componentDidUpdate。
+
+![img](https://pic3.zhimg.com/80/f5e1a1ac230ee99a44b7dd68b28bdf5d_720w.png)
+
+- 为何 React 会按上述顺序执行生命周期？
+- 为何 React 多次 render 时，会执行生命周期的不同阶段？
+- 为何 getDefaultProps 只执行了1次？
+
+![img](https://pic4.zhimg.com/80/ec65c26c1123f588c2a57e40423cf6fa_720w.png)
+
+![img](https://pic4.zhimg.com/80/34357c2a84e53be3619667ffa4ebbc90_720w.png)
+
+注意：禁止在 **shouldComponentUpdate** 和 **componentWillUpdate** 中调用 setState，会造成循环调用，直至耗光浏览器内存后崩溃
+
+![img](https://pic2.zhimg.com/80/f86d22e349de571c43098351026e8162_720w.png)
+
+---
+
+![img](https://pic4.zhimg.com/80/24487816f694e6bee594870992c1c54b_720w.png)
+
+总结
+
+- React 通过三种状态：**MOUNTING**、**RECEIVE_PROPS**、**UNMOUNTING**，管理整个生命周期的执行顺序；
+- setState 会先进行 *_pendingState* 更新队列的合并操作，不会立刻 reRender，因此是异步操作，且通过判断状态（**MOUNTING**、**RECEIVE_PROPS**）来控制 reRender 的时机；
+- 不建议在 *getDefaultProps、getInitialState、shouldComponentUpdate、componentWillUpdate、render 和 componentWillUnmount* 中调用 setState，特别注意：不能在 *shouldComponentUpdate 和 componentWillUpdate*中调用 setState，会导致循环调用。
+
+核心思想和vue差不多，只是分成了状态机的概念
+
+-----
+
+## react和vue中的状态管理
+
+**把组件之间需要共享的状态抽取出来，遵循特定的约定，统一来管理，让状态的变化可以预测**。
+
+Flux 有一些缺点（特点），比如一个应用可以拥有多个 Store，多个Store之间可能有依赖关系；Store 封装了数据还有处理数据的逻辑。
+
+还是要好好看看，单向数据流和双向数据流的区别
+
+然后注意再看下总结
+
+太多了，看着好累，看不下去
+
+先了解mobx这些是什么，用在哪里，然后看这些文章
+
+todo： 这个暂时放下，类型太多，没有基础会看花了眼镜
+
+等到看react面试题的时候一起看完
+
+----
+
+## react的diff算法
+
+
+
+## dom渲染机制
+
+### react hooks
+
+### 高阶组件
+
+## vue&&react面试题
+
+- [Deep In React 之详谈 React 16 Diff 策略(二)](https://juejin.im/post/5d3e3231e51d4510926a7c39)
+- [React 源码剖析系列 － 不可思议的 react diff](https://zhuanlan.zhihu.com/p/20346379)
+- [浅入浅出图解 Dom Diff](https://juejin.im/post/5ad550f06fb9a028b4118d99)
+
+[React Hooks 原理](https://github.com/brickspert/blog/issues/26)
+
+[React hooks: not magic, just arrays](https://medium.com/@ryardley/react-hooks-not-magic-just-arrays-cd4f1857236e)
+
+[Deep dive: How do React hooks really work?](https://www.netlify.com/blog/2019/03/11/deep-dive-how-do-react-hooks-really-work/)
+
+[【React深入】从Mixin到HOC再到Hook](https://juejin.im/post/5cad39b3f265da03502b1c0a)
+
+[React Hooks 详解 【近 1W 字】+ 项目实战](https://juejin.im/post/5dbbdbd5f265da4d4b5fe57d)
+
+[30分钟精通React今年最劲爆的新特性——React Hooks](https://segmentfault.com/a/1190000016950339)
+
+[React Hooks 详解（一）](http://huayifeng.top:2368/react-hooks/)
+
+- [React 高阶组件(HOC)入门指南](https://juejin.im/post/5914fb4a0ce4630069d1f3f6)
+- [深入理解 React 高阶组件](https://zhuanlan.zhihu.com/p/24776678)
+
+然后就是找出一些常见的react面试题
+
+12篇文章，还有vue的文章
+
+还有两个对应的框架面试题
+
+-----
+
+## react没进阶看不懂这里，看不到这里
+
+https://juejin.im/post/5d5f44dae51d4561df7805b4
+
+
+

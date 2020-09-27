@@ -1,0 +1,1410 @@
+作者：白日梦201712091734936
+链接：https://www.nowcoder.com/discuss/177482
+来源：牛客网
+
+
+
+4月9号下午4:30约了字节跳动的面试，人生中第一次视频面试吧 ( •̀ ω •́ )✧
+
+一面：
+本来约的下午4:30一面的，但是发生了小意外，面试官可能比较忙，迟到了几分钟. 面试开始，首先介绍一下自己，就简单说了一下自己来自什么学校，然后现在大三，成绩一直班级第一，年级第二，因为大四一年没课，所以可以找实习。
+先是聊了聊项目，问是不是自己写的，然后看我项目了用了SSR，要我简单介绍了一下SSR，然后为什么不用SPA，这个当然得回答首页白屏而且会造成SEO问题，
+
+#### 然后问了我GraphQL，
+
+我就介绍了我项目的设计结构，以及如何用GraphQL进行前后端交互的，以及这种方式交互有什么好处等等。。。
+面试官了解情况后就开始试我的技术了，
+
+#### 先问我JS类型判断，这个很简单，写了typeof, instanceof, Object.toString.call ，然后说了一下用typeof能检测8种值，es5的string，boolean，number，function，object，undefined  es6的symbol，以及最新的bigint。
+
+然后开始问我函数式编程，我首先介绍了一下纯函数，函数的副作用，
+
+#### 然后说了curry的实现
+先写了个ES5的
+
+[复制代码](#)
+
+```
+function curry (fn, arr = []) {``  ``
+return` `fn.length === arr.length ? fn.apply(``null``, arr) : function (...args) {``    ``return` `curry (fn, arr.concat(args))``  ``}``}
+```
+
+然后随手写了一个用ES6写了一个一行代码实现curry
+
+[复制代码](#)
+
+```
+const` `curry = (fn, arr = []) => fn.length === arr.length ? fn(...arr) : (...args) => curry(fn, [...arr, ...args]);
+```
+
+然后给他讲了偏函数等等，实现的话就没让我实现了。他问我是不是es6用的多，要我介绍一下es6扩展了哪些东西。毫不犹豫的写了各种基本类型的扩展，比如数值扩展，函数扩展啊，比如剪头函数等等，然后还有Proxy,Reflect,Promise,class,生成器函数，async/await等等，当然他就问Proxy对象能拦截什么，我说总共13个吧，但是我不一定写得全，然后随手就写了，get，set，deleteProperty, has, getPrototypeOf, defineProperty ，....。然后他问我Promise 我给他讲了一下这个对象，然后又顺便扩展出JS实现异步的5种方式callback, 发布订阅模式，Promise，生成器函数，async/await等等，然后介绍了实现异步的Event Loop，即浏览器端的宏任务，微任务，以及nodejs中的几个事件循环阶段，然后介绍了一下异步在其他语言上是怎么实现，然后随手就写了一段python代码，
+
+## 当然他就问Proxy对象能拦截什么，
+
+我说总共13个吧，但是我不一定写得全，然后随手就写了，get，set，deleteProperty, has, getPrototypeOf, defineProperty 
+
+**get(target, prop, receiver)**：拦截对象属性的访问。
+
+**set(target, prop, value, receiver)**：拦截对象属性的设置，最后返回一个布尔值。
+
+**apply(target, object, args)**：用于拦截函数的调用，比如 `proxy()`。
+
+**construct(target, args)**：方法用于拦截 new 操作符，比如 `new proxy()`。为了使 new操作符在生成的Proxy对象上生效，用于初始化代理的目标对象自身必须具有 [[Construct]] 内部方法（即 new target 必须是有效的）。
+
+**has(target, prop)**：拦截例如 prop in proxy的操作，返回一个布尔值。
+
+**deleteProperty(target, prop)**：拦截例如 `delete proxy[prop]` 的操作，返回一个布尔值。
+
+**ownKeys(target)**：拦截 `Object.getOwnPropertyNames(proxy)`、`Object.keys(proxy)`、`for in` 循环等等操作，最终会返回一个数组。
+
+**getOwnPropertyDescriptor(target, prop)**：拦截 `Object.getOwnPropertyDescriptor(proxy, propKey)`，返回属性的描述对象。
+
+**defineProperty(target, propKey, propDesc)**：拦截 `Object.defineProperty(proxy, propKey, propDesc`）、`Object.defineProperties(proxy, propDescs)`，返回一个布尔值。
+
+**preventExtensions(target)**：拦截 `Object.preventExtensions(proxy)`，返回一个布尔值。
+
+**getPrototypeOf(target)**：拦截 `Object.getPrototypeOf(proxy)`，返回一个对象。`**Object.getPrototypeOf()**` 方法返回指定对象的原型(官方调用`__prpto__`)
+
+**isExtensible(target)**：拦截 `Object.isExtensible(proxy)`，返回一个布尔值。
+
+**setPrototypeOf(target, proto)**：拦截 `Object.setPrototypeOf(proxy, proto)`，返回一个布尔值。如果目标对象是函数，那么还有两种额外操作可以拦截。
+
+## 生成器函数
+
+generator
+
+## nodejs中的几个事件循环阶段
+
+## 阶段概述
+
+- **定时器**：本阶段执行已经被 `setTimeout()` 和 `setInterval()` 的调度回调函数。
+- **待定回调**：执行延迟到下一个循环迭代的 I/O 回调。
+- **idle, prepare**：仅系统内部使用。
+- **轮询**：检索新的 I/O 事件;执行与 I/O 相关的回调（几乎所有情况下，除了关闭的回调函数，那些由计时器和 `setImmediate()` 调度的之外），其余情况 node 将在适当的时候在此阻塞。
+- **检测**：`setImmediate()` 回调函数在这里执行。
+- **关闭的回调函数**：一些关闭的回调函数，如：`socket.on('close', ...)`。
+
+[复制代码](#)
+
+```
+while` `True:``  ``e = event_queue.front()
+```
+
+然后说了一下如果阻塞了JS中的主线程会发生什么情况，就是下面的代码。
+
+[复制代码](#)
+
+```
+setTimeout(() => console.log(``"hello world"``))``while` `(``true``) {}
+```
+
+然后就开始问我提到的发布订阅设计模式，其实这就是一个nodejs中的EventEmitter，然后就随手写了一个EventEmitter类，主要方法有on, emit, once, off
+
+[复制代码](#)
+
+```
+class` `EventEmitter {``  ``constructor () {``    ``this``._eventpool = {};``  ``}``  ``on (event, callback) {``    ``this``._eventpool[event] ? ``this``._eventpool[event].push(callback) : ``this``._eventpool[event] = [callback]``  ``}``  ``emit (event, ...args) { ``    ``this``._eventpool[event] && ``this``._eventpool[event].forEach(cb => cb(...args))``  ``}``  ``off (event) {``    ``if` `(``this``._eventpool[event]) {``      ``delete ``this``._eventpool[event]``    ``}``  ``}``  ``once (event, callback) {``    ``this``.on(event, (...args) => {``      ``callback(...args);``      ``this``.off(event)``    ``})``  ``}``}
+```
+
+当然在写的时候也有点紧张了，once方法忘咋写了，面试官就给了个小提示，最后还是写上了，当我写完这个时，他就出来一道原型链的题，我没记错的话是这样的
+
+```js
+function a() {
+this.b = 3
+}
+a.prototype.b = 7;
+var t = new a();
+var b =2;
+a();
+console.log(t.b);
+console.log(b);// 2,因为直接执行a（）this是window，然后就把全局的b改成3了
+```
+
+题目非常简单，我就不解释了
+然后问了我PureComponent，flex布局以及一些css的东西，比如水平垂直居中等等，当然这些比较简单，我就不说了。
+最后他问我平常怎么学习的，我说主要是书看的多一点，比如JavaScript高级程序设计，ES6标准入门，Javascript设计模式，然后平常喜欢去掘金，前端之巅里面看一些文章等等。最后他说你稍等十分钟，我给你联系二面，o(*￣▽￣*)ブ
+
+二面：
+一面大概面了一个多小时吧，然后十分钟没到，二面就打电话过来了，二面的面试官一脸严肃，
+
+出第一题，要我用css实现一个模态窗口，要从窗口下面向上弹的动画，其实这个一点都不难，反正我花几分钟就是写出来了。
+
+然后问一些css的单位比如rem，em，问css的布局方式，就是只用盒子模型布局，position的布局，flex布局，grid布局等等。
+
+然后问我跨域的问题，如何解决，我说了后端响应时设置Access-control-allow-origin头部，还有JSONP，然后他就那个响应头问的比较深，反正我也没答上
+
+，然后就要我写JSONP，我是首先介绍了一下它的基本原理，然后写到一半他就没让我写了。
+
+然后问我一堆网络安全的问题，比如XSS攻击，这个我会，所以也答的比较轻松，然后问我CSRF，这个没听过就过了，然后我说前端安全那块我不太熟，面试官就没有继续问我这个问题了。
+
+然后要我写个节流函数，随手就写
+
+[复制代码](#)
+
+```
+function throttle (fn, time) {``  ``var canRun = ``true``;``  ``return` `function () {``    ``if` `(!canRun) ``return` `false``;``    ``canRun = ``false``;``    ``var that = ``this``, args = arguments;``    ``setTimeout(function () {``      ``fn.apply(that, args);``      ``canRun = ``true``;``    ``}, time || ``500``);``  ``}``}``setInterval(throttle(function() {``  ``console.log(``"hello world"``)``}), ``100``)
+```
+
+问我用reduce实现map的功能，这个比较简单，分分钟就完事了
+
+[复制代码](#)
+
+```
+Array.prototype.map = function (callback) {``  ``var arr = ``this``;``  ``return` `arr.reduce((acc, cur, i) => {``    ``acc.push(callback(cur, i, arr));``    ``return` `acc``  ``}, []);``}``var m = [``1``,``2``,``3``,``4``,``54``].map(function (v, i, arr) {``  ``return` `v * v``});``console.log(m)
+```
+
+让我实现二叉树的后序遍历，想都没想，递归版
+
+[复制代码](#)
+
+```
+function TreeNode (val) {``  ``this``.val = val;``  ``this``.left = ``null``;``  ``this``.right = ``null``;``}` `function vist(root) {``  ``if` `(root) {``    ``vist(root.left);``    ``vist(root.right);``    ``console.log(root.val);``  ``}``}
+```
+
+写完之后，才发现自己上当了，自己写太快了，面试官就要我实现一个非递归版的，可能当时也比较紧张吧，而且面试官一边看着我写代码一边笑，我写到一半就不想写了，跟面试官讲了讲思路就让我过了
+然后问我nodejs的事件循环，我跟一面的面试官就说了这个，所以把一面说的在跟这个面试官说一遍就ok了，最后他问我还有什么想问他的吗，我就随口一问CSRF，反正这个也不懂。没想到面试官非常耐心的给我讲了CSRF，瞬间感觉到了字节跳动面试官是有多么的负责，然后挂电话1分钟后又给我打过来了，说接下来19点到20:00点有空吗，给你约一下三面，然后给你30分钟，去吃个饭吧。哇塞，感觉这是我见到的最好最好的面试官了。(*≧︶≦))(￣▽￣* )ゞ
+
+三面：
+其实二面的面试官要我去吃饭，自己也没去吃，就一直准备三面可能要问的东西，差不多20：00点的时候三面的面试官打来了电话。估计三面的面试官看我面完前两面，觉得我挺累的，就没太问我题了，首先要我自我介绍，先说自己哪个学校的，现在大三，然后成绩班级第一，年级第二，然后年级里大概有300人。然后自己在保证成绩的同时，利用自己课余时间学习了前端....。然后就开始和他聊项目，聊了一下我项目的设计，然后说了一下我当时为什么要用GraphQL，用它有什么好处等等。面试官问我学习前端多久了，怎么学习前端的 ，我回答的是大概学习前端5个月左右，平常看JavaScript高级程序设计，es6标准入门，JavaScript设计模式，深入理解react，你不知道的JavaScript，深入浅出nodejs等书，当然还有像疯狂Java讲义，流畅的python这些书，然后还喜欢上掘金、Medium、前端之巅了看一些文章等等，然后自己也写一些博客什么的。然后他又问了我nodejs相关的问题吧。然后他又问我平常看什么书籍，当时可能也有些激动，就把旁边的JavaScript高级程序设计给他看，当时面试官就乐了。当然还问了我一些人生规划啊，自己的优缺点啊，最后他看我会设计模式，就让我敲一个单例模式，我想这还不简单，在JavaScript里也就var a = {}就ok了，然后我就跟面试官说要不我用Java敲一个，随手就写了一个线程安全的Java单例设计模式，然后还跟他聊聊了大前端时代该如何更好的学习前端啊等等，最后他让我等几分钟，他帮我联系HR。不得不说字节跳动的面试官效率真高。d=====(￣▽￣*)b
+
+四面：
+其实四面的时候发生了点小插曲，经过三面大概是面到了晚上9点半，然后我又在电脑前等了一个小时也不见HR和我联系，最后就打电话给字节跳动的负责人问问啥情况，然后她跟我说HR晚上比较忙，在加上太晚了，就约到了另一天下午4点。四面的话，因为不是技术面嘛，所以都问我为什么要学前端，前端学多久了，前端怎么学习啊，平常除了学习成绩好获得的一些奖学金之外，还有没有其他奖。自己目前有哪些方面不足啊等等问题。比较尴尬的就是我一直以为我面的头条部门，结果HR跟我说他们那里是抖音，这昨天三个面试官都没跟我说他们是什么部门啊，外加上自己一晚上干三面也挺累的都忘记问啥部门了。不过最后还是得加一下HR的微信嘛，HR还让三面我的面试官加了我微信，感觉美滋滋。φ(*￣0￣)
+
+面试问了我老多东西了，而且还很基础，有很多自己问题自己都记不清了，不过今天顺利拿到字节跳动offer就ok了，期待7月份去字节跳动的实习。ο(=•ω＜=)ρ⌒☆
+
+----
+
+作者：offer扑满小猪
+链接：https://www.nowcoder.com/discuss/174632
+来源：牛客网
+
+
+
+3.30号的一、二面，二面完之后HR说当天不安排面试，于是三面约到了今天。
+
+​	一面（40分钟）
+
+​	自我介绍
+
+#### 线程与进程，空间分配、资源分配等等
+
+#### 三次握手、四次挥手及标志位、time-wait等等
+
+![img](https://user-gold-cdn.xitu.io/2017/11/9/d8bf92c7906718271fdb8b0d2d5fe5b4?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+
+![img](https://user-gold-cdn.xitu.io/2017/11/9/8c7874fafe233c9278509e40e906055c?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+
+
+
+#### H5的新特性，语义化
+
+​	4.BOM与DOM，及BOM相关的一些属性
+
+​	写代码：双向绑定、防抖和节流
+
+#### 设计模式：发布订阅、观察者
+
+​	
+
+​	二面（1小时）
+
+​	介绍项目
+
+#### web worker，web storage，怎样验证本地数据的有效性
+
+web storage： localstorge sesssionstorge
+
+加密，控制时效
+
+​	2.性能优化相关
+
+​	3.缓存相关的http头部属性，强制缓存，协商缓存，优先级，以及meta标签
+
+#### 怎样做的登录，接着就是session，cookie，token等等
+
+​	5.input属性相关，以及怎样做的文件上传
+
+​	6.微信小程序相关（项目中有涉及到）
+
+#### transform transition与animation
+
+### 变形(transform)、转换(transition)和动画(animation)。
+
+#### css的transition允许css的`属性值`在`一定的时间区间`内`平滑地`过渡
+
+#### CSS3中添加的新属性`animation`是用来为元素实现动画效果的，但是`animation`无法单独担当起实现动画的效果。承载动画的另一个属性——`@keyframes`。使用的时候为了兼容可加上`-webkit-、-o-、-ms-、-moz-、-khtml-`等前缀以适应不同的浏览器。
+
+#### setTimeout、setInterval与requestAnimationFrame
+
+？？？？
+
+​	9.页面加载问题，JS的异步加载
+
+​	10.给出代码，说出运算结果（this、event loop）
+
+#### 	写代码：回文数，数组去重（set去重，indexof），自定义log，判断数据类型
+
+​	11. React与Vue，各自做了些什么事情
+
+​	
+
+​	三面（1小时）
+
+​	介绍项目
+
+#### 缓存命中率的问题，怎样确保缓存全部数据，缓存命中率不是100%应该怎么办
+
+- **FIFO(first in first out)**
+
+先进先出策略，最先进入缓存的数据在缓存空间不够的情况下（超出最大元素限制）会被优先被清除掉，以腾出新的空间接受新的数据。策略算法主要比较缓存元素的创建时间。在数据实效性要求场景下可选择该类策略，优先保障最新数据可用。
+
+- **LFU(less frequently used)**
+
+最少使用策略，无论是否过期，根据元素的被使用次数判断，清除使用次数较少的元素释放空间。策略算法主要比较元素的hitCount（命中次数）。在保证高频数据有效性场景下，可选择这类策略。
+
+- **LRU(least recently used)**
+
+最近最少使用策略，无论是否过期，根据元素最后一次被使用的时间戳，清除最远使用时间戳的元素释放空间。策略算法主要比较元素最近一次被get使用时间。在热点数据场景下较适用，优先保证热点数据的有效性。
+
+除此之外，还有一些简单策略比如：
+
+- 根据过期时间判断，清理过期时间最长的元素；
+- 根据过期时间判断，清理最近要过期的元素；
+- 随机清理；
+- 根据关键字（或元素内容）长短清理等。
+
+
+
+​	2.说说性能优化的通用架构方案
+
+#### 请求优化和渲染优化的方法
+
+
+
+#### 数据类型转换的原理
+
+
+
+​	5.编程，5个feach请求，请求完成后要求立即执行，但最终的输出顺序要按照要求输出ABCDE（思路是：将每个feach的回调通过a/a的方式输出，但最后没有run出来）
+
+----
+
+作者：Atlassss
+链接：https://www.nowcoder.com/discuss/171705
+来源：牛客网
+
+
+
+## 简介
+
+3月30号面的，整体来说字节跳动的面试的考核很全面，包括项目，算法，基础，问的问题也很细致，有些题目也没怎么答出来，投的是 Node.js 方向，所以 Node 的题也比较多。一天面完的，每面大概40-50分钟。感觉面试官还是挺负责的，给的意见也很中肯~
+
+## 一面
+
+#### 先聊了一通项目，问了我 decorator 的实现原理，扯了一大堆，感觉良好。
+####  如何判断是不是完全二叉树（没答出来）（层次遍历，排前面的元素，如果没有右节点，那么右边的节点都不能有孩子）
+#### 编程题：判断一个链表是否有环
+\4. 一道考异步执行顺序的题，只要了解micro task 和 macro task 应该就可以答出来
+####  编程题：写个函数反转字符串
+#### TCP 握手，分手，拥塞控制，流量控制
+\7. https的原理
+####  DHCP 的实现基于啥协议（UDP）
+\9. Vue 的双向绑定实现原理
+
+####  Vue 如何监听一个不会触发 render 的数据
+
+**computed watch**
+
+剩下的记不清了
+
+## 二面
+
+先聊项目
+\1. TCP 握手，分手，拥塞控制，流量控制
+
+#### 有哪些缓存策略（只答出了 LRU）
+
+先进先出，最少使用，最近最少使用
+
+\3. 简单介绍进程与线程
+#### 简单介绍 node 中的 child_process 模块，父子进程的通信机制（没答好）
+
+父进程：
+
+- `process.on('message')`收
+- `child.send()`发
+
+子进程：
+
+- `process.on('message')`收
+- `process.send()`发
+
+####  介绍基本的数据结构及其应用，队列，栈，堆。函数的执行栈和堆内存
+
+**二叉排序树是一种比较有用的折衷方案。  
+ 数组的搜索比较方便，可以直接用下标，但删除或者插入某些元素就比较麻烦。  
+ 链表与之相反，删除和插入元素很快，但查找很慢。  
+ 二叉排序树就既有链表的好处，也有数组的好处。  
+ 在处理大批量的动态的数据是比较有用。**
+
+#### 又是一道考异步执行顺序的题，需要了解 Node 的 nexttick 以及事件循环每个 stage 做了啥。比如 poll 阶段， timer阶段， check阶段之间的差异，有点难，最后还是错了一点
+#### 编程题：实现一个简单的 EventEmitter，然后基于此聊了一会
+####  二叉树的前中后序遍历，已知前中序，求原有的二叉树
+\9. 各类排序算法介绍，冒泡，快排，堆排，以及相应的算法复杂度
+
+## 三面
+
+这面没问算法题，聊了很久项目，问了一些开放性的问题，也问了一些基础题，感觉发挥的不是很好，有些很简单的题没答出来。
+
+#### 简单介绍一下 body-parser 的作用和原理（没答好）
+\2. 基于 http 模块，写一个 http server，并且处理 POST 请求
+这里 req 实际上是个 stream，获取 body 的方法是基于注册 on data 事件实现的，当时脑子短路没说上来。。错了整道题
+\3. 跨域相关的问题
+\4. 介绍CSRF。CSRF会不会有跨域的问题（不会，这里涉及到跨域的一些原理，跨域请求会被后端接口执行，但是返回的时候会被浏览器拦截）
+\5. 希望 **全栈还是专注做 Node.js**
+\6. 基于你学的信息安全专业你对现在的 web 安全有什么看法，有什么改进意见（没有看法。。。）
+\7. 一堆开放式问题。。
+
+node好难
+
+## 最后
+
+感觉第三面面的不是很好。。攒人品，等结果ing
+
+----
+
+作者：蠢蠢说蠢蠢
+链接：https://www.nowcoder.com/discuss/170779
+来源：牛客网
+
+
+
+首先聊一聊项目 
+
+  1、讲讲ES6的箭头函数 
+
+  2、await和async 本质 
+
+  3、类数组转化成数组的方法 
+
+  4、代码题，异步执行的顺序，宏观任务任务理解，promise、setTimeout等，让你写出输出的顺序 
+
+  5、http缓存头部相关，Etag过程，***-control的参数 
+
+#### 代码题，思路是将一个嵌套的数组用深度遍历（递归）和广度遍历（发现有孩子，就把孩子加入到遍历队列中，候选节点）分别写出来
+
+----
+
+作者：我是five啊
+链接：https://www.nowcoder.com/discuss/170549
+来源：牛客网
+
+6号做完笔试，后来约了21号一面，25号二面，一面面试官看起来比较和蔼，一来就是自我介绍，他说前端的问题我也没准备多少，我就知道他不是前端的了，瞬间有点方。
+
+ 一面
+ 一开始是数据结构的题，二叉树相关，已知前序遍历和中序遍历的结果，求树的结构，这个讲了一下思路面试官就给过了。
+ http请求方法有哪些？
+ 跨域问题遇过吗？什么办法可以解决？讲了一下cors，jsonp，websocket，postmessage，反向***等
+ 讲一下前端安全？xss，csrf，说一下他们具体是什么，如何预防？
+ TCP连接和断开过程（三次招手，四次挥手）
+ cookie localStorage sessionStorage有什么区别？
+ https和http有什么区别？（TLS套接层协议）
+ 如果登陆的请求是https，而其它的请求是http的会出现什么问题？（一开始答了跨域的问题，后来想了一下，答了cookie会加密，可能导致其它请求无法通过身份验证）
+ 最后面试官问我接触过redux吗？我说没有我学的是vue，应该是react里面的状态管理工具，相当于vuex
+ 面试官没什么问题了，提问时间到，我问他对前端学习和发展的建议，他说前端啊，我也不知道，哈哈超可爱，然后说但是我看旁边一些比较厉害的，都是有目标的。第二个问题我问他对我的总体评价和针对我的一些建议，他说你说你现在大三，大三有这个水平已经不错了（天啊这是我遇过的说话最好听的面试官），要有目标有计划地学习之类的。20多分钟后收到二面通知。
+
+​	
+
+​	二面
+
+二面是下载zoom软件，可以视频，也可以共享屏幕，还用石墨文档分享题目。一共面了快一个半钟，问了很多，手撕三次代码。面试官看起来比较严肃，先让我自我介绍，说说项目，说说项目难点，但是感觉他没怎么在意听，就大概说了几句。
+
+
+
+​	第一道题是css相关，实现一个div在页面中垂直水平居中，然后高度是宽度的一半（实现不了也可以固定为200px）div里有文字A垂直水平居中，用本地IDE共享代码给面试官，具体代码看博客：https://blog.csdn.net/weixin_41531446/article/details/88903436 
+
+#### 写完后面试官问我vw（视口的宽度），vh（视口的高度），vmin（min（vw,vh）），vmax的区别？垂直水平居中的其它实现方法？
+
+ #### 一个div里面有个span，span里有很多字，这时候给span加一个border会咋样显示，这个题我没答对，面试官跟我解释了一下
+####  margin合并问题，解决方法？BFC和IFC的区别？
+
+## BFC
+
+> BFC(Block formatting context)直译为"块级格式化上下文"。它是一个独立的渲染区域，只有Block-level box参与， 它规定了内部的Block-level Box如何布局，并且与这个区域外部毫不相干。
+
+### BFC的布局规则
+
+- 内部的Box会在垂直方向，一个接一个地放置。
+- Box垂直方向的距离由margin决定。属于同一个BFC的两个相邻Box的margin会发生重叠。
+- 每个盒子（块盒与行盒）的margin box的左边，与包含块border box的左边相接触(对于从左往右的格式化，否则相反)。即使存在浮动也是如此。
+- BFC的区域不会与float box重叠。
+- BFC就是页面上的一个隔离的独立容器，容器里面的子元素不会影响到外面的元素。反之也如此。
+- 计算BFC的高度时，浮动元素也参与计算。
+
+### 如何创建BFC
+
+1. float的值不是none。
+2. position的值不是static或者relative。
+3. display的值是inline-block、table-cell、flex、table-caption或者inline-flex
+4. overflow的值不是visible
+
+### BFC的作用
+
+1. 利用BFC避免margin重叠。
+2. 清除浮动
+
+## IFC
+
+> IFC(Inline Formatting Contexts)直译为"内联格式化上下文"，IFC的line box（线框）高度由其包含行内元素中最高的实际高度计算而来（不受到竖直方向的padding/margin影响) IFC中的line box一般左右都贴紧整个IFC，但是会因为float元素而扰乱。float元素会位于IFC与与line box之间，使得line box宽度缩短。 同个ifc下的多个line box高度会不同。 IFC中时不可能有块级元素的，当插入块级元素时（如p中插入div）会产生两个匿名块与div分隔开，即产生两个IFC，每个IFC对外表现为块级元素，与div垂直排列。 那么IFC一般有什么用呢？ 水平居中：当一个块要在环境中水平居中时，设置其为inline-block则会在外层产生IFC，通过text-align则可以使其水平居中。 垂直居中：创建一个IFC，用其中一个元素撑开父元素的高度，然后设置其vertical-align:middle，其他行内元素则可以在此父元素下垂直居中。
+
+### IFC布局规则：
+
+框会从包含块的顶部开始，一个接一个地水平摆放。 摆放这些框的时候，它们在水平方向上的外边距、边框、内边距所占用的空间都会被考虑在内。在垂直方向上，这些框可能会以不同形式来对齐：它们可能会把底部或顶部对齐，也可能把其内部的文本基线对齐。能把在一行上的框都完全包含进去的一个矩形区域，被称为该行的行框。水平的margin、padding、border有效，垂直无效。不能指定宽高。 行框的宽度是由包含块和存在的浮动来决定。行框的高度由行高计算这一章所描述的规则来决定。
+
+
+
+####  chrome的字体最小为12px，如何设置10px的字体（使用transform:scale()属性进行缩放)
+####  为什么设置font-weight是数字的时候作用会失效？（这个有点懵的，然后面试官说这个有点偏了，然后告诉我是因为用了一些特殊的字体，它们没有实现该粗细的字体，真好，学到了）
+ 浏览器缓存相关的问题？讲了一下协商缓存的机制，简单请求和options预检请求
+ 说一下es6的promise的状态，实现原理？
+ 一道eventLoop的题，直接写出输出结果，然后说一下一次事件循环的过程，在题目中标出每一次事件循环
+ 中间问的一些细节问题有点忘了哈
+
+####  写代码，实现一个累加函数的功能比如sum(1,2,3)(2).valueOf()//8，写完后面试官说总体思路是对的，柯里化，但是一些细节要注意一下（当时变量有的写错了），代码：
+ https://blog.csdn.net/weixin_41531446/article/details/88903436 
+
+​	最后面试官出了道原型继承的题，我当时没看石墨文档直接在本地IDE写了两个函数然后组合继承，他说让我看看文档，要我封装一个实现继承的函数 
+
+封装下继承函数: extrends
+
+​	面试到这里就到尾声了，面试官评价我学习前端感觉挺有热情（字节面试官说话都挺好听耶），然后面完当天没有hr给我打电话我以为我大概凉了，没想到第二天hr约我hr面了，心情难以言喻。
+
+ 三面
+ 面试官是个hr小姐姐，问的是：为什么选择北京的公司？还面了哪些公司？父母对你到其它城市的看法？生活学习中坚持最久的是什么？推荐一本书会推荐什么？为什么推荐？你觉得你能给团队带来什么？
+
+----
+
+作者：瑟瑟花抖小前端
+链接：https://www.nowcoder.com/discuss/167553
+来源：牛客网
+
+
+
+一面：
+
+一面小哥哥很nice，问的问题也偏基础，全程谈笑风生
+
+\- 什么是堆，什么是栈，在哪里应用
+
+\- 什么是进程，什么是线程
+
+- TCP 协商流程&断开流程
+
+\- 讲一下什么是 eventloop
+
+-讲一下代码的执行结果，并解释为什么
+
+```js
+Promise.resolve().then(() => console.log(2));
+new Promise((resolve, reject) => {
+  resolve();
+  console.log(3);
+}).then(() => console.log(4));
+setTimeout(() => {
+  Promise.resolve().then(() => console.log(5));
+  setTimeout(() => console.log(7), 0);
+}, 0);
+setTimeout(() => console.log(6), 0);
+```
+
+- 讲一下什么是 prototype
+- 一个矩形，水平垂直居中，且宽高比为 2:1
+- Vue 双向数据绑定实现（问的很细）
+- node用过吗，electron了解吗
+- 有什么想问的
+
+回答的较为顺利，不出预料几分钟后收到了2面通知.
+
+二面：
+
+二面面试官是人给人感觉很平易近人，给人感觉技术特别强，问题完全不按套路出牌，笑容渐渐消失，全程让我充满着卑微感和压迫感
+
+1.tcp在哪一层？让你实现一个基于tcp协议之上的协议，你怎么实现。（其实就是实现一个http协议，问的相当细了，近20分钟都在讨论这道题）
+
+2.webpack打包产物是怎样的，到底是为了什么，优化了什么，为什么要合并文件？
+
+3.vue的diff是为什么，浏览器重绘重排前会diff吗，为什么？
+
+#### 实现一个单行容器内：左边一行文字，右边一个btn，文字边长过程中，不会把btn挤下去，而是文字超出省略
+
+5.手写编程题：
+
+实现一个累加函数，当最后一次调用传入空时，计算所有参数和，类似下面：
+const x = sum(1);
+
+x = sum(1,2)(3,4,5)(6)()
+\6. 有什么想问的？
+
+二面真是把我学前端这一年积累下来的自信心彻底击垮了，问题基本是没准备过的，完全考验临场反应和知识积累，面试官最后问我有什么问题时，我都已经放弃挣扎随便问了几个，没想到过了几分钟接到了三面通知。
+
+三面：
+三面面试官全程很严肃，主要问一些思想层面的东西了
+
+- 实习经历？主要做什么？实习收获成长？
+- 个人感兴趣的前端方向？目前研究状况？将来打算？
+- 来道算法题：逆波兰表达式相关
+- 有什么想问的？感觉没戏了，也就问了一下上面的题相关的东西
+
+三面等了一个半小时，个人感觉答得也不怎么样，过了一会儿收到短信说30天内同步结果，个人感觉无望了
+--- end ---
+顺道挂个blog：https://1465799166.github.io/
+
+4.16更新:昨天下午接到hr电话，收到了offer
+
+----
+
+作者：AllenTan
+链接：https://www.nowcoder.com/discuss/167370
+来源：牛客网
+
+大三党
+ 面试官是个小哥哥 挺好的 
+ 问的也挺简单的 就是自己太菜了哈哈 短信过来说挂了
+ 加油 秋招再战
+
+
+ js基础类型
+ ==的隐式转换 
+ 两道编程题 
+
+
+
+​	// getSum([1, '2', [3, [4, 5]]])
+
+​	// => 13
+
+​	function getSum(arr) {
+
+}
+
+
+
+​	给定无序、不重复的数组 data，取出 n 个数，使其相加和为 sum
+
+\```js function getResult(data, n, sum) { } ```
+
+ http的常见method 几乎都问到了
+ bfc和margin塌陷
+ this
+ 闭包 
+ 变量提升
+
+ 大概记得的是这些
+
+----
+
+作者：紫霞眨眼无缝
+链接：https://www.nowcoder.com/discuss/165786
+来源：牛客网
+
+\## 一面
+ 一二面都是远程视频面试，在牛客网上，可以在线撸代码，面试官能实时看到，
+ 考得比较基础，都是写过的。
+ 一面面试官是个小姐姐，人挺好的
+ \- 有没有使用过css3动画，介绍一下,怎么做，关键是怎么做的CSS
+ \- 单行文本溢出，多行文本溢出把代码实现写出来
+ \- bfc布局是什么
+ \- js类型，封装一个类型鉴定函数
+ \- 闭包，平时在哪用到？ 立即执行函数解决闭包中访问变量的问题
+ \- 事件轮训机制
+ \- 原生js实现bind函数
+ \- 一个函数，然后让你说他们的值是多少，为什么，预编译，严格模式，作用域链
+ \- 算法 快拍 选择排序
+ \- 浏览器渲染原理
+
+ \## 二面
+ 二面面试官是一个小哥哥，人挺好
+ \- 实现一个构造函数 new的时候每次加一
+ \- 计算机网络tcp与udp区别， tcp拥塞机制， tcp三次握手， 四次挥手
+ \- react setstate为什么是异步的
+ \- react 性能优化
+ \- 知不知道css性能优化
+
+----
+
+作者：ZoraYang
+链接：https://www.nowcoder.com/discuss/161436
+来源：牛客网
+
+
+
+面试官是个很爱笑的叔叔。
+
+1. 先自我介绍，我介绍的时候说了自己比较擅长基础，所以面试官问了基础
+2. 说一说输入Url到页面渲染整个过程（我答出来了面试官说我答案倍的挺熟）
+3. 回流和重绘（老问题了有没有）
+4. 你是怎么学习框架的？
+
+   #### 手撕代码：实现一个tab组件
+6. 如果页面卡顿你会怎么解决？
+7. 你这两年的前端学习路线是怎么样的？
+8. 你从接一个项目到项目开发完成的一个过程？
+9. 有没有了解过大公司是怎么开发的？
+10. 未来目标是什么？想在头条收获什么呢？
+11. 感想： 面试官真的很和蔼，是个爱笑的叔叔，我也超级爱笑，所以两个人就一直傻笑，面试官说话挺损的，一直拆我话，我冠冕堂皇的说要好好学习他就说除了学习跟工作你还有啥想在头条干的吗？哈哈 我就很尴尬一直傻笑。我这个人就很直，说话很直so很多话都说的很诚实，又一直傻笑，觉得过了是性格加分。
+
+真的觉得自己欧气满满，三个面试官都超级好，问的问题也不难，下午五点hr面，希望能拿到offer把，现在真的超级开心。
+
+----
+
+作者：ZoraYang
+链接：https://www.nowcoder.com/discuss/158773
+来源：牛客网
+
+
+
+## 题目
+
+1. 说说你做了什么项目，用了什么技术栈？
+2. 为什么要使用Redux，是不是所有项目都必须要使用Redux？
+3. 你觉得mongoose有什么作用？
+
+   #### 如何判断一个IP是不是国内IP？
+
+   #### 一道程序题
+
+```js
+var a = {x:1}
+var b = a;
+a = a.x = {x:1}
+console.log(a);   // {x:1}
+console.log(b);   // {x:{x:1}}
+ 
+```
+
+1. 如何判断一个对象是不是空对象？
+2. 0.1+0.2 == 0.3？原因？
+3. 在线编程，getUrlParams(url,key); 就是很简单的获取url的某个参数的问题，但要考虑边界情况，多个返回值等等
+4. POST一般可以发送什么类型的文件
+5. 说一说你了解的express中间件
+6. git使用过吗？用过哪些指令？git具体工作流是什么？
+
+**心得说一下**：二面面试官是一个头发稀少的叔叔，看起来就是很波澜不惊的大佬，一共就面了三十分钟不到。
+
+面试的时候虽然我有的问题答上来了但是我觉得摸棱两可，最后在线编程虽然代码写了，但是不知道为什么没运行起，
+
+面试官说思路正确只是有小错误，最后发现是return的问题。
+
+面完之后是觉得肯定是凉了的，主要题目量比较少，有一两个问题回答不上来错误率就变高了，而且最后的编程题犯低级错误，也只面了三十分分钟，看面试官从头到尾都是无表情，想到肯定凉了，结果十分钟之后就有hr打电话约三面，我很意外问了她一下，她说面试官反映我的态度还是挺积极的。
+
+三面时间约的下周三，主要我这周上午都被面试排满了，下午全是实训课。
+
+三面面完会再出面经的，大家一起加油叭
+
+----
+
+作者：ZoraYang
+链接：https://www.nowcoder.com/discuss/157216
+来源：牛客网
+
+
+
+面了一个小时，从四点面到五点一十，下面的问题可能不是所有的，反正我记得起来的都写了。
+
+1. 算法：链表反序输出，不再申请内存空间
+
+2. 0.1+0.2===0.3吗，为什么？
+
+3. Number()的存储空间是多大，如果后台发送了一个超过最大字节的数字怎们办
+
+4. 垂直居中实现方法
+
+5. 跨域、jsonp原理、CORS原理
+
+6. Proxy
+
+7. Promise原理
+
+   [复制代码](#)
+
+   `console.log(``1``)``new` `Promise((resolve)=>{`` ``resolve();`` ``console.log(``2``)``}).then(()=>{`` ``console.log(``3``) ``})``setTimeOut(function()=>{`` ``console.log(``4``)``},``0``)``console.log(``5``)`
+
+8. 浏览器请求数据问题，请求数据到请求结束与服务器进行了几次交互
+
+9. TCP为什么要四次挥手
+
+10. cookie有哪些属性、大小、浏览器如何禁止别人访问cookie
+
+11. localStorage，sessionStorage的区别。
+
+12. display:none,visibility:hidden,opactiy:0的区别。
+
+13. BFC，如何形成BFC
+
+14. BFC与IFC的区别
+
+15. BFC会与float元素相互覆盖吗？为什么？举例说明
+
+16. 回流与重绘，如何避免回流
+
+17. git merge、git rebase的区别
+
+18. js脚本加载问题，async、defer问题
+
+19. antd源码相关，使用什么语言写的，按需加载实现
+
+20. 设计模式，有哪些设计模式
+
+21. 在交互过程中如果数据传送完了，还不想断开连接怎么办，怎么维持
+
+22. websocket与ajax的区别
+
+    ## fetch API与传统request的区别
+
+    fetch是一个低层次的API，你可以把它考虑成原生的XHR，所以使用起来并不是那么舒服，需要进行封装
+
+    - 符合关注分离，没有将输入、输出和用事件来跟踪的状态混杂在一个对象里
+    - 更好更方便的写法，诸如：
+
+说一下心得好了，因为他面算法，我不会，我说我只会简单的快排、冒泡、归并等算法，所以面试官后面就没问算法了
+
+问框架我有的答得出来，我跟他说我框架掌握比较薄弱，基础比较厉害，所以框架就问的少，问很多js相关、交互相关的基础
+
+一面过了，面试官是个很可爱的小哥哥，虽然前面第一题问算法，第二题问框架，我都没答出来很尴尬，但后面问很多js和浏览器基础，都答上来了，所以,面试还是很人性化的~
+
+---------------------------------2019.8.6更新------------------------------
+
+其实这些面试题哈哈，上次我跟部门的小哥哥小姐姐去吃火锅，坐在我一面面试官对面，还拿着题考他哈哈，这边的人真的超级可爱～
+
+然后我一面、二面、三面都发了帖子，大家可以对比一下啊。，一般一面是部门同事面，涉及到比较广，如果面到40min以上基本上稳的几率比较大，二面是其他部门的前端交叉面你，主要问项目比较多，然后很可能手撕代码（校招可能一面就手撕）。三面的话是leader面，应该会着重问一下你的学习能力什么的。
+
+秋招开始啦，大家不嫌弃我的内推码可以使用啊～把我的好运气送给大家（毕竟字节跳动是我面试的第一家公司然后一路绿灯哈哈），社招的也可以私聊我帮你们推简历啊。
+
+----
+
+作者：家有佳欣
+链接：https://www.nowcoder.com/discuss/171320
+来源：牛客网
+
+面试官开头就说问你几道算法题，问了链表，快排em...因为楼主今年大二数据结构没有学就实话实说了。
+ 2 tcp的三次握手
+ 3 懒加载的节流和防抖，代码实现，并说明原理去区别还有使用场景
+ 4 css垂直居中，不定宽高和定宽高的2种实现办法
+ 5 写一个继承吧，组合继承，然后说出寄生组合继承相对于组合继承的优点
+ 6 ajax和后台对接传数据如何实现，中间需要注意什么细节，get还是post
+ 7 es6有学过吗？说一下你了解哪几个，我详细说了let var const的区别各种使用办法
+ 8 promise有用过吗？他是干啥的？你会在啥场景使用他，promise如何解决回凋地狱？如何和ajax配合？
+ 9 浏览器的渲染过程
+ 10 浏览器输入url发生什么？
+ 11 em和rem如何适配？有啥区别？还有其他适配的办法吗？
+ 12 前端性能如何优化列举几种吧
+ 13 你有canvas的经验，你可以大概说一下如何实现一个普通canvas的过程吗？可以写一下吗？
+ 14 还有啥问题问我吗？
+ 全程50多分钟，面试官说我前端基础不错，算法啥的需要注意好好补习
+
+ 到现在已经2天了，还没2面的消息，也没发短信挂我，只是单纯的一个面试体验评卷，微信问了hr还有二面吗，hr暂时也不知道，想问一下大家我这样还有机会吗，问的问题基本上都回答出来了吧😊
+
+----
+
+作者：An14
+链接：https://www.nowcoder.com/discuss/168663
+来源：牛客网
+
+
+
+前端小白准备的最充分的一次
+
+  自我介绍，项目介绍，项目困难如何解决。。。 
+
+  \1. 输入URL发生了什么(域名解析过程,tcp三次握手，为什么需要三次握手) 
+
+  \2. http缓存 
+
+  \3. 事件***，事件冒泡 
+
+  4.html语义化，HTML5新增 
+
+  \5. 盒子模型，boxsizing没有设置的时候的默认大小 
+
+(以下题目我尴尬地一知半解)
+
+  \6. Css 写一个正方形，大小是父级的一半 
+
+  7.写函数任意标签转成json文件 
+
+  <div>  <span>     <a></a >  </span>  <span>  <a></a >    <a></a > </span></div> 
+
+  
+
+
+  { tag: 'DIV',children: [  {   tag: 'SPAN',  children: [    { tag: 'A', children: [] }   ] },  {   tag: 'SPAN',   children: [    { tag: 'A', children: [] },    { tag: 'A', children: [] }  ]  } ]} 
+
+  
+
+
+  function DOM2JSON(root) {} 
+
+  8.写函数： 
+
+  function repeat(func, times, wait) { // TODO}const repeatFunc = repeat(alert, 4, 3000);repeatFunc("hellworld"); 
+
+  repeatFunc("hellworld");//会alert4次 helloworld，每次间隔3秒 
+
+  
+
+
+  9.抛硬币 
+
+  抛硬币问题 先抛的人赢的概率 
+
+昨天14.30面，15.10结束，今天上午12.00收到没过的邮件
+
+----
+
+作者：敲起锣打起鼓
+链接：https://www.nowcoder.com/discuss/162081
+来源：牛客网
+
+
+
+一面：
+
+1. ​		业务方面的知识 
+2. ​		ssr和前后端分离的区别 
+3. ​		h5兼容问题 
+4. ​		list的无限滚动---节流 
+5. ​		处理跨域的方法 
+6. ​		http缓存的了解--强缓存和协商缓存 
+7. ​		css中垂直居中 
+8. ​		align-center中ios8的问题-webkit-align-item: center 
+9. ​		rem的理解 
+10. ​		算法：数组中map和reduce，如何用reduce实现map 
+11. ​		算法：打平数组和规定深度的打平数组 
+
+​	二面：
+
+1. ​		ssr的优点 
+2. ​		vue@3.0中的preset配置？ 
+3. ​		父组件A和其子组件B/子组件C，B/C进行通信的方式 
+4. ​		组件中eventbus的实现 
+5. ​		组件如何设置并被使用 
+6. ​		如何来创建多个项目？ 
+7. ​		多个组件$message如何实现最后触发的在最上面 
+8. ​		如何实现在图片被加载之前的占位符一个image，宽高比16:9 
+9. ​		H5中边框为1px的设置 
+10. ​		多行或单行省略 
+11. ​		.div 和div > div > div的优先级 
+12. ​		动画相关 
+13. ​		post和put的区别是什么？ 
+14. ​		Cookie中的操作以及httponly 
+15. ​		重绘和重排 
+16. ​		js1 
+
+​		function a() {this.b = 3} 
+
+​		var c = new a(); 
+
+​		a.prototype.b = 9; 
+
+​		var b = 7; 
+
+​		a() 
+
+​		console.log(b) 
+
+​		console.log(c.b) 
+
+​		17.js2 
+
+​		setTimeout(()=>{ 
+
+​		setTimeout(() => { 
+
+​		console.log('console1'); 
+
+​		}, 0) 
+
+​		console.log('console2'); 
+
+​		setTimeout(() => { 
+
+​		console.log('console3'); 
+
+​		}, 200) 
+
+​		}) 
+
+​		setTimeout(() => { 
+
+​		console.log('console4'); 
+
+​		}, 200); 
+
+​		console.log('console5') 
+
+​		18.算法题 
+
+​		给定一个字符串如下，请统计字符串中出现最多的字母和次数  
+
+​	
+
+​	感觉自己的css基础不扎实～
+
+----
+
+作者：offer-hunter
+链接：https://www.nowcoder.com/discuss/155934
+来源：牛客网
+
+
+
+一面二面紧挨着，视频面试只把记住的几个题记下来了
+其余的都是我的 project 相关，没有列出来的必要
+
+这是我放在印象笔记的，所以还有当时实现的代码
+也不知道对不对，大家看的时候还能帮我找找错 嘿嘿 :)
+
+#### js实现继承
+
+这是我当时实现的
+
+```js
+function Animal(){
+    this.type = 'animal'
+}
+
+function dog(){
+    Animal.call(this)
+    dog.prototype = Animal.prototype
+    dog.prototype.constructor = dog
+}
+```
+
+不应该把Animal的原型给dog，这样对于dog原型链操作会影响到父类
+
+```js
+function A() {
+  this.a = 'hello';
+}
+
+function B() {
+  A.call(this);
+  this.b = 'world';
+}
+
+B.prototype = Object.create(A.prototype, {
+  constructor: { value: B, writable: true, configurable: true }
+});
+
+let b = new B();
+Object.create()方法创建一个新对象，使用现有的对象来提供新创建的对象的__proto__。
+```
+
+#### 实现bind
+
+我当时的实现
+
+```js
+Function.prototype.bind = function bind(fn) {
+    let that = this
+    let args = arguments
+    return function () {
+        fn.call(that, args)
+    }
+}
+
+function test() {
+    let that = this
+}
+
+let obj = {
+    name: "wwc"
+}
+
+let newtest = test.bind(obj)
+newtest()
+```
+
+正确的实现
+
+```js
+let b = Function.prototype.bind
+Function.prototype.bind = Function.prototype.bind || function bind(ctx) {
+    let that = this
+    let slice = Array.prototype.slice
+    let bindArgs = slice.call(arguments,1)
+    // bind可以传递参数，返回的被绑定的函数同样可以传参，所以这里先保存第一次bind的参数，忽略ctx，从 index 1 开始
+    // 后面将调用时的参数传递进去，concat成一个array
+    return function b(args) {
+        // slice.call 将 arguments 转换为 Array
+        that.apply(ctx,bindArgs.concat(slice.call(arguments)))
+      // From https://stackoverflow.com/a/960870/7529562
+      //NOTE: The slice function is intentionally generic; it does not require that its this value be an Array object. 
+      //Therefore it can be transferred to other kinds of objects for use as a method.
+      // Whether the slice function can be applied successfully to a host object is implementation-dependent.
+
+      //Therefore, slice works on anything that has a length property, which arguments conveniently does.
+    }
+}
+
+function test (a,b) {
+    console.log(arguments)
+}
+
+let obj = {
+    name: "wwc"
+}
+
+let newtest = test.bind(obj,'1','2')
+newtest('3','4')
+```
+
+#### 给一段代码判断执行顺序
+
+// 判断下面输出顺序
+
+```js
+console.log('begin');
+setTimeout(() => {
+    console.log('setTimeout 1');
+    Promise.resolve()
+        .then(() => {
+            console.log('promise 1');
+            setTimeout(() => {
+                console.log('setTimeout2');
+            });
+        })
+        .then(() => {
+            console.log('promise 2');
+        });
+    new Promise(resolve => {
+        console.log('a');
+        resolve();
+    }).then(() => {
+        console.log('b');
+    });
+}, 0);
+console.log('end');
+```
+
+#### 给出代码判断this指向
+
+```js
+let a = {b: function() { console.log(this) }, c: () => {console.log(this)}}
+
+a.b()
+a.c()
+
+let d = a.b
+d()
+```
+
+#### html文件解析过程，浏览器的重排，重绘
+
+#### 浏览器的渲染机制，为什么使用Virtual DOM，直接操作DOM的弊端是什么？
+
+#### 补全下面代码
+
+```js
+function repeat(func, times, wait) {
+    
+}
+
+
+// 输入
+const repeatFunc = repeat(alert, 4, 3000);
+
+// 输出
+// 会alert4次 helloworld, 每次间隔3秒
+repeatFunc('hellworld');
+// 会alert4次 worldhellp, 每次间隔3秒
+repeatFunc('worldhello')
+```
+
+我当时的实现
+
+```js
+function repeat(func, times, wait) {
+    let timer
+    let count = 1
+
+    function set(f) {
+        timer = setTimeout(() => {
+            func(f)
+            if (count >= times) {
+                clearTimeout(timer)
+                return
+            }
+            set(f)
+            count++
+
+        }, wait)
+    }
+
+    return set
+}
+
+
+// 输入
+const repeatFunc = repeat(alert, 4, 3000);
+
+// 输出
+// 会alert4次 helloworld, 每次间隔3秒
+repeatFunc('hellworld');
+```
+
+这种实现如果调用两次 repeatFunc
+一共会输出4次，因为 count 被公用了
+
+而且只能接受一个参数
+
+当时更好的写法没有想出来
+面试官到最后给了一个写法，但是有错误，
+
+改完之后：
+
+```js
+async function wait(seconds) {
+    return new Promise((res) => {
+        setTimeout(res, seconds);
+    });
+}
+
+function repeat(func, times, s) {
+    return async function (...args) {
+        for (let i = 0; i < times; i++) {
+            func.apply(null, args);
+            await wait(s);
+        }
+    };
+}
+
+let log = console.log
+let repeatFunc = repeat(log,4,3000)
+repeatFunc('HelloWorld')
+repeatFunc('WorldHello')
+```
+
+输出
+
+```js
+HelloWorld
+WorldHello
+HelloWorld
+WorldHello
+HelloWorld
+WorldHello
+HelloWorld
+WorldHello
+```
+
+最初给的是
+
+```js
+async function wait(seconds) {
+    return new Promise((res) => {
+        setTimeout(res, seconds);
+    });
+}
+
+async function repeat(func, times, s) {
+    return function (...args) {
+        for (let i = 0; i < times; i++) {
+            func.apply(null, args);
+            await wait(s);
+        }
+    };
+}
+```
+
+首先， 必须在 `async` 中使用 `await`
+所以
+
+```js
+return async function (...args) {
+    
+}
+```
+
+再者， `async` 函数返回值会被 `Promise` 包装
+所以 `async function repeat(){}` 返回 `Promise`，并不是我们想要的 `async function`
+所以这里去掉 `async`
+
+----
+
+作者：栗子Liz啊
+链接：https://www.nowcoder.com/discuss/141443
+来源：牛客网
+
+只有一面。。。
+ 1.css中position哪些？
+ 2.http和https区别
+ https的劣势
+ 具体又问了对称加密和非对称加密区别
+ 3.setTimeOut和promise区别
+ 4.实现一定时间内事件只触发一次
+ 5.两道编程
+ 实现队列函数（先进先出），以实现一次100秒后打印出1，200秒后打印2，300秒后打印3这样
+ 实现类似于模板字符串的功能
+
+----
+
+作者：Anselm
+链接：https://www.nowcoder.com/discuss/111688
+来源：牛客网
+
+
+
+发三个面经回馈一下吧，毕竟基本上是面向面经学的前端
+
+​	计算机专业本科生，准备前端到现在时间比较仓促，所以八月很少过一面…但是九月基本上都能走完流程了，快手由于三面面试官明确说不可以漏题，所以不放了，头条三面忘记录音了，所以也没有
+
+​	快手：
+
+​	![img](https://uploadfiles.nowcoder.com/images/20180917/938343429_1537180490399_4A364C29218EE678E4DA387A92854CC9)
+
+​	头条：
+
+​	![img](https://uploadfiles.nowcoder.com/images/20180917/938343429_1537180536651_AC81BD01F6187CCE3210A8E33EBE764F)
+
+​	BIGO：
+
+​	![img](https://uploadfiles.nowcoder.com/images/20180917/938343429_1537180563386_11E6E4056FD6405000631451509DCAAE) 
+
+​	祝大家都能拿到理想的offer
+
+---
+
+作者：棱析析
+链接：https://www.nowcoder.com/discuss/110004
+来源：牛客网
+
+
+
+1.介绍一下TCP
+
+​	2.介绍一下Http,写一个http请求报文头
+
+​	3.介绍一下三次握手与四次挥手，两次握手可不可以？如果两次握手中间会出现什么问题
+
+​	4.介绍一下线程和进程的区别？
+
+​	5.介绍一下js的构造函数里面有什么操作
+
+​	6.new一个对象中间做了什么操作
+
+​	7.介绍一下prototype
+
+​	8.写一个promise
+
+​	9.async和generator有什么区别，写一个async和generator函数，并介绍区别
+
+​	10.
+
+[复制代码](#)
+
+```
+for``(``var` `i = 0;i<5;i++){` `setTimeout(``function``(){` `console.log(i); ` `},1000); ` `}
+```
+
+​	用promise和async实现每间隔1s,2s,3s...打印i 
+
+​	11.实现类似与java的多线程打印 
+
+[复制代码](#)
+
+```
+var` `a = [1,2,3,4]; ` `var` `b = [``'a'``,``'b'``,``'c'``]; ` `//实现交替打印1a2b3c4
+```
+
+----
+
+作者：windl
+链接：https://www.nowcoder.com/discuss/105513
+来源：牛客网
+
+
+
+刚面完今日头条三轮面试，发个面经反馈一下牛客网。 
+
+  
+
+
+  **一面（上午9：30）**  
+
+  一面问的问题非常基础，反正就是很多面试基本会问的东西。 
+
+1. ​    常用的块级元素和行内元素有哪些      
+2. ​    块级元素的特点      
+3. ​    img是什么类型的元素      
+4. ​    说一下你了解的浮动      
+5. ​    为什么要清除浮动？举个实际场景      
+6. ​    说一下你了解的盒模型      
+7. ​    css3用过什么      
+8. ​    box-sizing的各个属性有什么区别      
+9. ​    float和position一起用是什么效果      
+10. ​    rem用过吗？做不同手机的适配怎么做？      
+11. ​    写个二分查找      
+12. ​    箭头函数特点？      
+13. ​    var a = {
+     b: ()=> {console.log(this);}, 
+     c: function() {console.log(this);}
+     }
+     a.b(); // ??? 
+     a.c(); // ???      
+14. ​    vue的双向绑定和依赖收集      
+15. ​    vuex是做什么的？缺点？      
+16. ​    cookie和session区别？      
+17. ​    后端怎么存储session？      
+18. ​    讲一下登录验证全过程（涉及session）      
+19. ​    进程和线程的区别？      
+20. ​    webpack3升级到4为什么会提升速度？      
+21. ​    webpack优化有哪些？     
+
+   大概就这么多了，总体来说比较简单都是常见的问题，我之前写二分查找的时候面试官还给我挖坑，问我乱序数组怎么二分查找？我说二分查找的前提条件就是数组有序。面试官也没说什么了。然后hr就通知二面  
+
+  
+
+
+  **二面（上午11:15）**  
+
+  二面比一面难一点，但是也是挺常见的问题，分为三种方向：前端方向、网络方向、算法方向。 
+
+1. ​    script的async有什么用      
+2. ​    手写懒加载（考虑防抖和重复加载问题）      
+3. ​    手写bind      
+4. ​    给页面注入50万个li怎么做提升性能？      
+5. ​    fileReader用过吗？base64编码原理？      
+6. ​    setTimeout一定会按时执行吗？      
+7. ​    讲一讲event loop（微任务、宏任务等）      
+8. ​    https的过程？      
+9. ​    http请求的报文头部是什么？      
+10. ​    http有哪些方法？option是做什么的？      
+11. ​    你一般用的MIME类型有哪些？      
+12. ​    http缓存？      
+13. ​    手写快排      
+14. ​    分治算法     
+
+  只记住这么多了，其他的印象不深刻，反正不会很难。 
+
+  
+
+
+  **三面（13：50）**  
+
+  经历了前两轮面试本来我是很自信的，然而三面面完只剩下懵逼...面试官不问基础，一上来就让我做题 
+
+1. ​    实现一个简单的打桌球游戏，构建一个小球类、球杆类、球桌类，在游戏主类中实现核心算法。     
+
+  题还没完成就说不用写了，我大概了解你的思路了。然后就问我下面几个问题 
+
+1. ​    github那些项目怎么做的，为什么想做这些？      
+2. ​    你在阿里实习做过最难的最深入的东西是什么？      
+3. ​    webpack的css-loader原理讲一下     
+
+   然后面试就结束了，负责通知的hr给我说两周内出结果让我耐心等待。本来以为自己凉了因为没有hr面，结果在头条的师兄说这次是技术面，过段时间hr再统一面试.......那再等等吧，希望大家秋招都能拿到满意的offer~  
+
+-----
+
+
+

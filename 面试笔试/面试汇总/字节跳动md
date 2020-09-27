@@ -1,0 +1,628 @@
+# 字节跳动（校招）
+
+笔者读大三，前端小白一枚，正在准备春招，人生第一次面试，投了头条前端，总共经历了四轮技术面试和一轮hr面，不多说，直接上题
+
+## 一面
+
+自我介绍，然后问了为什么学习前端
+
+## 算法：实现36进制转换
+
+> 实现进制的转化，算法如何实现  用算法比较复杂，直接答 parsInt  36->10  toString-> 10->36
+
+把`0.1`转化为二进制是：`0.0001100110011001100...`（1100循环），然后把`0.2`转化为二进制是：`0.00110011001100...`（1100循环）。
+
+十进制小数转为二进制小数采用 乘2取整  ，所以一直是无线循环小数
+
+所以就不精确
+
+`parseInt(str,radix); 将字符串str按照radix进制编码方式转换为10进制返回`，没有radix，默认为10； 此方法把任意进制字符串转为10进展返回。
+
+`eg: console.log(parseInt('23',8));  //19`
+`Number的一个方法：toString(radix)；返回表示该数字的指定进制形式的字符串`。（把10进制的数据转为指定进制，并以字符串形式输出）；radix支持 [2, 36] 之间的整数。默认为10；
+
+`eg：var x = 66;x.toString(16); //“42”`
+
+---
+
+## 简述https原理，以及与http的区别
+
+> https中信息是加密传输的，但是http是明文
+>
+> https链接方式不同，https比http在tcp基础上多了一层ssl，https的端口是443 http是80
+>
+> http无状态，https可加密传输，身份验证
+>
+> https协议需要到ca申请证书，一般免费证书较少，因而需要一定费用。
+>
+> http是超文本传输协议，信息是明文传输，https则是具有安全性的ssl加密传输协议。
+>
+> http和https使用的是完全不同的连接方式，用的端口也不一样，前者是80，后者是443。
+>
+> http的连接很简单，是无状态的；HTTPS协议是由SSL+HTTP协议构建的可进行加密传输、身份认证的网络协议，比http协议安全
+
+https的原理
+
+就是把https的整个加密流程讲一遍
+
+todo：复习下之前看的https,好现在复习一下
+
+复习完了，
+
+**数字签名就是使用非对称加密的摘要**
+
+对称加密des  **aes**  chacha20 非对称加密 RSA（整数分解） ECC（椭圆曲线算法） 摘要sha-2 私钥只加密原文的摘要,所以基本上都是这样吗?不确定,明文加摘要
+
+证书,就是机构对服务端的信息的签名。签名也就是用非对称加密，对数据进行摘要验证，确保内容完整并且来自正确的人
+
+tls ssl整个过程
+
+## 操作系统中进程和线程怎么通信
+
+程有自己的堆栈和局部变量，但线程之间没有单独的地址空间
+
+**进程在执行过程中拥有独立的内存单元**，而**多个线程共享内存**
+
+**管道 信号 消息队列 共享内存 信号量 套接口**
+
+## node中cluster是怎样开启多进程的，并且一个端口可以被多个进程监听吗
+
+那么nodejs是单线程吗？如果严格的来讲，node存在着多种线程。比如包括：js引擎执行的线程、定时器线程、异步http线程等等这样的。
+
+nodejs是在主线程执行的，其他的异步IO和事件驱动相关的线程是通过libuv来实现内部的线程池和线程调度的。libuv存在着一个Event Loop,通过 Event Loop（事件循环）来切换实现类似多线程的效果。Event Loop 是维持一个执行栈和一个事件队列，在执行栈中，如果有异步IO及定时器等函数的话，就把这些异步回调函数放入到事件队列中。等执行栈执行完成后，会从事件队列中，按照一定的顺序执行事件队列中的异步回调函数。
+nodeJS中的单线程是指js引擎只在唯一的主线程上运行的。其他的异步操作是有独立的线程去执行。通过libuv的Event Loop实现了类似多线程的上下文切换以及线程池的调度。线程是最小的进程，因此node也是单进程的。
+
+上第四点，面对单线程单进程对多核使用率不好的问题，因此我们使用多进程，每个进程使用一个cpu，因此我们就可以实现多核cpu的利用。
+Node提供了child_process模块和cluster模块来实现多进程以及进程的管理。也就是我们常说的 Master-Worker模式。也就是说进程分为Master(主)进程 和 worker（工作）进程。master进程负责调度或管理worker进程，那么worker进程负责具体的业务处理。在服务器层面来讲，worker可以是一个服务进程，负责出来自于客户端的请求，多个worker就相当于多个服务器，因此就构成了一个服务器群。master进程则负责创建worker，接收客户端的请求，然后分配到各个服务器上去处理，并且监控worker进程的运行状态及进行管理操作。
+
+如上我们了解了使用 child_process实现node集群操作，现在我们来学习使用**cluster模块实现多进程服务充分利用我们的cpu资源以外，还能够帮我们更好地进行进程管理**。我们使用cluster模块来实现我们上面同样的功能
+
+如上代码，我们可以使用 cluster.isMaster 来判断是主进程还是子进程，如果是主进程的话，我**们使用cluster创建了和cpu数量相同的worker进程，并且通过监听 cluster中的online事件来判断worker是否创建成功。并且使用了 cluster监听了 exit事件，当worker进程退出后，会触发master进程中cluster的online事件来判断worker是否创建成功。如下图我们在命令行中运行命令：**
+
+
+
+最初的 Node.js 上，多个进程监听同一个端口，它 们相互竞争新 accept 过来的连接。这样会导致各个进程的负载很不均衡，于是后来使用了上文提到的 round-robin 策略。具体思路是，master 进程创建 socket，绑定地址并进行监听。该 socket 的 fd 不传递到各个 worker 进程。**当 master 进程获取到新的连接时，再决定将 accept 到的客户端连接分发给指定的 worker 处理**。简单说就是，**master 进程监听端口，然后将连接通过某种分发策略（比如 round-robin），转发给 worker 进程。这样由于只有 master 进程接收客户端连接，就解决了竞争导致的负载不均衡的问题。但是这样设计就要求 master 进程的稳定性足够好了**  观察订阅模式
+
+**大家介绍了 Node.js Cluster 实现多进程的核心原理。重点讲了进程通信、负载均衡以及多进程端口监听三个方面**
+
+简单做个介绍，然后说自己没有深入使用过node
+
+todo：回去看下深入浅出node这本书
+
+https://juejin.im/post/5a6e92815188257349792a65
+
+## 实现原生ajax
+
+```js
+    function ajax(url, method = 'get', param = {}) {
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        const paramString = getStringParam(param);
+        if (method === 'get' && paramString) {
+          url.indexOf('?') > -1 ? url += paramString : url += `?${paramString}`
+        }
+        xhr.open(method, url);
+        xhr.onload = function () {
+          const result = {
+            status: xhr.status,
+            statusText: xhr.statusText,
+            headers: xhr.getAllResponseHeaders(),
+            data: xhr.response || xhr.responseText
+          }
+          if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304) {
+            resolve(result);
+          } else {
+            reject(result);
+          }
+        }
+        // 设置请求头application/json;charset=utf-8
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        // 跨域携带cookie
+        xhr.withCredentials = true;
+        // 错误处理
+        xhr.onerror = function () {
+          reject(new TypeError('请求出错'));
+        }
+        xhr.timeout = function () {
+          reject(new TypeError('请求超时'));
+        }
+        xhr.onabort = function () {
+          reject(new TypeError('请求被终止'));
+        }
+        if (method === 'post') {
+          xhr.send(paramString);
+        } else {
+          xhr.send();
+        }
+      })
+    }
+    function getStringParam(param) {
+      let dataString = '';
+      for (const key in param) {
+        dataString += `${key}=${param[key]}&`
+      }
+      return dataString;
+    }
+```
+
+就三步
+
+- `var xhr = new XMLHttpRequest();`
+- `xhr.open(options.type, options.url, options.async);`
+- `xhr.onreadystatechange`
+- `xhr.send(formData);`
+
+## vue-router源码
+
+![img](https://user-gold-cdn.xitu.io/2018/5/8/1633d8c30a032a2d?imageslim)
+
+把这个相关的面试题都侦破 下，这周 h5的api history
+
+在其他面试题里面看了
+
+todo
+
+## vue原理（手写代码，实现数据劫持）
+
+todo
+
+## 算法：树的遍历有几种方式，实现下层次遍历
+
+```js
+var levelOrder = function(root) {
+  if(!root) return [];
+  let queue=[root];
+  let res=[];
+  while(queue.length>0){
+      let currentLevel=[];
+      let len=queue.length;// 记录当前层的数量
+      while(len){
+          let cur=queue.shift();
+          currentLevel.push(cur.val);
+          if(cur.left) queue.push(cur.left);
+          if(cur.right) queue.push(cur.right);
+          len--;
+      }
+      res.push(currentLevel);  
+  }
+  return res;
+
+};
+```
+
+重点是每次循环的时候，保留当前队列的长度，当前队列的长度就是当前层的节点数量
+
+## 算法：判断对称二叉树
+
+```
+第一次面试，当时比较紧张，面试官很和蔼，面试中问到操作系统的进程，当时不记得操作系统，
+就提到了node多进程，然后面试官就问了cluster是怎样开启多进程的，并且一个端口可以被多个
+进程监听吗？答完后面试官就问了后面写完vue数据劫持的时候，面试官又问了Object.defineProperty除了
+set get外还有什么属性，我回答了configurable enumerable。vue-router主要提到了hashchange
+事件等，顺便跟面试官聊了一下h5的historyAPI。时间总共是50分钟左右，一面完了后面试官让
+我等五分钟，接下来二面就开始了
+```
+
+## 二面
+
+## 你知道哪些http头部
+
+## webpack怎么优化
+
+## 介绍一下项目中的难点
+
+1. 介绍一下项目中的难点
+
+2. let var const 有什么区别
+
+3. 你知道哪些http头部
+
+4. 怎么与服务端保持连接
+
+5. http请求跨域问题，你都知道哪些解决跨域的方法
+
+   
+
+6. webpack怎么优化
+
+7. 你了解哪些请求方法，分别有哪些作用和不同
+
+8. **你觉得typescript和javascript有什么区别**
+
+9. **typescript你都用过哪些类型**
+
+   布尔，数字，字符串，数组，元祖（多个类型组合起来）,any
+
+   void Object
+
+10. **typescript中type和interface的区别**
+
+    interface 和 type 都可以拓展，并且两者并不是相互独立的，也就是说 interface 可以 extends type, type 也可以 extends interface 。 **虽然效果差不多，但是两者语法不同**
+
+    - **type 可以声明基本类型别名，联合类型，元组等类型**
+    - type 语句中还可以使用 typeof 获取实例的 类型进行赋值
+    - interface 能够声明合并
+    - ![image-20200828172522583](imge/image-20200828172522583.png)
+
+    ![image-20200828172255514](imge/image-20200828172255514.png)
+
+    
+
+11. react怎么优化
+
+12. 算法题：合并乱序区间
+
+```j
+笔者在回答http头部的时候，顺带跟面试官聊到了浏览器缓存，回答跨域的时候，面试官又
+让我用jsonp实现一下跨域，回答webpack的时候提到了happypack和treeshaking，面试官就
+顺带问了一下他们的作用，算法题我当时没有写出来（主要是因为菜），二面大概40多分钟结
+束，面试完后面试官说稍后hr会联系我，让我注意保持通信，还没过一小时，hr打电话约我
+第三次面试时间，不得不说，字节的效率真的高
+```
+
+webpack要回答出如果配置，loader
+
+## 三面
+
+1. 你了解node多进程吗
+
+2. **node进程中怎么通信**
+
+   todo： 进行如何通信
+
+   使用 parentPort 进行父子线程通信
+
+   worker_threads 中使用了 MessagePort（继承于 EventEmitter，[参考](https://developer.mozilla.org/en-US/docs/Web/API/MessagePort)）来实现线程通信。worker 线程实例上有 parentPort 属性，是 MessagePort 类型的一个实例，子线程可利用 postMessage 通过 parentPort 向父线程传递数据
+
+   使用 MessageChannel 实现线程间通信
+
+   worker_threads 还可以支持线程间的直接通信，通过两个连接在一起的 MessagePort 端口，**worker_threads 实现了双向通信的 MessageChanne**l。**线程间可通过 postMessage 相互通信**
+
+   > 通信方式与进程产生方式有关，而Node有4种创建进程的方式：`spawn()`，`exec()`，`execFile()`和`fork()`
+   >
+   > `message`：子进程通过`process.send()`发送消息时触发，父子进程之间可以通过这种*内置的消息机制通信*
+   >
+   > ### 1.通过stdin/stdout传递json
+   >
+   > > stdin/stdout and a JSON payload
+   >
+   > 最直接的通信方式，拿到子进程的handle后，可以访问其`stdio`流，然后约定一种`message`格式开始愉快地通信：
+   >
+   > ```
+   > const { spawn } = require('child_process');
+   > 
+   > child = spawn('node', ['./stdio-child.js']);
+   > child.stdout.setEncoding('utf8');
+   > // 父进程-发
+   > child.stdin.write(JSON.stringify({
+   >   type: 'handshake',
+   >   payload: '你好吖'
+   > }));
+   > // 父进程-收
+   > child.stdout.on('data', function (chunk) {
+   >   let data = chunk.toString();
+   >   let message = JSON.parse(data);
+   >   console.log(`${message.type} ${message.payload}`);
+   > });
+   > ```
+   >
+   > 子进程与之类似：
+   >
+   > ```
+   > // ./stdio-child.js
+   > // 子进程-收
+   > process.stdin.on('data', (chunk) => {
+   >   let data = chunk.toString();
+   >   let message = JSON.parse(data);
+   >   switch (message.type) {
+   >     case 'handshake':
+   >       // 子进程-发
+   >       process.stdout.write(JSON.stringify({
+   >         type: 'message',
+   >         payload: message.payload + ' : hoho'
+   >       }));
+   >       break;
+   >     default:
+   >       break;
+   >   }
+   > });
+   > ```
+   >
+   > ### 2.原生IPC支持
+   >
+   > 如`spawn()`及`fork()`的例子，进程之间可以借助内置的IPC机制通信
+   >
+   > 父进程：
+   >
+   > - `process.on('message')`收
+   > - `child.send()`发
+   >
+   > 子进程：
+   >
+   > - `process.on('message')`收
+   > - `process.send()`发
+   >
+   > 限制同上，同样要有一方能够拿到另一方的handle才行
+   >
+   > ### sockets
+   >
+   > 借助网络来完成进程间通信，*不仅能跨进程，还能跨机器*
+   >
+   > ## 四.总结
+   >
+   > Node进程间通信有4种方式：
+   >
+   > - 通过stdin/stdout传递json：最直接的方式，适用于能够拿到“子”进程handle的场景，适用于关联进程之间通信，无法跨机器
+   > - Node原生IPC支持：最native（地道？）的方式，比上一种“正规”一些，具有同样的局限性
+   > - 通过sockets：最通用的方式，有良好的跨环境能力，但存在网络的性能损耗
+   > - 借助message queue：最强大的方式，既然要通信，场景还复杂，不妨扩展出一层消息中间件，漂亮地解决各种通信问题
+   >
+   > ipc（进程通信，管道，消息队列，共享内存，信号量，套接字）
+
+3. 算法题：老师分饼干，每个孩子只能得到一块饼干，但每个孩子想要的饼干大小不尽相同。 目标是尽量让更多的孩子满意。 如孩子的要求是 1, 3, 5, 4, 2，饼干是1, 1， 最多能让1个孩子满足。如孩子的要求是 10, 9, 8, 7, 6，饼干是7, 6, 5，最多能 让2个孩子满足。
+
+4. 算法题：给定一个正整数数列a, 对于其每个区间, 我们都可以计算一个X值; X值的定义如下: 对于任意区间, 其X值等于区间内最小的那个数乘上区间内所有数和; 现在需要你找出数列a的所有区间中, X值最大的那个区间; 如数列a为: 3 1 6 4 5 2; 则X值最大的区间为6, 4, 5, X = 4 * (6+4+5) = 60;
+
+```
+三面大概是1小时，面试官比较冷漠，就问你知道不知道，算法思路，然后实现这个算法，
+面试完感觉凉凉，但是第二天就收到hr到来的电话，约下一轮的面试时间。
+复制代码
+```
+
+
+
+
+
+## 四面
+
+算法题：两个有序链表和并成一个有序链表
+
+https与http有什么区别(一面刚好也被问到)
+
+## cookie有哪些属性
+
+浏览器会把cookie放到请求头一起提交给服务器，cookie携带了会话ID信息。服务器会根据cookie辨认用户：由于cookie带了会话的ID信息，可以通过cookie找到对应会话，通过判断会话来判断用户状态
+
+cookie存在客户端，每次请求都会带上，里面有sessionid，这个id给服务端查找对应的链接Session 对象存储特定用户会话所需的属性及配置信息
+
+![image-20200829200958111](imge/image-20200829200958111.png)
+
+`"key=name; expires=Sat, 08 Sep 2018 02:26:00 GMT; domain=ppsc.sankuai.com; path=/; secure; HttpOnly"`
+
+httponly：只能http携带，不能用js代码拿到
+
+Secure https
+
+- Expires、Max Age:
+
+Expires选项用来设置“cookie 什么时间内有效”。Expires其实是cookie失效日期
+
+- Domain和Path
+
+Domain是域名，Path是路径，两者加起来就构成了 URL，Domain和Path一起来限制 cookie 能被哪些 URL 访问。即请求的URL是Domain或其子域、且URL的路径是Path或子路径，则都可以访问该cookie，例如：
+
+某cookie的 Domain为“baidu.com”, Path为“/ ”，若请求的URL(URL 可以是js/html/img/css资源请求，但不包括 XHR 请求)的域名是“baidu.com”或其子域如“api.baidu.com”、“dev.api.baidu.com”，且 URL 的路径是“/ ”或子路径“/home”、“/home/login”，则都可以访问该cookie。
+
+## cookie,session,localstorage,sessionstorage有什么区别
+
+- cookie 数据始终在同源的http请求中携带，而 webStorage 不会再请求中携带，仅仅在本地存储
+
+具体细节还是要看看
+
+localstorage，同源 需要手动或者代码清理 sessionstorage同一个窗口，关掉窗口就没了
+
+## 怎么禁止js访问cookie
+
+`response.setHeader("Set-Cookie","deniro=1; Path=/;Domain=www.deniro.net;" +                "Max-Age=30;HTTPOnly");`
+
+position有哪些属性
+
+  static  相对（相对自己，未脱离文档流） 绝对（相对第一个positon不为static的父元素，脱离文档流） fixed（相对于”窗口“）
+
+你知道哪些状态码
+
+options请求方法有什么用
+
+OPTIONS请求方法的主要用途有两个：
+
+1、获取服务器支持的HTTP请求方法；
+
+2、用来检查服务器的性能。例如：AJAX进行跨域请求时的预检（判断是否支持一个复杂请求），需要向另外一个域名的资源发送一个HTTP OPTIONS请求头，用以判断实际发送的请求是否安全。
+
+less,sass它们的作用是什么
+
+```
+四面算是比较简单的一次面试，面完后第二天晚上hr打来了电话，约与hr面的时间
+复制代码
+```
+
+-----
+
+根据自己简历和做过的项目，问一系列相关问题。
+
+闭包的输出值，考查闭包（看试题给结果，分析过程）。
+
+状态码 304 是什么意思，有什么用 ？
+
+浏览器缓存的方法有哪些，它们的优先级是怎样的 ？
+
+都说要减少 https 的请求，https 为什么慢 ？
+
+## http2 与 http1 有什么区别 ？
+
+复习下，背一下
+
+
+
+![image-20200829203006618](imge/image-20200829203006618.png)
+
+**头部压缩，传输加密，二进制协议不再是纯文本，流传输，可发起多个请求，允许服务器推送**
+
+## click DOM 节点的 inner 与 outer 的执行机制，考查事件冒泡与事件捕获 （看试题给结果，分析过程）。
+
+**`event.currentTarget`始终是监听事件者，而`event.target`是事件的真正发出者**。
+
+currentTarget是监听这个事件的dom，有很多个元素可以监听事件，因为事件会冒泡，然后event.target是真实那个元素触发的事件
+
+？？ addEventListener参数，再复习下这个
+
+第三个参数：可选。布尔值，指定事件是否在捕获或冒泡阶段执行。
+
+可能值:
+
+- true - 事件句柄在捕获阶段执行
+- false- false- 默认。事件句柄在冒泡阶段执行（默认是在冒泡）
+
+
+
+for 循环中的 var 、let 与 const 区别，比如 for( const i = 0;  i< 3; i++ ){ console.log(i); } 会输出什么结果 ？（看试题给结果，分析过程）。
+
+有没有系统学习过 es6 或者看过 es6 的书 ？
+
+js 单线程、宏任务与微任务的执行顺序 （看试题给结果，分析过程）。
+
+考查箭头函数的 this 与 普通函数的区别，this 的指向 （看试题给结果，分析过程）。
+
+## vue 中 computed 与 watch 的内在是如何实现的 ？
+
+computed也是一个watcher，计算属性依赖的属性变化了，会通知到计算属性，然后会触发getAndInvoke方法来计算新的计算属性是否发生变化，发生了再通知计算属性watcher对应的依赖（问题： watcher不是组件级别的吗，怎么细节到一个属性变化，watcher应该也是计算属性为一个watcher）
+
+watcher是表明那些dom可能改变了，把数据和dom链接起来，数据变化，js层面语言就实现了这个。
+
+知识点：`vue`还是挺聪明的，通过这两个实例大家也看出来了，派发更新通知的粒度是组件级别，至于组件内是哪个属性赋值了，派发更新并不关心，而且怎么高效更新这个视图，那是之后`diff`比对做的事情。
+
+知识点：`watcher`的执行顺序是先父后子，然后是从`computed watcher`到`user watcher`最后`render watcher`，这从它们的初始化顺序就能看出
+
+所以之后就是要搞清楚，userwatcher是啥三个watcher区别
+
+执行`run`就是执行`getAndInvoke`方法，因为是渲染`watcher`，参数`cb`是`noop`空函数。看了这么多，其实...就是重新执行一次`this.get()`方法，让`vm._update(vm._render())`再走一遍而已。然后生成新旧`VNode`，最后进行`diff`比对以更新视图。
+
+> ### Vue中的三种Watcher
+>
+> **1.computed Watcher**
+>
+> 在initComputed的时候，在非服务端的渲染的情况下，会循环key in computed对象，**为每一个key和其对应的value(函数/对象)创建watcher，**
+>
+> watcher的特点是创建时watcher.lazy=true,watcher.get()不会立马执行，watcher.value初始化时为undefined
+>
+> **2.user Watcher**
+>
+> 在initWatch的时候，会循环key in watch对象，通过createWatcher(vm, key, handler)为每一个key和其对应的handler(函数/对象)创建watcher
+>
+> user watcher的标志是watcher.user-true,user Watcher会在创建的时候直接执行this.get(),得到的值赋值给watcher.value
+>
+> **3. 渲染 Watcher**
+>
+> 每个组件只有一个渲染Watcher，vm._watcher就是这个组件的渲染watcher
+>
+> 渲染watcher的创建是在执行mountComponent方法时，创建后会直接执行this.get方法
+>
+> //dirty一直false的时候，evaluate函数,也就是getter函数不会重新执行
+>
+> watch对象里的key对应的watcher是创建后会里面先执行一次，watch.value初始化后不为undefined
+>
+> **evaluate方法也不过多分析，主要就是执行这个key在computed对象中定义的get方法，返回执行结果，将dirty设为false**
+
+只有this.dirty为true的时候才能通过 this.get() 求值，然后把 this.dirty 设置为 false。
+
+ computed watcher，它实际上是有 2 种模式，lazy 和 active。如果 this.dep.subs.length === 0 成立，则说明没有人去订阅这个 computed watcher 的变化，就把把 this.dirty = true，只有当下次再访问这个计算属性的时候才会重新求值。否则会执行getAndInvoke方法：
+
+getAndInvoke 函数会重新计算，然后对比新旧值，在三种情况下(1.新旧值不想等的情况2.value是对象或数组的时候3.设置deep属性的时候)会执行回调函数，那么这里这个回调函数是 this.dep.notify()，在我们这个场景下就是触发了渲染 watcher 重新渲染。这就能解释官网中所说的**计算属性是基于它们的依赖进行缓存的**。
+
+还是没懂computed如何根据变化来实现依赖通知
+
+计算值会被缓存，依赖的data值改变时才会从新计算
+
+
+
+如果计算属性依赖的data值发生变化时会调用
+
+//案例中 当data.name值发生变化时会执行此方法` **evaluate** () {     this.value = this.get()     this.dirty = false }`
+
+这里为啥要把dirty设置成fasle。相当于dirty是个变量锁，只有依赖的变量变化了，才把这个锁设置成true。保证了只有变化才从新计算，只有计算属性最后的值变化了才进行渲染watcher的变化
+
+```
+ if (watcher) {
+	    	//watcher.dirty 参数决定了计算属性值是否需要重新计算，默认值为true，即第一次时会调用一次
+	      	if (watcher.dirty) {
+	      		/*每次执行之后watcher.dirty会设置为false，只要依赖的data值改变时才会触发
+	      		watcher.dirty为true,从而获取值时从新计算*/
+	        	watcher.evaluate()
+	      	}
+//更新
+  	update () {
+  		if (this.lazy) {
+      		this.dirty = true
+    	}else{
+    		this.run()
+    	}
+	}
+	
+	分析：执行data.name时会触发两个Watcher监听函数(为什么是两个Watcher自己去脑补一下额！)，一个是全局的watcher，一个是computed的watcher，第一个Watcher会更新视图，第二个Watcher会触发watcher.dirty=true。
+
+
+```
+
+**分析：执行data.name时会触发两个Watcher监听函数(为什么是两个Watcher自己去脑补一下额！)，一个是全局的watcher，一个是computed的watcher，第一个Watcher会更新视图，第二个Watcher会触发watcher.dirty=true。**
+
+----
+
+接下来前端要深入的方向 ？
+
+写一个方法输出 ABCDEFG 的值（看试题、现场写程序）。
+
+从排好序的两个链表中，找到相同的节点，并输出链表（看试题、现场写程序）。
+
+-----
+
+作者：夏天梛抹藍
+链接：https://www.nowcoder.com/discuss/419857
+来源：牛客网s
+
+
+
+34.TCP 为什么是可靠的？［因为它有 ACK］ 
+
+窗口确认机制，还有包重传机制，还有校验机制，有连接确认机制
+
+  35.那 tpc 和 udp 相比的话，udp 有什么好处？虽然不可靠，但是为什么还有很多基于 udp 的协议［因为 upd 报文小，udp 头部8个字节，tcp 头部20个字节，而且有些协议也不需要太可靠。］
+
+udp快头报文小，容忍不可靠，但是要快
+
+----
+
+之后的时间里面，全部就是
+
+1，更深入的计算机网络
+
+2，手写算法题，编程题
+
+3，node
+
+4，项目
+
+----
+
+![image-20200709122733614](imge/image-20200709122733614.png)
+
+---
+
+# 作者：杨超越求大厂offer
+
+链接：https://www.nowcoder.com/discuss/410066?source_id=profile_create&channel=666
+来源：牛客网
+
+1. 判断链表有环（完全忘了，大三做过
+2. vue响应式原理
+3. http2.0（答的不好
+4. 手撕观察者模式（写代码，撕出来了
+5. 实现axios（不会
+6. 实现深拷贝（之前复习没考虑symbol等es6属性，还有循环引用，所以答的不好
+7. sessionStorage相关，不同标签页一起缓存（答错，从来没看到过以前有这个说法
+总结：年前刚复习完红宝书就拿字节练手，一个钟左右，然后挂了。有点可惜。
+
+要好好自己写代码
+
+---8篇，四篇
+
+3w字==3k字一篇，今天要看4篇（字节跳动+字节跳动4+字节跳动社招，看下能不能看完）

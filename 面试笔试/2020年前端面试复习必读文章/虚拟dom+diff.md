@@ -72,7 +72,7 @@ oldEndIdx => oldEndVnode
 newStartIdx => newStartVnode
 newEndIdx => newEndVnode
 
-在遍历中，如果存在key，并且满足sameVnode，会将该DOM节点进行复用，否则则会创建一个新的DOM节点。
+**在遍历中，如果存在key，并且满足sameVnode，会将该DOM节点进行复用**，否则则会创建一个新的DOM节点。
 
 首先，oldStartVnode、oldEndVnode与newStartVnode、newEndVnode两两比较一共有2*2=4种比较方法。
 
@@ -135,3 +135,11 @@ newEndIdx => newEndVnode
 
 
 ![img](https://user-gold-cdn.xitu.io/2017/9/18/c067fa75aa884a2c231d940de35ef7a1?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+
+----
+
+**有key，就会在四个指针都没有匹配的时候，在查找，于是则通过查找事先建立好的以旧的 VNode 为 key 值，对应 index 序列为 value 值的哈希表，如果找到，并且是同一个vnode，则移动该节点**
+
+**如果找不到这个key，或者没有设置key，直接创建一个新的节点。**
+
+移到未处理之前，okok冲冲冲

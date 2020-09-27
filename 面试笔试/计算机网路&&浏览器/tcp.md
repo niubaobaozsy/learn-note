@@ -6,7 +6,7 @@ TCP的面试题通常情况下前端不会涉及太多，此章主要面对node.
 
 ## [#](https://www.cxymsg.com/guide/tcp.html#tcp-的特性)TCP 的特性
 
-- TCP 提供一种面向连接的、可靠的字节流服务
+- TCP 提供一种面向连接的、可靠的**字节流**服务。udp是面向报文的
 - 在一个 TCP 连接中，仅有两方进行彼此通信。广播和多播不能用于 TCP
 - TCP 使用校验和，确认和重传机制来保证可靠传输
 - TCP 给数据分节进行排序，并使用累积确认保证数据的顺序不变和非重复
@@ -48,4 +48,10 @@ https://segmentfault.com/a/1190000020610336
 序号，确认序号
 
 ![img](https://ask.qcloudimg.com/http-save/yehe-2504969/dzfau8azov.png?imageView2/2/w/1620)
+
+-----
+
+https://www.cnblogs.com/xiaolincoding/p/12732052.html
+
+！important
 

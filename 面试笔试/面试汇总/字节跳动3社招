@@ -1,0 +1,1062 @@
+# 字节前言
+
+笔者此次面的是深圳字节跳动的前端岗位，一直听说头条注重算法，所以面试前已经花了不少时间准备，可是最后还是到了二面就止步了，算法基础还是不够扎实啊-.-|||||||||所以大家要面头条的话还是要好好准备一下算法，多做做题啥的～
+
+# 笔试 + 一面
+
+高宽固定比
+
+```php+HTML
+html body{
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+.box{
+    width: 100%;
+}
+.text{
+    overflow: hidden;
+    height: 0;
+    padding-bottom: 50.28%;
+}
+.box .text img{
+    width: 100%;
+}
+.box{
+    width:100%;
+    height:50.3vw
+}
+.box img{ 
+    width:100%; 
+}
+    </style>
+</head>
+<body>
+  <div class="box">
+    <div class="text">
+        <img src="http://images.pingan8787.com/2019_07_12guild_page.png" />
+    </div>
+  </div>
+```
+
+
+
+敲黑板！头条是一定会有笔试题的哦，css，js，算法都会考察噢。我尽量还原题目。。有的实在是忘了-.-
+
+**1.  实现css布局**
+
+
+
+```bash
+一个div垂直居中
+其距离屏幕左右两边各10px
+其高度始终是宽度的50%
+
+div中有文本'A'
+其font—size:20px
+文本水平垂直居中
+```
+
+我的回答：
+
+
+
+```jsx
+<div class="wrap">
+    <div class="box">
+        <span class="text">A</span>
+    <div>
+</div>
+```
+
+todo： 复习width height百分比问题，复习一下之前看的那个高宽固定比例的方法
+
+todo： 高宽固定比例
+
+下面这个答案是错误的
+
+```css
+.wrap {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    top: 0;
+    bottom: 0;
+}
+
+.box {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    height: 50%;
+    background: red;
+}
+
+.text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 14px;
+    background: blue;
+}
+```
+
+我的回答好像做不到“其高度始终是宽度的50%”这一点，网上参考了一下其他大神的，使用了calc和flex，大家可以看看：
+
+
+
+```jsx
+<div class="box">
+    <div class="Abox">A</div>
+</div>
+```
+
+
+
+```css
+*{
+    padding:0;
+    margin: 0;
+}
+html,body{
+    width: 100%;
+    height: 100%;
+}
+.box{
+    position: relative;
+    background: red;
+    width: 100%;
+    height: 100%;
+}
+.Abox{
+    margin-left:10px;
+    width: calc(100vw - 20px);
+    height: calc(50vw - 10px);
+    position: absolute;
+    background: yellow;
+    top:50%;
+    transform: translateY(-50%);
+    display: flex;用来设置文本垂直水平居中
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+```
+
+**2. 函数中的arguments是数组吗？类数组转数组的方法了解一下？**
+
+答： arguments当然不是数组啦，转数组的方法有：
+
+- [...arguments]
+- Array.from(arguments)
+
+**3. 类型比较**
+
+todo： **背一下类型比较，==如何转换**。复习
+
+```cpp
+if([]==false){console.log(1)};
+if({}==false){console.log(2)};// 报错
+if([]){console.log(3)}
+if([1]==[1]){console.log(4)}
+```
+
+答：1 3
+
+- == 是非严格比较操作符，false会转换为0，[]会转换成0''，{}会转换为"[object Object]"，所以会输出1，不输出2，具体的可以看看以下文章
+
+> 参考文章
+>
+> [为什么[\] 是 false ](https://www.h5jun.com/post/why-false-why-true.html)
+
+- **[]和{}是“空”的对象，不是“空”，所以会输出3**
+
+- 最后一个引用地址不一致，不是同一个对象，所以不会输出4
+
+  
+
+**4. EventLoop**
+
+全对啊，我真棒，为自己感到高兴
+
+```jsx
+async function a1 () {
+    console.log('a1 start')
+    await a2()
+    console.log('a1 end')
+}
+async function a2 () {
+    console.log('a2')
+}
+
+console.log('script start')
+
+setTimeout(() => {
+    console.log('setTimeout')
+}, 0)
+
+Promise.resolve().then(() => {
+    console.log('promise1')
+})
+
+a1()
+
+let promise2 = new Promise((resolve) => {
+    resolve('promise2.then')
+    console.log('promise2')
+})
+
+promise2.then((res) => {
+    console.log(res)
+    Promise.resolve().then(() => {
+        console.log('promise3')
+    })
+})
+console.log('script end')
+```
+
+**5. 改正代码，输出0123401234**
+
+直接把var改成let就行，创建块级作用域，实现每次setTimeout拿的i是块级作用域里面的
+
+```jsx
+function a () {
+    for (var i = 0; i < 5; i++) {
+        this.i = i
+        setTimeout(function () {
+            console.log(i)
+        }, 0)
+        console.log(this.i)
+    }
+}
+
+a()
+```
+
+答：首先留意var，可以改成let，再加个立即执行函数；然后留意this指向，可以改为箭头函数。（我当时的想法就是这么短浅。。。）
+
+```jsx
+function a () {
+    for (let i = 0; i < 5; i++) {
+        (function (i) {
+            this.i = i
+            setTimeout(() => {
+                console.log(i)
+            }, 0)
+            console.log(this.i)
+        })(i)
+    }
+}
+
+a()
+```
+
+```jsx
+var count = 0;
+Object.defineProperty(window, 'i', {
+    get: function() {
+        return count++
+    },
+    set: function() {}
+})
+
+function a () {
+    for (let i = 0; i < 5; i++) {
+        (function (i) {
+            this.i = i
+            setTimeout(() => {
+                console.log(this.i)
+            }, 0)
+        })(i)
+    }
+}
+
+a()
+```
+
+```jsx
+function a () {
+    for (var i = 0; i < 5; i++) {
+        this.i = i
+        setTimeout(function () {
+            console.log(this.i)
+        }.bind({i: i}), 0)
+    }
+}
+```
+
+**6. 按要求写出bind（题目我实在记不清楚，反正不是简单的写一个bind）**
+
+答：(以下是正常的bind手写实现)  注意，题目不是简单的实现bind函数，而是有一些其他特殊要求
+
+bind如何写，bind函数里面的this就是要执行函数，传入的则是他的this
+
+```jsx
+1.处理参数，返回一个闭包
+2.判断是否为构造函数调用，如果是则使用new调用当前函数
+3.如果不是，使用apply，将context和处理好的参数传入
+    Function.prototype.myBind = function (context,...args1) {
+      if (this === Function.prototype) {
+        throw new TypeError('Error')
+      }
+      const _this = this
+      return function F(...args2) {
+        // 判断是否用于构造函数
+        if (this instanceof F) {
+          return new _this(...args1, ...args2)
+        }
+        return _this.apply(context, args1.concat(args2))
+      }
+    }
+```
+
+**7. 按要求写出一个throttle防抖函数**（并不知道这事什么要求，todo：后面准备多搜搜，这个是什么要求）
+
+![img](https:////upload-images.jianshu.io/upload_images/7162582-1af352f5a6e0fc15.jpeg?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp)
+
+
+
+答：
+ 先丢个正常的防抖函数出来
+
+不管事件触发频率多高，一定在事件触发`n`秒后才执行
+
+```jsx
+function throttle(callback, ms) {
+    var pending = false;
+    var _this;
+
+    return function () {
+        if (!pending) {
+            var args = arguments;
+            pending = true;
+            _this = this;
+
+            setTimeout(function () {
+                callback.apply(_this, args);
+                pending = false;
+            }, ms);
+        }
+    };
+}
+function debounce(event, time, flag) {
+      let timer = null;
+      return function (...args) {
+        clearTimeout(timer);
+        if (flag && !timer) {
+          event.apply(this, args);
+        }
+        timer = setTimeout(() => {
+          event.apply(this, args);
+        }, time);
+      };
+    }
+
+```
+
+**结果面试官不满意了，明明题目点第三次的时候虽然不执行，但是等第一次执行完后会马上执行第三次的。反正我最后还是做不出来**，，？？？？
+
+**8. 从一个无序，不相等的数组中，选取N个数，使其和为M实现算法**
+
+哈哈哈哈哈做不出来，面试官很有耐心引导，假如选取2个数的话怎么实现呢，我就想到递归函数之类的，但是最后还是手写不出来。。。
+
+一面的面试官主要是看着笔试题拓展问了相关的知识点，然后我也不知道怎么就过了一面了，，，
+
+用二进制的位来表示元素是否被选中，然后就遍历所有的可能
+
+```js
+function search(arr, count, sum) {
+  var len = arr.length, res = [];
+  for (var i = 0; i < Math.pow(2, len); i++) {
+	if (n(i) == count) {
+	  var s = 0, temp = [];
+	  for (var j = 0; j < len; j++) {
+		if (i & 1 << (len - 1 -j)) {
+		  s += arr[j]
+		  temp.push(arr[j])
+		}
+	  }
+	  if (s == sum) {
+		res.push(temp)
+	  }
+	}
+  }
+  return res;
+}
+
+function n(i) {
+  var count = 0;
+  while( i ) {
+   if(i & 1){
+    ++count;
+   }
+   i >>= 1;
+  }
+  return count;
+}
+
+console.log(search([1,2,3,4],2,5))
+```
+
+https://juejin.im/post/6844903792782082055
+
+那么开篇的例子, 4 选 2，满足条件的二进制有 0011、0101、0110、1001、1010、1100 共 6 种可能。而符合对应元素之和为 5 的只有 0110 和 1001。
+
+**二进制表示所有的情况，遍历每次情况的时候判断是否成立**
+
+# 二面
+
+二面几乎都是算法题，再加点js基础题这样。emmm算法题我就说说当时的做法吧，，感觉要误人子弟了，，改天研究透了再单独分享
+
+**1. 一个字典['I', 'have', 'a', 'book', 'good']，实现一个函数，判断一个字符串中是否**都是**出自字典中的，输出true/false**
+
+例如：
+
+输入'I have a book' 输出 true
+
+输入 'this is a good book' 输出 false
+
+答： 我当时是想出了个很蠢的方法，就是将字符串的字典词都切了，切完后还有得剩就说明是false，哈哈哈哈啊哈哈哈好蠢啊，面试官不满意地问我这个做法的复杂度，我说好的我知错了。。。
+
+todo：没搜到答案
+
+自己有什么其他方法，暂时放一放
+
+**2. 一个长阶梯有n级，可以一次走1级，一次走2级，一共有多少种走法？**
+
+答： 引导了一番后我写了个递归函数
+
+
+
+```jsx
+function step (n) {
+    if (n === 1) return 1
+    if (n === 2) return 2
+    return step(n - 1) + step(n - 2)
+}
+```
+
+面试官看完后不是很满意，说假如在浏览器上敲step(40000)会怎样，我说会爆掉吧。。他说为什么。。我说内存会溢出。。他问我为什么。。
+
+blablabla一大堆后我还是没答好，回到家后我想想觉得应该是还存在尾递归的优化空间吧。。。
+
+////////之后问的算法题我已经记不住了。。我再分享一些基础题题目吧，大部分答案都在之前的文章和面经都提过了，此处不再赘述
+
+**3. 说说http缓存**
+
+**4. 用过typescript吗？它的作用是什么？**
+
+作用：类型检查，让代码更容易阅读，没有在工作中用过，学习的时候写过简单的
+
+答： 用过，我真的只想到类型检查，提供缺省值诶，，后来想想还有引入了“类”“模块”的概念。
+
+**5. ts的用法用到了装饰器，你了解过吗？知道如何实现的嘛？
+
+**装饰器原理，很多地方都会被问道了**
+
+ES6中的类实际上就是一个语法糖，本质上是构造函数，类的属性的定义使用的是 [Object.defineProperty()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty) 
+
+装饰一个类的属性，其实就是用[Object.defineProperty()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty) 来实现
+
+#### 装饰一个类
+
+装饰一个类的时候类本身本质上是一个函数，没有descriptor，target是这个函数本身。
+
+```js
+function isAnimal(target) {
+    target.isAnimal = true;
+  	return target;
+}
+@isAnimal
+class Cat {
+    ...
+}
+console.log(Cat.isAnimal);    // true
+复制代码
+```
+
+也就是说，上面的@isAnimal其实就是做了下面这件事
+
+装饰器顺序在类和类的属性定义的时候就对它们进行了"装饰"。
+
+```js
+Cat = isAnimal(function Cat() { ... });
+```
+
+**6. PWA使用过吗？serviceWorker的使用原理是啥？**
+
+serviceWorker的使用原理
+
+其实在注册后，service-worker详细的生命周期是分为几种状态：
+
+**安装中, 安装后, 激活中, 激活后, 废弃。**
+
+- 由于 Service Worker 要求 HTTPS 的环境，我们通常可以借助于 [github page](https://pages.github.com/) 进行学习调试。当然一般浏览器允许调试 Service Worker 的时候 host 为 localhost 或者 127.0.0.1 也是 ok 的。
+
+- Service Worker 的缓存机制是依赖 [Cache API](https://developer.mozilla.org/zh-CN/docs/Web/API/Cache) 实现的
+
+- 依赖[ HTML5 fetch API](https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API)
+
+- 依赖 [Promise ](https://developer.mozilla.org/zh-CN/docs/Web/javaScript/Reference/Global_Objects/Promise)实现
+
+应该再详细的了解下背书下
+
+----
+
+之前面试其实拿到了不少 offer，感兴趣的可以看看我[关于这次挪坑的总结](https://quincychen.cn/interview-review/)，最终权衡各种因素选择了**字节跳动 - 今日头条**的岗位。
+
+入职字节跳动已经两天了，从入职的这两天来看，我觉得我这次跳槽是一个正确的决定，并且也很认可字节跳动的氛围和环境。这是一个很开放、年轻化、活跃的公司，但是在流程、管理、技术上却完善的不像一家年轻的公司，很符合我对自己下一份工作的期许，我相信我可以在这里学到不少东西，也可以贡献一些自己已有的东西。
+
+写这篇面经主要是来捞简历的，哈哈哈哈，字节跳动长期不限量招收前端工程师，中高级、校招社招都收，有需要内推的同学欢迎邮件骚扰我，邮件地址：mail@quincychen.cn
+
+以下是面经内容（工作五年了，一下面试题是高级，做不出来也没事）
+
+### 一面
+
+- 状态机的三个组成部分是什么？
+
+- service worker可以做什么？局限或者说缺点是什么？
+
+> 以下罗列了几点当前以及将来 Service Worker 能做的事情：
+>
+> - 拦截网络
+> - 离线缓存
+> - 消息推送
+> - 后台同步
+> - 定期同步（future support）
+> - 地理围栏（future support）
+>
+> （离线缓存（拦截请求），消息推送）
+>
+> 1、https: Service Worker必须是https协议的，但本地环境下http://localhost或者http://127.0.0.1也可以的。
+> 2、浏览器兼容性：
+>
+> service worker让离线缓存成为可能，offline情况下也可以访问页面。然而销毁比较困难，更新会有问题
+
+- 说说你对 HTTPS 的理解
+  - HTTPS 密钥的交换过程
+  - HTTPS 绝对安全吗？HTTPS欺骗是怎么实现的？
+  
+- react 是怎么将数据变更反应到视图上的
+
+  todo： react的渲染原理，之前有看过专门的diff两个的区别，要针对性复习下
+
+- vue是怎么解析模板的？
+
+  todo：vue解析模板
+
+- 三大框架从数据到视图的原理
+  - 谈谈你对虚拟Dom的理解
+  - angular的脏检查和vue的双向数据绑定有什么区别？
+  
+- 聊一聊你的工作经历
+
+- 你提到你有负责 sdk 开发，讲一讲你开发过的 SDK
+  - cloudbus-event
+    - 事件发布订阅怎么实现的？
+  - terra-uploader
+    - 大文件上传怎么实现？有什么注意点？
+      - 分片上传怎么实现？
+      - 断点续传怎么实现？
+  - app-info-parser
+    - 安装包的解析原理是什么？
+  
+- 你有什么想问我的吗
+
+### 二面
+
+- 自我介绍
+
+- 在线编程：实现 bind 函数
+
+- 在线编程：实现 call，apply 函数
+
+- 在线编程：实现一个判断变量类型的函数
+
+- 在线编程：a~z 有 26个字母，按照 1~26 编码，现在给定一个数字字符串，输出所有可能的解码结果，如：输入 `1234`，输出 `['axd', 'abcd', 'lcd']`
+
+  我以为就是for循环，没想到用动态规划
+
+  https://leetcode-cn.com/problems/decode-ways/solution/dong-tai-gui-hua-tu-jie-by-nfgc/
+
+  ![未命名.001.png](https://pic.leetcode-cn.com/7fe73ae7d0a7bc32c9c982458f4a6a494c9c985ced1e01bbb80f2b6a6b8cb56a-%E6%9C%AA%E5%91%BD%E5%90%8D.001.png)
+
+- 类数组怎么转换为数组？
+
+- 箭头函数和普通函数有什么区别？
+
+  todo: 复习
+
+- ```
+  // 以下代码执行会输出什么
+  const  myfun = () => {
+      const args = arguments;
+      if (true) {
+          console.log(args.join());
+      }
+  }
+  myfun(1, 2);
+  ```
+
+  ![image-20200819142757879](imge/image-20200819142757879.png)
+  
+- 实现一个 div 相对视口居中
+
+- marigin 塌陷是什么
+
+  bfc的原理是什么
+
+  本文讲了BFC的概念是什么； BFC的约束规则；咋样才能触发生成新的BFC；BFC在布局中的应用：防止margin重叠(塌陷,以最大的为准)； 清除内部浮动；自适应两（多）栏布局。
+
+  因为BFC内部的元素和外部的元素绝对不会互相影响
+
+  ## vue3.0 和 vue2.x 的有什么区别
+
+> #### 1.1.2 其他的运行时增强
+>
+> ​    简述：体积更小、速度更快，支持 tree-shaking，支持 fragment 和 portal，支持自定义 render。
+>
+> ​    体积更小。新的代码库在设计的时候就考虑了 tree-shaking。内置的组件（如  ）和内置的指令（v-model）是按需引入的，支持 tree-shaking。新的运行时最小体积将低于 10kb（gzip之后）。除此之外，由于很多特性是支持 tree-shaking 的，所以我们可以提供更多的内置特性，如果你不想用这些特性，你的代码体积完全不会增加。另外在这里说一嘴,Vue 2.0 体积是Vue 3.0 的一倍
+>
+> ​    速度更快，包括虚拟 DOM 的挂载和更新、组件实例的初始化和观察者的创建。3.0 版本将让你的应用启动时间减少一半。
+>
+> ​    支持 fragment 和 portal。虽然体积变小了，但是 3.0 版本还是带来了新功能，那就是支持 Fragment（一个组件包含多个根节点）和 Portal（在 DOM 中渲染一个 subtree，而不需要在一个组件中）。
+>
+> ​    插槽机制增强。所有由编译产生的插槽现在都是函数，这些函数会在子组件的 render 调用时被调用。这样一来，插槽中的依赖会被认为是子组件的依赖而不是父组件的依赖。这意味着：1、当插槽内容变化时，只有子组件重新渲染；2、当父组件重新渲染时，如果插槽内容没有变化，子组件就不需要重新渲染。这个特性提供了更精确的组件树层面上的变更检测，所以会减少很多无用的渲染。
+>
+> ​    自定义 render。我们会提供一个 API 用来创建自定义的 render，因此你不需要为了自定义一些功能而 fork Vue 的代码。这个特性给 Weex 和 NativeScript Vue 这样的项目提供了很多便利。
+>
+> 3.0 版本里将有一个基于 Proxy 的观察者，它会提供全语言覆盖的响应式跟踪。相比于 2.x 版本里基于 Object.defineProperty 的观察者，新的实现更加强大：
+>
+> 可以检测属性的新增和删除
+>
+> 可以检测数组索引的变化和 length 的变化
+>
+> 支持 Map、Set、WeakMap 和 WeakSet
+>
+> ---
+>
+> 上面的没有总结完全
+>
+> **3.0 新加入了 TypeScript 以及 PWA 的支持**
+>
+> proxy
+>
+> vue3的核心——Composition API
+>
+> 更快更高效
+>
+> 渲染层面的优化（好复杂）直接答优化了渲染方式（ 编译器来帮助把那些静态的dom分离出来，）
+>
+> 其次，最好的方法是消除不必要的虚拟DOM树遍历和属性比较，这在更新过程中往往会带来最大的性能开销。为了实现这一点，编译器和运行时需要协同工作：编译器分析模板并生成带有优化提示的代码，而运行时将拾取提示并在可能的情况下采用快速路径。这里有三个主要的优化工作：
+>
+> 首先，在tree的层面上，我们注意到，节点结构在没有模板指令动态改变节点结构的留完全静态的（例如，`v-if`和`v-for`）。如果我们将模板分为嵌套由这些结构指令分隔的"block tree"，每个块内的节点结构再次变得完全静态。当我们更新一个块内的节点时，我们不再需要递归遍历tree,可以在平面数组中跟踪该块内的动态绑定。通过将我们需要执行的tree遍历量减少一个数量级，此优化可避免虚拟DOM的大部分开销。
+>
+> 其次，编译器会主动检测模板中的静态节点，子树甚至数据对象，并将其提升到生成代码中的render函数之外。这样可以避免在每个渲染上重新创建这些对象，从而大大提高了内存使用率并减少了垃圾回收的频率。
+>
+> 第三，在元素级别，编译器还会根据需要执行的更新类型为具有动态绑定的每个元素生成一个优化标志。例如，具有动态类绑定和许多静态属性的元素将收到一个标志，指示仅需要进行类检查。运行时将获取这些提示并采用专用的快速路径。
+
+- 为什么会做 app-info-parser 这个开源项目
+
+- 你有什么想问我的吗
+
+  CDN 原理
+
+  > 通过以上的分析我们可以得到，为了实现对普通用户透明(使用缓存后用户客户端无需进行任何设置)访问，需要使用DNS(域名解析)来引导用户来访问Cache服务器，以实现透明的加速服务. 由于用户访问网站的第一步就是域名解析,所以通过修改dns来引导用户访问是最简单有效的方式.
+  >
+  > 浏览器向域名解析服务器发出解析请求，由于CDN 对域名解析过程进行了调整，所以用户端一般得到的是该域名对应的 CNAME 记录，此时浏览器需要再次对获得的 CNAME 域名进行解析才能得到缓存服务器实际的IP 地址。 注：在此过程中，全局负载均衡DNS 解析服务器会根据用户端的源IP 地址，如地理位置(北京还是上海)、接入网类型(电信还是网通)将用户的访问请求定位到离用户路由最短、位置最近、负载最轻的Cache 节点(缓存服务器)上，实现就近定位。定位优先原则可按位置、可按路由、也可按负载等。Vue 的 Dom diff 的实现
+
+  - 完全比较两个 Dom 树和只比较同层节点的算法复杂度各是多少
+  - Dom diff 具体流程是怎么样的，内部细节能说一下么
+
+- 说说你对 Node 运维的了解
+
+- 假如现在，我说有一个页面打开有点慢，交给你来负责优化，你的思路和做法是什么
+  
+  - 前端优化的指标有哪些，通过什么手段获取？
+  
+  todo：性能优化上面，找到对应的文章，前端q里面的，性能优化方面都看看
+  
+- 分别讲讲 restful 和 graphQL 及其优缺点
+
+- 你现在有面其他公司吗？手上有没有其他offer？
+
+- 如果阿里腾讯都过的话，包括字节跳动，这三家你会基于什么去考虑？
+
+- 你有什么想问我的吗
+
+### 总结
+
+字节跳动很重视编程能力，写代码的题目比较多，也会有算法题考核，所以想要到字节跳动的同学建议多训练一下这一类的编程题。给我出的题目难度其实不高，唯一的一道算法题是简单的一道动态规划（你别看我，一般的动归真的不难啊！），其他的编程题都是很基础的内容，没有什么难度。
+
+字节跳动这一次面试下来，面试体验还是很不错的，面试官和 HR 也很有诚意，非常坦诚的罗列字节的情况，包括优缺点，拉人也很真诚，这一点加了很多分，最终权衡公司技术水平、薪酬情况等因素，pick 了字节跳动。
+
+
+
+----
+
+有幸得到猎头推荐参加字节跳动工程效率部的前端面试，为此准备了一周的时间，面试前内心十分忐忑，略微有些小紧张。
+
+由于是下午面试，所以早早起床，翻出许多年前购买的，几近翻烂的《JavaScript设计模式》，从前到后粗略的翻看了下。之后起床刷牙、洗澡、整理下，躺在床上开始闭目养神~
+
+由于是下午两点面试，所以中午12点半从家里出门，担心天气太热，为防止面试时身上有汗水和味道，所以，我决定，打车去面试，这也是我唯一一次打车去面试，不心疼。
+
+结果低估了司机师傅的开车速度，竟然不到20分钟就给我送到了地方，没办法，在字节大楼外转了一圈，13:30入场，前台妹子随机抽了一份面试题给我，开始答题。
+
+两张面试题，给了十多张A4纸给我答题，嗯，有钱，答题笔柔软，有弹性、出水均匀流畅，高级货！
+
+**先笔试**
+
+1. 利用html css 编写样式，div垂直body居中、div内的text垂直居中，div高度等于body宽度的一半（第一题就难住我了，充分暴露了我css功底极差的问题，跪，但终究还是写了点）
+
+2. 第二题判断if([] == false) {} , if({} == false) {} , if([]) {} 不会，跪 （最后一面小哥给我讲下，人不错，good）
+
+3. 利用宏任务，微任务的知识点判断程序输出（easy ok)
+
+4. bind函数实现(ok)
+
+5. trottle函数实现（ok， 可以用任务队列也可以只维护一个function， 我用的队列）
+
+6. 给定一个不含重复数字的数组arr,指定个数n,目标和sum,判断是否含有由n个不同数字相加得到sum的情况（ok, leetcode 40 变种， 数字不得重复使用）
+
+
+**一面**
+
+来的是个小哥，年纪比较小，无形中给我一种挫败感，看题速度极快，之后继续出题：
+
+1. 二叉树路径总和（leetcode 112)、
+
+   ```js
+   求解从 root 到叶子节点是否存在路径和为 sum 的路径 hasPathSum(root, sum)。
+   
+   可以转换成求解从 root.left 或者 root.right 到叶子节点是否存在路径和为 sum - root.val 的路径，即 hasPathSum(root.left, sum - root.val) || hasPathSum(root.right, sum - root.val) 。
+   class Solution {
+       public boolean hasPathSum(TreeNode root, int sum) {
+           if (root == null) {
+               return false;
+           }
+           // 到达叶子节点时，递归终止，判断 sum 是否符合条件。
+           if (root.left == null && root.right == null) {
+               return root.val == sum;
+           }
+           // 递归地判断root节点的左孩子和右孩子。
+           return hasPathSum(root.left, sum - root.val) || hasPathSum(root.right, sum - root.val);
+       }
+   }
+   
+   作者：sweetiee
+   链接：https://leetcode-cn.com/problems/path-sum/solution/jian-dan-di-gui-bi-xu-miao-dong-by-sweetiee-2/
+   来源：力扣（LeetCode）
+   著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+   ```
+
+   
+
+2. function request(urls, maxNumber, callback) 要求编写函数实现，根据urls数组内的url地址进行并发网络请求，最大并发数maxNumber,当所有请求完毕后调用callback函数(已知请求网络的方法可以使用fetch api)
+
+   之前看到的并发，要去面试，估计得背
+
+写代码不怕，最短时间给出程序，相互讨论下，至此一面结束，赞
+
+**二面**
+
+问：介绍下项目前端架构、项目难点
+
+答：简单介绍下，面试官很感兴趣，讲了大概有三十分钟
+
+问：react如何进行性能优化
+
+答：function component + redux、immutable、pure component , shouldComponentUpdate ...
+
+问：https握手机制
+
+答：不太懂
+
+问：CDN原理
+
+答：cache、负载均衡、资源同步
+
+问：CDN获取最近节点资源的算法是什么
+
+答：不懂 
+
+智能 DNS 分线路或者分地区解析
+
+#### 问：requestAnimationFrame 和setTimeout 、setInterval的关系
+
+todo:
+
+requestAnimationFrame 和setTimeout 、setInterval的关系，答案是没有关系，**前者是浏览器帧渲染的钩子函数，一般不渲染不触发**，做动画比较合适因为这个函数在每帧渲染的开始与上一帧结束的时候触发，能最大限度的利用浏览器的渲染流程，至于网上有人说的调用时间比较准确其实不对的，一个渲染帧也是有时间间隔的，根据task的不同每个渲染帧的时间都不同也就ftp都不太一样，requestAnimationFrame同样会延时，后者是浏览器的定时任务，用来定时在浏览器event loop中追加macro task，如果前面的任务运行时太长，会出现延后的情况
+
+答：都可以用作动画 requestAnimationFrame还可以埋点监测应用卡顿
+
+问：react fiber 了解多少
+
+答：Vritual DOM & FiberNode 利用调度器分批次在不同的tick内渲染 (答的不好)
+
+#### 问：你以前做过性能优化方面的开发，介绍下
+
+答：通过探针抓取performance数据，判断资源请求、白屏、首屏时间、页面卡顿，以及编写代码抓取页面错误、慢加载、代理用户事件进行行为分析等等。
+
+#### 问：sum(100, 200)(300)(...)...(...)() curring化实现
+
+```js
+/**
+ *分析：
+ * 1. sum可以分步传参
+ * 2. sum返回一个函数
+ * 3. 调用sum的valueOf方法返回值，需要重写valueOf()方法求和。
+ */
+function sum () {
+  var args = [].slice.apply(arguments);
+  var fn = function () {
+    args.push.apply(args, [].slice.apply(arguments));
+    return arguments.callee;
+  }
+  fn.valueOf = function () {
+    return args.reduce(function (pre, cur) {
+      return pre + cur
+    })
+  }
+  return fn
+}
+
+console.log(sum(1, 2, 3, 4, 5).valueOf())
+console.log(sum(1, 2, 3, 4)(5).valueOf())
+console.log(sum(1, 2, 3, 4)(5).valueOf())
+console.log(sum(1, 2)(3)(4)(5).valueOf())
+console.log(sum(1, 2)(3, 4)(5).valueOf())
+
+给sum创建一个函数，fn，这个函数每次都把参数缓存下来，并给fn一个方法，最后计算所有的参数和，sum函数最后返回fn
+```
+
+答：写代码，简单
+
+等等还有很多，知识点非常全面，充分暴露了我这个老码农只会搬砖，网络知识一窍不通、框架深度不够的弱点。
+
+二面结束已经5点，面试官说回头HR会有安排（100%没戏了）
+
+整体看，笔试题偏向基础，不难，只要工作中活学活用lodash，通过笔试没问题
+
+但非笔试部分比较难，考察面试者的表达能力，能否通过简单的描述让面试官了解你的工作，以及工作中遇到的问题等等。
+
+码农不仅要会写代码，在框架、网络、算法上也应该深入学习。
+
+总体收获颇丰，虽然面试第二天就收到了拒信，但并不意外，这点字节HR做的不错。
+
+**面试失败肯定是能力不足，这点没有任何疑问。**
+
+
+
+7年前端
+
+---
+
+## 前言
+
+你好，我是星辉，幸会幸会。 今天我参加了字节跳动的前段视频第一次面试，把它记录总结下来，希望能够对大家带来帮助。
+
+## 楔子
+
+投递简历后过了一段时间接到约面小姐姐的电话，了解你的具体的实习时间段，和你约定面试时间。你确认后小姐姐挂电话。过段时间hr给你发视频面试的链接，是牛客网用来面试的链接。
+
+## 正文
+
+#### 面试前做出的准备
+
+我在面试前准备以下几点东西，似乎都解决了面试的部分问题
+
+- 面试前我查阅了其他朋友写的字节跳动的面经以及面试题目，寻找题目解答，把它们总结了下来，用了一天一夜的时间，并把它们放到了我的这个博客上面。
+- 我做了一份详细的自我介绍，通过三段开发经历来总结出了我的一些优点和开发经验，用讲故事的形式说明情况，最后点明故事中表现了自己具有哪些素质，点明自己为什么可以做前端的工作。字节跳动的宗旨“和优秀的人一起做有挑战的事情”也被我用到了自我介绍中，“我认为我是优秀的人，也喜欢做有挑战的事情，更喜欢与优秀的人为伍”“我希望搭上字节跳动这架火箭”等等。
+
+#### 快要面试时做出的准备
+
+快要面试了，第一次面试，有些紧张，但还是像平常考试一样，将总结下来的面试题目总结、前端遇到问题的总结又看了一遍，把自己做好的自我介绍熟悉的几遍，给自己亲近的朋友发条消息获得她的祝福，又站在电脑桌前活动了一下身子，头脑顿时清醒利索了许多。
+
+#### 面试前奏
+
+由于紧张怕错过面试，早早的便坐在了电脑桌前。面试官迟到了一会，就给我发起了面试视频邀请，终于开始了。 迎面是一个挺帅气的哥哥，简单的打了一下招呼，就进入了自我介绍的环节。由于自我介绍我已经熟悉过几遍了，自我介绍的效果看起来效果还是不错的。 开始问我项目经历的细节以及自我介绍中的细节，由于项目经历确实是自己亲身经历过的事情，并且我一般项目完成时都会做一下总结，所以也能够答个头头是道。个人感觉上的，至于面试官怎么想的，我就不清楚了， 说不定是那种我就静静的看着你装逼的情况。
+
+#### 面试高潮
+
+来了来了，开始问技术的问题了。
+
+- 你对Vue的理解有多少 因为我在简历的项目经历中写了一个Vue项目，于是他问的时候就把我在项目中对Vue的理解和面试前准备的Vue总结结合起来回答。
+- 用css2和css3分别写一下垂直居中和水平居中 这道题我不会，并不知道css2和css3有什么区别以及写法，只会css3，我脑袋里有面试前总结的垂直居中和水平居中其中的两种方式，我就给他讲了一讲，倒是他没有再问下去，可能看出来我不会了吧。这也体现出了面试前知识点总结复习的重要性，不然你不会的东西你连说都不会说。
+
+```javascript
+css3新增了一些属性，像flex，这是css3中很重要的改变，所以除了flex以外的垂直水平居中的技巧都是属于css2的。
+- css2的水平居中技巧
+将元素display为行内元素，再text-align:center;即可
+或者
+将块级元素定义一个宽度，再margin: 0 auto;即可
+- css3的水平居中技巧
+将元素display设为flex，再通过justify-content: center; 实现居中。
+- css2的垂直居中技巧
+单行内容的垂直居中可以通过设置相同height值和line-height值来实现。
+多行内容的垂直居中且高度可变可以通过设置上下相同的padding值来实现。
+行级盒子：小图标和标题对齐设置vertical-align: middle。
+绝对定位：top:50%; left:50%;的方法，需要已知块级的宽高
+- css3的垂直居中技巧
+将元素display设为flex，再通过align-items:center;来实现。
+```
+
+- 你对计算机网络的认识怎么样 又是一道探底的题，判断能否从这里给你出题考察你
+- 讲述一下计算机网络的七层 应用层、表示层、会话层、传输层、网络层、数据链路层、物理层
+- TCP和UDP的区别是什么
+
+```javascript
+TCP：面向连接、传输可靠(保证数据正确性,保证数据顺序)、用于传输大量数据(流模式)、速度慢，建立连接需要开销较多(时间，系统资源)
+UDP：面向非连接、传输不可靠、用于传输少量数据(数据包模式)、速度快
+TCP和UDP协议的一些应用例子：
+TCP一般用于文件传输（FTP HTTP 对数据准确性要求高，速度可以相对慢），发送或接收邮件（POP IMAP SMTP 对数据准确性要求高，非紧急应用），远程登录（TELNET SSH 对数据准确性有一定要求，有连接的概念）等等；UDP一般用于即时通信（QQ聊天 对数据准确性和丢包要求比较低，但速度必须快），在线视频（RTSP 速度一定要快，保证视频连续，但是偶尔花了一个图像帧，人们还是能接受的），网络语音电话（VoIP 语音数据包一般比较小，需要高速发送，偶尔断音或串音也没有问题）等等。
+
+原文：https://blog.csdn.net/buster2014/article/details/40082109 
+```
+
+- TCP和UDP属于计算机网络中的哪一层
+
+```javascript
+网际层协议：IP协议、ICMP协议、ARP协议、RARP协议
+传输层协议：TCP协议、UDP协议
+应用层协议：FTP、Telnet、SMTP、HTTP、RIP、NFS、DNS
+```
+
+- HTTPS是什么
+
+```javascript
+HTTPS即加密的HTTP，HTTPS并不是一个新协议，而是HTTP+SSL（TLS）。原本HTTP先和TCP（假定传输层是TCP协议）直接通信，而加了SSL后，就变成HTTP先和SSL通信，再由SSL和TCP通信，相当于SSL被嵌在了HTTP和TCP之间
+```
+
+- 介绍几种常见的状态码
+
+```javascript
+2XX系列：代表请求已成功被服务器接收、理解、并接受。
+200状态码：表示请求已成功，请求所希望的响应头或数据体将随此响应返回
+201状态码：表示请求成功并且服务器创建了新的资源，且其 URI 已经随Location 头信息返回。
+3XX系列：代表需要客户端采取进一步的操作才能完成请求，这些状态码用来重定向，后续的请求地址（重定向目标）在本次响应的 Location 域中指明。
+301状态码：被请求的资源已永久移动到新位置。服务器返回此响应（对 GET 或 HEAD 请求的响应）时，会自动将请求者转到新位置。
+302状态码：请求的资源临时从不同的URI响应请求，但请求者应继续使用原有位置来进行以后的请求。
+304状态码：自从上次请求后，请求的网页未修改过。服务器返回此响应时，不会返回网页内容。
+4XX系列：表示请求错误。代表了客户端看起来可能发生了错误，妨碍了服务器的处理。
+401状态码：请求要求身份验证。 对于需要登录的网页，服务器可能返回此响应。
+403状态码：服务器已经理解请求，但是拒绝执行它。与401响应不同的是，身份验证并不能提供任何帮助，而且这个请求也不应该被重复提交。
+404状态码：请求失败，请求所希望得到的资源未被在服务器上发现。
+5xx系列：代表了服务器在处理请求的过程中有错误或者异常状态发生，也有可能是服务器意识到以当前的软硬件资源无法完成对请求的处理。
+500状态码：服务器遇到了一个未曾预料的状况，导致了它无法完成对请求的处理。
+503状态码：由于临时的服务器维护或者过载，服务器当前无法处理请求。
+```
+
+- 闭包是什么 闭包就是能够读取其他函数内部变量的函数。 闭包的用途：可以读取函数内部的变量，并且让这些变量的值始终保持在内存中。
+
+```javascript
+// 输出全为10
+for(var i=0;i<10;i++){
+   setTimeout(function(){
+       console.log(i);
+   },50);
+}
+
+// 输出相应的输出
+for(var i=0;i<10;i++){
+    (function(i){
+        setTimeout(function(){
+        console.log(i);
+        },50);
+    })(i);
+}
+```
+
+#### NaN是什么，用typeof会输出什么 Not a Number 会输出 Number
+
+通常都是在计算失败时，作为 Math 的某个方法的返回值出现的
+
+一个特殊的js类型
+
+#### js的隐性转换和显性转换
+
+```javascript
+隐性转换为： 1 + '1' = '11'
+显性转换
+Number("24 cccc");//结果：NaN
+ParseInt("24 cccc");//结果：24
+备注：Number的显性转换比较严格，若无法强转则直接报错
+
+面试官后引伸了两个问题
+1 + -'1' + 1 等于什么
+等于 1 ，'1'前面的负号把其数字化，变为-1，则后值为1
+'A' - 'B' 等于什么
+NaN（字母转化不了数字）
+```
+
+- 跨域问题如何解决 同源策略：浏览器安全策略，同协议、ip、端口的脚本才会执行。 只要协议、域名、端口有任何一个不同，都被当作是不同的域 js跨域是指通过js在不同的域之间进行数据传输或通信
+
+```javascript
+1. 通过jsonp跨域
+jsonp在页面上引入不同域上的js脚本文件实现请求不同域上的数据
+(1) 通过script标签引入一个js文件
+(2) js文件载入成功后会执行我们在url参数中指定的函数，并且会把我们需要的json数据作为参数传入
+注：需要服务器端的页面进行相应的配合
+2. 通过修改document.domain来跨子域
+3. 使用window.name来进行跨域
+window对象有个name属性，该属性有个特征：即在一个窗口(window)的生命周期内,窗口载入的所有的页面都是共享一个window.name的，每个页面对window.name都有读写的权限，window.name是持久存在一个窗口载入过的所有页面中的，并不会因新页面的载入而进行重置。
+```
+
+#### 知道babel么 可以实现将ES6编译为ES5代码
+
+
+
+####  用js实现判断一个变量是否为整数的函数
+
+```javascript
+实现思路：先判断该变量是否为Number类型，以此来缩小范围，再判断该变量除以1后是否与原值全等，若全等则返回true，若不全等则返回false
+function isInteger(obj) {
+ return Math.floor(obj) === obj
+}
+Number.isInteger(3) // true
+```
+
+- 进程和线程是什么 线程是最小的执行单元，而进程由至少一个线程组成。如何调度进程和线程，完全由操作系统决定，程序自己不能决定什么时候执行，执行多长时间。 进程指计算机中已运行的程序。 线程指操作系统能够进行运算调度的最小单位。
+
+  #### 死锁是什么 当两个以上的运算单元，双方都在等待对方停止运行，以获取系统资源，但是没有一方提前退出时，就称为死锁。
+- Left Join、Right Join、Inner Join 指的是什么
+
+```javascript
+LEFT JOIN 关键字会从左表那里返回所有的行，即使在右表中没有匹配的行
+RIGHT JOIN 关键字会右表那里返回所有的行，即使在左表中没有匹配的行
+在表中存在至少一个匹配时，INNER JOIN 关键字返回行
+```
+
+- 快速排序用js怎么写
+
+```javascript
+function quickSort(arr) {
+  if(arr.length<=1) {
+  	return arr;
+  }
+  var s = Math.floor(arr.length/2);
+ 
+  var temp = arr.splice(s,1);
+  
+  var left=[];
+  var right=[];
+  for(var i=0;i<arr.length;i++) {
+    if(arr[i]<temp) {
+      left.push(arr[i]);
+    }
+    if(arr[i]>=temp) {
+      right.push(arr[i]);
+    }
+  }
+  
+  return quickSort(left).concat(temp,quickSort(right));  
+  
+}
+```
+
+---
+

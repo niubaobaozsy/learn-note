@@ -74,3 +74,16 @@ module.exports = {
 }
 ```
 
+```js
+
+    plugins: [
+        new webpack.DllPlugin({ 
+            name: '_dll_[name]', // name === output.library
+            path: path.resolve(__dirname, '../dll/[name].manifest.json'),
+        })
+    ]
+```
+
+hard source webpack plugin
+
+dllplugin

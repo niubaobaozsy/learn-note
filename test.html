@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style type="text/css">
+  /* html body{
+    width: 100%;
+
+  } */
+    #ss{
+      border: 1px solid red;
+    }
+</style>
+</head>
+<body>
+
+  <div class="wrp wrp1">
+      <span id="ss">sjdfasdfaasdfassdfsdfadfsasasdfassdfsdfadfsasasdfassdfsdfadfsasasdfassdfsdfadfsassdfassdfsdfadfsasdfadsfdlfajsd</span>
+  </div>
+  </div>
+  <script>
+function arg2arr(){
+  // call后面的参数，是给slice方法的参数，如果另外还需要加参数，如何加，就不能用这种方法对不对，
+  // 用call方法，还要加新的参数，就在已经转成了的数组里面再加新参数
+  // 如果是用...很方便，
+    // var arr = Array.prototype.slice.call(arguments,4,5,6);
+    var arr = Array.from(arguments)
+    console.log(arr);
+}
+arg2arr(1,2,3);
+
+</script>
+
+</body>
+</html>

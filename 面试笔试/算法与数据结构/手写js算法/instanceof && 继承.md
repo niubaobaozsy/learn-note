@@ -173,7 +173,7 @@ object instanceof constructor
 测试代码
 
 ```js
-        function myInstanceof(target, origin) {
+    function myInstanceof(target, origin) {
       const proto = target.__proto__;
       if (proto) {
         if (origin.prototype === proto) {

@@ -22,9 +22,9 @@ html ，默认font-size为12px
 
 ![1536809063459](image\1536809063459.png)
 
-width和hegiht分别参照父元素的width和height
+**width和hegiht分别参照父元素的width和height**
 
-margin和padding参照包含块的width
+**margin和padding参照包含块的width**
 
 ![1536809181353](image\1536809181353.png)
 

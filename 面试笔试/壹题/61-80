@@ -1,0 +1,434 @@
+## 第 61 - 70 题
+
+### 第 61 题：介绍下如何实现 token 加密
+
+解析：[第 61 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/106)
+
+oken 加密方式：
+
+- 服务器通过私钥对一部分信息进行加密生成签名，并将签名和数据拼接在一起作为 token 的一部分。例如 JWT。
+- 使用客户端的 UA 或其他数据作为干扰码对 token 进行加密。
+
+### 第 62 题：redux 为什么要把 reducer 设计成纯函数
+
+解析：[第 62 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/107)
+
+edux的设计思想就是不产生副作用，数据更改的状态可回溯，所以redux中处处都是纯函数
+
+### 第 63 题：如何设计实现无缝轮播
+
+解析：[第 63 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/108)
+
+简单来说，无缝轮播的核心是制造一个连续的效果。最简单的方法就是复制一个轮播的元素，当复制元素将要滚到目标位置后，把原来的元素进行归位的操作，以达到无缝的轮播效果。
+
+### 第 64 题：模拟实现一个 Promise.finally
+
+解析：[第 64 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/109)
+
+```js
+Promise.prototype.finally = function (callback) {
+  let P = this.constructor;
+  return this.then(
+    value  => P.resolve(callback()).then(() => value),
+    reason => P.resolve(callback()).then(() => { throw reason })
+  );
+};
+```
+
+### 第 65 题： `a.b.c.d` 和 `a['b']['c']['d']`，哪个性能更高？
+
+解析：[第 65 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/111)
+
+应该是 `a.b.c.d` 比 `a['b']['c']['d']` 性能高点，后者还要考虑 `[ ]` 中是变量的情况，再者，从两种形式的结构来看，显然编译器解析前者要比后者容易些，自然也就快一点。
+下图是两者的 AST 对比：
+
+### 第 66 题：ES6 代码转成 ES5 代码的实现思路是什么
+
+解析：[第 66 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/112)
+
+1. 解析：解析代码字符串，生成 AST；
+2. 转换：按一定的规则转换、修改 AST；
+3. 生成：将修改后的 AST 转换成普通代码。
+
+### 第 67 题：数组编程题
+
+随机生成一个长度为 10 的整数类型的数组，例如 `[2, 10, 3, 4, 5, 11, 10, 11, 20]`，将其排列成一个新数组，要求新数组形式如下，例如 `[[2, 3, 4, 5], [10, 11], [20]]`。
+
+解析：[第 67 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/113)
+
+```js
+var arr = [2, 10, 3, 4, 5, 11, 10, 11, 20];
+arr.sort(function(a, b) {
+	return a - b
+});
+arr = [...new Set(arr)];
+var result = [];
+arr.forEach(function(val) {
+	let index = parseInt(val / 10);
+	if (!result[index]) {
+		result[index] = [];
+	}
+	result[index].push(val);
+})
+result = result.filter(arr => arr.length > 0);
+console.log(result);
+```
+
+
+
+### 第 68 题： 如何解决移动端 Retina 屏 1px 像素问题
+
+解析：[第 68 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/115)
+
+
+
+### 第 69 题： 如何把一个字符串的大小写取反（大写变小写小写变大写），例如 ’AbC' 变成 'aBc' 。
+
+解析：[第 69 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/116)
+
+1. viewport + rem
+
+2. background-image
+
+3. ```js
+   function processString (s) {
+       var arr = s.split('');
+       var new_arr = arr.map((item) => {
+           return item === item.toUpperCase() ? item.toLowerCase() : item.toUpperCase();
+       });
+       return new_arr.join('');
+   }
+   console.log(processString('AbC'));
+   ```
+
+### 第 70 题： 介绍下 webpack 热更新原理，是如何做到在不刷新浏览器的前提下更新页面的
+
+解析：[第 70 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/118)
+
+1.当修改了一个或多个文件；
+2.文件系统接收更改并通知webpack；
+3.webpack重新编译构建一个或多个模块，并通知HMR服务器进行更新；
+4.HMR Server 使用webSocket通知HMR runtime 需要更新，HMR运行时通过HTTP请求更新jsonp；
+5.HMR运行时替换更新中的模块，如果确定这些模块无法更新，则触发整个页面刷新。
+
+## 第 71 - 80 题
+
+### 第 71 题： 实现一个字符串匹配算法，从长度为 n 的字符串 S 中，查找是否存在字符串 T，T 的长度是 m，若存在返回所在位置。
+
+解析：[第 71 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/119)
+
+```
+const find = (S, T) => {
+  if (S.length < T.length) return -1
+  for (let i = 0; i < S.length; i++) {
+    if (S.slice(i, i + T.length) === T) return i
+  }
+  return -1
+}
+```
+
+
+
+### 第 72 题： 为什么普通 `for` 循环的性能远远高于 `forEach` 的性能，请解释其中的原因。
+
+[![image-20190512225510941](https://camo.githubusercontent.com/d7caf0017dd697ca7c68c0d834d18d061e2ab0e1/68747470733a2f2f7773322e73696e61696d672e636e2f6c617267652f303036744e633739677931673279786267347461386a333167683075303438682e6a7067)](https://camo.githubusercontent.com/d7caf0017dd697ca7c68c0d834d18d061e2ab0e1/68747470733a2f2f7773322e73696e61696d672e636e2f6c617267652f303036744e633739677931673279786267347461386a333167683075303438682e6a7067)
+
+解析：[第 72 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/121)
+
+- for 循环没有任何额外的函数调用栈和上下文；
+- forEach函数签名实际上是
+
+```
+array.forEach(function(currentValue, index, arr), thisValue)
+```
+
+它不是普通的 for 循环的语法糖，还有诸多参数和上下文需要在执行的时候考虑进来，这里可能拖慢性能；
+
+### 第 73 题： 介绍下 BFC、IFC、GFC 和 FFC
+
+解析：[第 73 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/122)
+
+
+
+### 第 74 题： 使用 JavaScript Proxy 实现简单的数据绑定
+
+解析：[第 74 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/123)
+
+```js
+const data = { count: 0 };
+const proxy = new Proxy(data, {
+  get(target, property) {
+    return target[property];
+  },
+  set(target, property, value) {
+    target[property] = value;
+    render(value);
+  }
+});
+
+render(proxy.count);
+
+function render(value) {
+  document.getElementById('count').innerHTML = value;
+}
+
+function increase() {
+  proxy.count += 1;
+}
+
+function decrease() {
+  proxy.count -= 1; 
+}
+```
+
+### 第 75 题：数组里面有10万个数据，取第一个元素和第10万个元素的时间相差多少
+
+解析：[第 75 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/124)
+
+数组可以直接根据索引取的对应的元素，所以不管取哪个位置的元素的时间复杂度都是 O(1)
+
+得出结论：**消耗时间几乎一致，差异可以忽略不计**
+
+### 第 76 题：输出以下代码运行结果
+
+```js
+// example 1
+var a={}, b='123', c=123;  
+a[b]='b';
+a[c]='c';  
+console.log(a[b]); b
+
+---------------------
+// example 2
+var a={}, b=Symbol('123'), c=Symbol('123');  
+a[b]='b';
+a[c]='c';  
+console.log(a[b]);b
+
+---------------------
+// example 3
+var a={}, b={key:'123'}, c={key:'456'};  
+a[b]='b';
+a[c]='c';
+console.log(a[b]);b
+```
+
+解析：[第 76 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/125)
+
+这题考察的是对象的键名的转换。
+
+- 对象的键名只能是字符串和 Symbol 类型。
+- 其他类型的键名会被转换成字符串类型。
+- 对象转字符串默认会调用 toString 方法。
+
+```js
+// example 1
+var a={}, b='123', c=123;
+a[b]='b';
+
+// c 的键名会被转换成字符串'123'，这里会把 b 覆盖掉。
+a[c]='c';  
+
+// 输出 c
+console.log(a[b]);
+// example 2
+var a={}, b=Symbol('123'), c=Symbol('123');  
+
+// b 是 Symbol 类型，不需要转换。
+a[b]='b';
+
+// c 是 Symbol 类型，不需要转换。任何一个 Symbol 类型的值都是不相等的，所以不会覆盖掉 b。
+a[c]='c';
+
+// 输出 b
+console.log(a[b]);
+// example 3
+var a={}, b={key:'123'}, c={key:'456'};  
+
+// b 不是字符串也不是 Symbol 类型，需要转换成字符串。
+// 对象类型会调用 toString 方法转换成字符串 [object Object]。
+a[b]='b';
+
+// c 不是字符串也不是 Symbol 类型，需要转换成字符串。
+// 对象类型会调用 toString 方法转换成字符串 [object Object]。这里会把 b 覆盖掉。
+a[c]='c';  
+
+// 输出 c
+console.log(a[b]);
+```
+
+### 第 77 题：算法题「旋转数组」
+
+> 给定一个数组，将数组中的元素向右移动 k 个位置，其中 k 是非负数。
+
+示例 1：
+
+```
+输入: [1, 2, 3, 4, 5, 6, 7] 和 k = 3
+输出: [5, 6, 7, 1, 2, 3, 4]
+解释:
+向右旋转 1 步: [7, 1, 2, 3, 4, 5, 6]
+向右旋转 2 步: [6, 7, 1, 2, 3, 4, 5]
+向右旋转 3 步: [5, 6, 7, 1, 2, 3, 4]
+```
+
+示例 2：
+
+```
+输入: [-1, -100, 3, 99] 和 k = 2
+输出: [3, 99, -1, -100]
+解释: 
+向右旋转 1 步: [99, -1, -100, 3]
+向右旋转 2 步: [3, 99, -1, -100]
+```
+
+解析：[第 77 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/126)
+
+```
+function rotate(arr, k) {
+  const len = arr.length
+  const step = k % len
+  return arr.slice(-step).concat(arr.slice(0, len - step))
+}
+// rotate([1, 2, 3, 4, 5, 6], 7) => [6, 1, 2, 3, 4, 5]
+```
+
+### 第 78 题：Vue 的父组件和子组件生命周期钩子执行顺序是什么
+
+解析：[第 78 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/128)
+
+1. 加载渲染过程
+   `父beforeCreate->父created->父beforeMount->子beforeCreate->子created->子beforeMount->子mounted->父mounted`
+2. 子组件更新过程
+   `父beforeUpdate->子beforeUpdate->子updated->父updated`
+3. 父组件更新过程
+   `父beforeUpdate->父updated`
+4. 销毁过程
+   `父beforeDestroy->子beforeDestroy->子destroyed->父destroyed`
+
+### 第 79 题：input 搜索如何防抖，如何处理中文输入
+
+解析：[第 79 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/129)
+
+```js
+<div>
+    <input type="text" id="ipt">
+  </div>
+
+  <script>
+    let ipt = document.getElementById('ipt');
+    let dbFun = debounce()
+    ipt.addEventListener('keyup', function (e) {
+      dbFun(e.target.value);
+    })
+
+    function debounce() {
+      let timer;
+      return function (value) {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          console.log(value)
+        }, 500);
+      }
+    }
+  </script>
+```
+
+
+
+### 第 80 题：介绍下 Promise.all 使用、原理实现及错误处理
+
+解析：[第 80 题](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/130)
+
+# 一、Promise概念
+
+Promise是JS异步编程中的重要概念，异步抽象处理对象，是目前比较流行Javascript异步编程解决方案之一。Promise.all()接受一个由promise任务组成的数组，可以同时处理多个promise任务，当所有的任务都执行完成时，Promise.all()返回resolve，但当有一个失败(reject)，则返回失败的信息，即使其他promise执行成功，也会返回失败。和后台的事务类似。和rxjs中的forkJoin方法类似，合并多个 Observable 对象 ，等到所有的 Observable 都完成后，才一次性返回值。
+
+# 二、Promise.all如何使用
+
+对于 Promise.all(arr) 来说，在参数数组中所有元素都变为决定态后，然后才返回新的 promise。
+
+```
+// 以下 demo，请求两个 url，当两个异步请求返还结果后，再请求第三个 url
+const p1 = request(`http://some.url.1`)
+const p2 = request(`http://some.url.2`)
+Promise.all([p1, p2])
+  .then((datas) => { // 此处 datas 为调用 p1, p2 后的结果的数组
+    return request(`http://some.url.3?a=${datas[0]}&b=${datas[1]}`)
+  })
+  .then((data) => {
+    console.log(msg)
+  })
+```
+
+# 三、Promise.all原理实现
+
+```
+function promiseAll(promises){
+     return new Promise(function(resolve,reject){
+            if(!Array.isArray(promises)){
+             return reject(new TypeError("argument must be anarray"))
+           }
+    var countNum=0;
+    var promiseNum=promises.length;
+    var resolvedvalue=new Array(promiseNum);
+    for(var i=0;i<promiseNum;i++){
+      (function(i){
+         Promise.resolve(promises[i]).then(function(value){
+            countNum++;
+           resolvedvalue[i]=value;
+          if(countNum===promiseNum){
+              return resolve(resolvedvalue)
+          }
+       },function(reason){
+        return reject(reason)
+      )
+     })(i)
+    }
+})
+}
+var p1=Promise.resolve(1),
+p2=Promise.resolve(2),
+p3=Promise.resolve(3);
+promiseAll([p1,p2,p3]).then(function(value){
+console.log(value)
+})
+```
+
+# 四、Promise.all错误处理
+
+有时候我们使用Promise.all()执行很多个网络请求，可能有一个请求出错，但我们并不希望其他的网络请求也返回reject，要错都错，这样显然是不合理的。如何做才能做到promise.all中即使一个promise程序reject，promise.all依然能把其他数据正确返回呢?
+
+## 1、全部改为串行调用（失去了node 并发优势）
+
+## 2、当promise捕获到error 的时候，代码吃掉这个异常，返回resolve，约定特殊格式表示这个调用成功了
+
+```js
+var p1 =new Promise(function(resolve,reject){
+    setTimeout(function(){
+        resolve(1);
+    },0)
+});
+var p2 = new Promise(function(resolve,reject){
+        setTimeout(function(){
+            resolve(2);
+        },200)
+ });
+ var p3 = new Promise(function(resolve,reject){
+        setTimeout(function(){
+            try{
+            console.log(XX.BBB);
+            }
+            catch(exp){
+                resolve("error");
+            }
+        },100)
+});
+Promise.all([p1, p2, p3]).then(function (results) {
+    console.log("success")
+     console.log(results);
+}).catch(function(r){
+    console.log("err");
+    console.log(r);
+});
+```
