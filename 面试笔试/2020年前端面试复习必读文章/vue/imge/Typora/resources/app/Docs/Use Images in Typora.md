@@ -83,7 +83,7 @@ You could tell Typora where to copy images or upload images when insert images f
 
 ### Relative path to current file/folder (default behavior)
 
-By default, users could refer to local image by relative path to current `*.md` file. For example, if the `*.md` file is at `/User/typora/desktop/test.md`, then the `![img](image.png)` will display image from `/User/typora/desktop/image.png` just like the `<img>` tag in HTML. Also, for `../download/image.png`, image from `/User/typora/download/image.png` will be fetched.
+By default, users could refer to local image by relative path to current `*.md` file. For example, if the `*.md` file is at `/User/typora/desktop/test.md`, then the `![img](imge.png)` will display image from `/User/typora/desktop/image.png` just like the `<img>` tag in HTML. Also, for `../download/image.png`, image from `/User/typora/download/image.png` will be fetched.
 
 ### Relative path to certain folder
 

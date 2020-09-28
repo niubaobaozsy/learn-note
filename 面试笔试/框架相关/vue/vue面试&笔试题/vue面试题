@@ -2,13 +2,13 @@
 
 
 
-![1565855552060](image/1565855552060.png)active-class是哪个组件的属性？
+![1565855552060](imge/1565855552060.png)active-class是哪个组件的属性？
 
 vue-router模块的router-link组件  
 
 #### axios？？？？
 
-![1565860028168](image/1565860028168.png)
+![1565860028168](imge/1565860028168.png)
 
 > 创建前/后： 在beforeCreated阶段，vue实例的挂载元素$el和数据对象data都为undefined，还未初始化。在created阶段，vue实例的数据对象data有了，$el还没有。
 >

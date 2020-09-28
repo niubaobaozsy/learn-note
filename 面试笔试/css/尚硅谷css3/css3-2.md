@@ -388,7 +388,7 @@ stretch		等高布局（如果高度没有设定，则会一样高）
 
 项目有5个，富裕空间有150px。那么每个项目分的150/（5*1）.加在项目的width上
 
-![1537444869815](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537444869815.png)
+![1537444869815](imge\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537444869815.png)
 
 新版本
 
@@ -400,17 +400,17 @@ flex-grow： 1；
 
 1，flex-wrap控制侧轴方向，换行
 
-![1537446296685](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537446296685.png)
+![1537446296685](imge\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537446296685.png)
 
 默认值nowrap不换行
 
-![1537446344344](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537446344344.png)
+![1537446344344](imge\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537446344344.png)
 
 wrap换行  wrap-reverse 将侧轴箭头方向反向
 
 2，换行，每一行之间的距离如何控制  align-content。控制多行多列，富裕空间的管理
 
-![1537446515451](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537446515451.png)
+![1537446515451](imge\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537446515451.png)
 
 align-items也是管理侧轴富裕空间的，
 
@@ -418,17 +418,17 @@ align-content当多行多列看这个属性，单行单列看align-items这个�
 
 3，flex-flow属性，控制主侧轴是那根，主侧轴的方向
 
-![1537447161956](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537447161956.png)
+![1537447161956](imge\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537447161956.png)
 
 #### 项目上新增的属性
 
 1，order：设置项目的顺序
 
-![1537448837920](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537448837920.png)
+![1537448837920](imge\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537448837920.png)
 
 2，align-self   给单个项目设置属性 。（align-self）
 
-![1537449835407](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537449835407.png)
+![1537449835407](imge\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537449835407.png)
 
 flex-grow和box-flex默认值都是0
 
@@ -438,13 +438,13 @@ flex-grow定义盒子的拉伸因子
 
 flex-shink定义项目盒子的收缩因子
 
-![1537498302615](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537498302615.png)
+![1537498302615](imge\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537498302615.png)
 
 flex-shrink前提是必须flex-wrp：nowrap保证在一行
 
-![1537580171488](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537580171488.png)
+![1537580171488](imge\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537580171488.png)
 
-![1537580224661](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537580224661.png)
+![1537580224661](imge\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537580224661.png)
 
 ## flex布局实例
 
@@ -452,7 +452,7 @@ flex-shrink前提是必须flex-wrp：nowrap保证在一行
 
 flex： 1（只要每个item的flex相同，不管为2还是为300都是等分布局）
 
-![1537582627924](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537582627924.png)
+![1537582627924](imge\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537582627924.png)
 
 flex的简写属性的意义需要知道
 
@@ -460,7 +460,7 @@ flex的简写属性的意义需要知道
 
 css3媒体查询是所有响应式布局的核心
 
-![1537583837801](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537583837801.png)
+![1537583837801](imge\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537583837801.png)
 
 1，媒体类型     媒体查询选择器
 
@@ -480,7 +480,7 @@ css3媒体查询是所有响应式布局的核心
 
 2，媒体属性
 
-![1537584588314](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537584588314.png)
+![1537584588314](imge\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537584588314.png)
 
 ```
 @media screen and (width:800px){只有在彩色屏幕的时候并且width为800px才能使用这上面的样式  里面写规则
@@ -505,7 +505,7 @@ css3媒体查询是所有响应式布局的核心
 
 ​	（，）：代表or
 
-![1537585076337](image\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537585076337.png)
+![1537585076337](imge\%5CUsers%5Cshuing%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5C1537585076337.png)
 
 后面那个没有写媒体类型，那么默认就是所有的屏幕属性满足即可。前面的为一整块
 

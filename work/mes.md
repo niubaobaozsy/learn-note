@@ -22,7 +22,7 @@ administrator     Meicloud@123
 
 安装过程
 
-![1570523095354](image/1570523095354.png)
+![1570523095354](imge/1570523095354.png)
 
 注：window10用管理员安装
 
@@ -30,7 +30,7 @@ administrator     Meicloud@123
 
 
 
-![1570686819668](image/1570686819668.png)
+![1570686819668](imge/1570686819668.png)
 
 file:///../h5/pages/REPORT/RegularMaintanceList/index.html
 

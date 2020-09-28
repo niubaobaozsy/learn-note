@@ -6,7 +6,7 @@ https://juejin.im/e/pwa-lavas  视频学习
 
 manifest.json文件的作用是用来实现添加到桌面。**这个json文件就是一些配置，**里面的各个字段决定作用。
 
-![1552225686535](image/1552225686535.png)
+![1552225686535](imge/1552225686535.png)
 
 - 我们需要手动编写service-worker.js文件。
 - 我们需要在网页中下载并注册service-worker.js文件。

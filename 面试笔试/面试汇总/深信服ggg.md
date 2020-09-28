@@ -481,7 +481,7 @@
 > image.onload = () => {
 >     canvas.width = imageWidth
 >     canvas.height = imageHeight
->     ctx.drawImage(image, 0, 0, imageWidth, imageHeight);
+>     ctx.drawImage(imge, 0, 0, imageWidth, imageHeight);
 >      //质量压缩成之前的0.5
 >     canvas.toDataURL('image/jpeg', 0.5)
 > }
