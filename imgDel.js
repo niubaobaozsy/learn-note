@@ -47,7 +47,7 @@ function checkImg(path) {
       execSync('git add .')
       execSync("git commit -m 'del-img'")
       execSync('git pull')
-      execSync('git push --no-verify')
+      // execSync('git push --no-verify')
     }
     // git show
   })
