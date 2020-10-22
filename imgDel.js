@@ -42,21 +42,20 @@ function checkImg(path) {
         console.log(file)
       }
     })
+    console.log(flag)
+    if (flag) {
+      execSync('git add .')
+      execSync("git commit -m 'del-img'")
+      execSync('git pull')
+      execSync('HUSKY_SKIP_HOOKS=1 git push')
+    }
     // git show
   })
-  console.log(flag)
-  if (flag) {
-    execSync('git add .')
-    execSync("git commit -m 'del-img'")
-    execSync('git pull')
-    execSync('HUSKY_SKIP_HOOKS=1 git push')
-  }
 
 }
 let a = execSync('git diff --name-only HEAD~ HEAD')
 let list = a.toString('utf-8')
 list = list.split('\n')
-console.log(list)
 list.forEach(file => {
   if (file !== '') {
     let ext = file.split('/').pop()
@@ -66,7 +65,6 @@ list.forEach(file => {
     } else {
       ext = ''
     }
-    console.log(ext == '')
     if (ext == 'md' || ext == '') {
       let tmp = file.split('/')
       tmp.pop()
