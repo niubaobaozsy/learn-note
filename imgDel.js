@@ -44,6 +44,7 @@ function checkImg(path) {
     })
     // git show
   })
+  console.log(flag)
   if (flag) {
     execSync('git add .')
     execSync("git commit -m 'del-img'")
