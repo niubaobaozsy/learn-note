@@ -7,6 +7,7 @@
 $ npm install -g nrm
 $ nrm add midea http://npm.midea.com:7001
 $ nrm use midea
+
 ```
 
 ---

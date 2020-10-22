@@ -1,0 +1,105 @@
+https://juejin.im/post/6844903889196548104
+
+这篇文章中写的不错，但是不明白，为啥子组件中的state变化了，父组件要更新，应该和react原理有关，为啥要重新渲染父组件
+
+### 食用测试
+
+我们分别在父组件的render和子组件的componentWillReceiveProps和getDerivedStateFromProps打印日志
+
+父组件
+
+```
+class Index extends React.Component {  
+    // ...  
+    render(){    
+        console.log('父组件更新')    
+        <Demo value={this.state.value}>  
+    }
+}复制代码
+```
+
+子组件使用componentWillReceiveProps
+
+```
+class Demo extends Component {  
+    state = {    
+        value: this.props.value      
+    };   
+    componentWillReceiveProps(props){    
+        console.log('componentWillReceiveProps')    
+        if(props.value !== this.state.value){      
+            this.setState({value:props.value})    
+        }  
+    }  
+    render(){    
+        console.log('子组件更新')     
+        // ...  
+    }
+}复制代码
+```
+
+子组件初始化打印结果：
+
+```
+父组件更新
+子组件更新复制代码
+```
+
+子组件更新state.value的打印结果：
+
+```
+子组件更新
+父组件更新
+componentWillReceiveProps
+子组件更新复制代码
+```
+
+2.子组件使用getDerivedStateFromProps
+
+```
+class Demo extends Component {  
+    state = {    
+        value: this.props.value  
+    };  
+    static getDerivedStateFromProps(props,state){    
+        console.log('getDerivedStateFromProps')    
+        if(props.value !== state.value){      
+            return {        
+                value:props.value      
+            }    
+        }    
+        return null  
+    }  
+    render(){    
+        console.log('子组件更新')     
+        // ...  
+    }
+}复制代码
+```
+
+子组件初始化打印结果：
+
+```
+父组件更新
+getDerivedStateFromProps
+子组件更新复制代码
+```
+
+子组件更新state.value的打印结果：
+
+```
+getDerivedStateFromProps
+子组件更新
+父组件更新
+getDerivedStateFromProps
+子组件更新复制代码
+```
+
+这让我们更清晰的认识了getDerivedStateFromProps函数，他不仅在props变化的时候触发，**而是在每次render（state和props更新）时就会触发**
+
+**不只是子组件本身的render，当父组件一个无关本组件的state发生了变化，也会触发getDerivedStateFromProps**
+
+先放这
+
+----
+

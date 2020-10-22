@@ -17,11 +17,12 @@
   },
   "homepage": "https://github.com/niubaobaozsy/learn-note#readme",
   "devDependencies": {
+    "glob": "^7.1.6",
     "husky": "^4.3.0"
   },
   "husky": {
     "hooks": {
-      "pre-push": "node ./imgDel.js"
+      "pre-commit": "node ./imgDel.js"
     }
   }
 }
