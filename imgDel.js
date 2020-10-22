@@ -23,6 +23,7 @@ var glob = require("glob")
 // })
 // 
 function checkImg(path) {
+  let flag = false
   glob(path + "/imge/*.png", function (er, files) {
     files.forEach(file => {
       let path = file.split('/')
@@ -37,15 +38,18 @@ function checkImg(path) {
         // 0 1
       } catch (e) {
         fs.unlinkSync(`./${file}`);
+        flag = true
         console.log(file)
       }
     })
     // git show
   })
-  execSync('git add .')
-  execSync("git commit -m 'del-img'")
-  execSync('git pull')
-  execSync('HUSKY_SKIP_HOOKS=1 git push')
+  if (flag) {
+    execSync('git add .')
+    execSync("git commit -m 'del-img'")
+    execSync('git pull')
+    execSync('HUSKY_SKIP_HOOKS=1 git push')
+  }
 
 }
 let a = execSync('git diff --name-only HEAD~ HEAD')
