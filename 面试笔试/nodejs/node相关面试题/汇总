@@ -1,0 +1,151 @@
+日志
+ 星期三日志分类
+
+
+
+##  多进程和 cluster/PM2原理
+ 星期一掘金文章- Node js的进程管理
+
+
+
+ 断点续传
+ 星期一字节跳动面试官：请你实现-
+
+ 深入理解 Node js进程和线程
+ 2020/9/24https：/juejin.im/post/5d43017be51
+
+ 浏览器与Node的事件循环（ Event Loop）
+ 2019/10/11参考：掘金文章
+
+ 备忘录
+ 标准输入输出
+ 2020/9 /24 process. stdin. pipe（process. stdout）
+
+ **pkg将node运行环境打包成可执行文件**
+ 2020/9/24使用pkg打包 Node. js应用
+
+https://juejin.im/post/6844903928052580359
+
+ **npm-script**
+ 2020/9/24你真的了解npm- scripts吗？
+
+https://www.ruanyifeng.com/blog/2016/10/npm_scripts.html
+
+ **服务端gzip压缩**
+ 2020/9/24koa- compress实现网页gz
+
+```js
+app.get(['/index.js','/index.css'], function (req, res, next) {
+  req.url = req.url + '.gz'
+  res.set('Content-Encoding', 'gzip')
+  res.setHeader("Content-Type", generateType(req.path)) // 这里要根据请求文件设置content-type
+  next()
+})
+```
+
+
+
+ **PM2进程守护**
+ 2019/113使用pm2自动化部署node项目
+
+**密码加密/加盐**
+ 2019/1/2 Bcrypt密码的加盐和验证
+
+bcrypt，是一个跨平台的文件加密工具。由它加密的文件可在所有支持的操作系统和处理器上进行转移
+
+**可以在项目中好好用用**
+
+ **Node js内存泄露**
+ 2019/112你们有遇到过 nodes一些内存泄露
+
+
+
+ **Koa源码解析**  （暂时不看，看之后的express，剩下的加黑都看下）
+ 2019/10/29http：//dopro.io/koa-source
+
+ **Node js几种路径分析**
+ 20199/9绝对路径：以“开始
+
+ **教你编写 Node. js中间件，实现服务端缓**
+ 2019/8/25https：//juejin.im/post/59afbfo56fb9
+
+ **深入学习 Node js Net**  （太底层了）
+ 2019/8/24无附加文本
+
+
+
+ **深入学习 Node js Http**
+ 2019/8/24无附加文本
+
+https://cloud.tencent.com/developer/article/1533060
+
+这个可以好好看看
+
+ **深入学习 Node. js Buffer**
+ 2019/8/24无附加文本
+
+看一看，后面遇到面试题再补充
+
+ **深入学习 Node js Module**
+ 2019/8/24无附加文本
+
+
+
+ **深入学习 Node js EventEmitter**
+ 2019/8/24无附加文本
+
+就是手写eventEmitter  可以自己手写
+
+ Ant-Express-blog
+ 2019/823前端https：//github.com/biaocher
+
+
+
+ **阻塞|O和非阻塞|o**
+
+ 0198/12阻塞|o
+
+
+
+node模块机制
+
+https://juejin.im/post/6844903951742025736 
+
+什么是进程和线程？之间的区别？参考：[Interview1](#heading-1)
+
+什么是孤儿进程？参考：[Interview2](#heading-2)
+
+创建多进程时，代码里有 `app.listen(port)` 在进行 fork 时，为什么没有报端口被占用？参考：[Interview3](#heading-3)
+
+什么是 IPC 通信，如何建立 IPC 通信？什么场景下需要用到 IPC 通信？参考：[Interview4](#heading-4)
+
+Node.js 是单线程还是多线程？进一步会提问为什么是单线程？参考：[Interview5](#heading-5)
+
+关于守护进程，是什么、为什么、怎么编写？参考：[Interview6](#heading-6)
+
+实现一个简单的命令行交互程序？参考：[Interview7](#heading-7)
+
+如何让一个 js 文件在 Linux 下成为一个可执行命令程序？参考：[Interview8](#heading-8)
+
+进程的当前工作目录是什么? 有什么作用？参考：[Interview9](#heading-9)
+
+多进程或多个 Web 服务之间的状态共享问题？参考：[Interview10](#heading-10)
+
+https://juejin.im/post/6844903870066327566
+
+---
+
+深入学习 Node. js Buffer
+
+这个人的学习笔记
+
+看下深入浅出nodejs那本书，上面怎么讲这些模块
+
+----
+
+晚上赶紧把webpack视频看完，看完之后，开始学习react。nice，今天没看完也可以开始学react
+
+看完之后，就可以把模块化这个深入学习下
+
+全看完了。
+

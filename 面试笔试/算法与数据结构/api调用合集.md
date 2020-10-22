@@ -51,3 +51,7 @@ var removed = myFish.splice(2, 0, "drum");
 var myFish = ['angel', 'clown', 'drum', 'sturgeon'];
 var removed = myFish.splice(2, 1, "trumpet");
 ```
+
+---
+
+`array**find()**` 方法返回数组中满足提供的测试函数的第一个元素的值。否则返回 [`undefined`](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/undefined)。

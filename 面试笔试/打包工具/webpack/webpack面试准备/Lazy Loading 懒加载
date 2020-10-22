@@ -1,0 +1,205 @@
+# 懒加载
+
+https://www.cnblogs.com/zhaoweikai/p/10945780.html 文章，源码，讲的很细，源码很清晰
+
+### installedChunks缓存变量
+
+根据注释，该对象变量主要缓存各个独立的js文件模块的加载状态。
+
+该对象的key就是chunkId，而chunkId实际就是文件名去掉.bundle.js后剩余的内容，例如：print.bundle.js的chunkId就是print。
+
+**根据值的不同标志着key对应的文件加载状态主要有以下几种：**
+
+undefined：key对应的文件未加载；
+
+null：key对应的文件延迟加载；
+
+数组：正在加载（注意，这里的注释有点不准确，这个数组实际存储的是一个promise的实例，以及对应的reject和resolve）；
+
+0：已经加载过了。
+
+**这个变量的核心作用：**当一个懒加载模块被多个文件依赖时，如果该模块已经被加载过了，就不会被其它模块加载了。判断方法就是通过该缓存变量判断的。具体源码可以在__webpack_require__.e函数中看到：
+
+```js
+ 1 __webpack_require__.e = function requireEnsure(chunkId) {
+ 2     var promises = [];
+ 3 
+ 4     // JSONP chunk loading for javascript
+ 5     var installedChunkData = installedChunks[chunkId];
+ 6     if (installedChunkData !== 0) { // 0 means "already installed".
+ 7 
+ 8         // a Promise means "currently loading".
+ 9         if (installedChunkData) {
+10             promises.push(installedChunkData[2]);
+11         } else {
+12             // ... 
+13             // 创建一个<script>标签，将路径设置为懒加载文件路径，并插入HTML，实现该懒加载文件的加载。
+14         }
+15     }
+16     return Promise.all(promises);
+17 };
+```
+
+### 4.2 __webpack_require__.e函数
+
+该函数主要作用就是创建一个<script>标签，然后将chunkId对应的文件通过该标签加载。
+
+源代码如下：
+
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
+```js
+ 1 __webpack_require__.e = function requireEnsure(chunkId) {
+ 2         var promises = [];
+ 3 
+ 4         // JSONP chunk loading for javascript
+ 5 
+ 6         var installedChunkData = installedChunks[chunkId];
+ 7         if (installedChunkData !== 0) { // 0 means "already installed".
+ 8 
+ 9             // a Promise means "currently loading".
+10             if (installedChunkData) {
+11                 promises.push(installedChunkData[2]);
+12             } else {
+    
+    // 这两步会把懒加载的promise的 resolve reject方法放到外面去。就是可以在外面resolve这个promise
+13                 // setup Promise in chunk cache
+14                 var promise = new Promise(function (resolve, reject) {
+15                     installedChunkData = installedChunks[chunkId] = [resolve, reject];
+16                 });
+17                 promises.push(installedChunkData[2] = promise);
+18 
+    
+    
+19                 // start chunk loading
+20                 var script = document.createElement('script');
+21                 var onScriptComplete;
+22 
+23                 script.charset = 'utf-8';
+24                 script.timeout = 120;
+25                 if (__webpack_require__.nc) {
+26                     script.setAttribute("nonce", __webpack_require__.nc);
+27                 }
+28                 script.src = jsonpScriptSrc(chunkId);
+29 
+30                 // create error before stack unwound to get useful stacktrace later
+31                 var error = new Error();
+   // 如果提前失败，就清理定时器
+32                 onScriptComplete = function (event) {
+33                     // avoid mem leaks in IE.
+34                     script.onerror = script.onload = null;
+35                     clearTimeout(timeout);
+36                     var chunk = installedChunks[chunkId];
+37                     if (chunk !== 0) {
+38                         if (chunk) {
+39                             var errorType = event && (event.type === 'load' ? 'missing' : event.type);
+40                             var realSrc = event && event.target && event.target.src;
+41                             error.message = 'Loading chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')';
+42                             error.type = errorType;
+43                             error.request = realSrc;
+44                             chunk[1](error);
+45                         }
+46                         installedChunks[chunkId] = undefined;
+47                     }
+48                 };
+    //限时机制在这
+49                 var timeout = setTimeout(function () {
+50                     onScriptComplete({type: 'timeout', target: script});
+51                 }, 120000);
+52                 script.onerror = script.onload = onScriptComplete;
+53                 document.head.appendChild(script);
+54             }
+55         }
+56         return Promise.all(promises);
+57     };
+```
+
+[![复制代码](https://common.cnblogs.com/images/copycode.gif)](javascript:void(0);)
+
+主要做了如下几个事情：
+
+**1）判断chunkId对应的模块是否已经加载了，如果已经加载了，就不再重新加载；**
+
+**2）如果模块没有被加载过，但模块处于正在被加载的过程，不再重复加载，直接将加载模块的promise返回。**
+
+**3）如果模块没有被加载过，也不处于加载过程，就创建一个promise，并将resolve、reject、promise构成的数组存储在上边说过的installedChunks缓存对象属性中。然后创建一个script标签加载对应的文件，加载超时时间是2分钟。如果script文件加载失败，触发reject（对应源码中：chunk[1](error)，chunk[1]就是上边缓存的数组的第二个元素reject），并将\**installedChunks缓存对象中对应key的值设置为undefined，标识其没有被加载。\****
+
+**4）最后返回promise**
+
+加载失败没有去重新加载，不是网络，肯定不会再重新加载
+
+## 把缺掉的部分补充上来
+
+```js
+ 1     function webpackJsonpCallback(data) {
+ 2         var chunkIds = data[0];
+ 3         var moreModules = data[1];
+ 4 
+ 5         // add "moreModules" to the modules object,
+ 6         // then flag all "chunkIds" as loaded and fire callback
+ 7         var moduleId, chunkId, i = 0, resolves = [];
+ 8         for (; i < chunkIds.length; i++) {
+ 9             chunkId = chunkIds[i];
+10             if (installedChunks[chunkId]) {
+11                 resolves.push(installedChunks[chunkId][0]);
+12             }
+13             installedChunks[chunkId] = 0;
+14         }
+15         for (moduleId in moreModules) {
+16             if (Object.prototype.hasOwnProperty.call(moreModules, moduleId)) {
+17                 modules[moduleId] = moreModules[moduleId];
+18             }
+19         }
+20         if (parentJsonpFunction) parentJsonpFunction(data);
+21 //为啥在这里resolve？ 这个时候保证文件已经加载完成了吗
+22         while (resolves.length) {
+23             resolves.shift()();
+24         }
+25     };
+```
+
+
+
+![image-20201020092335615](imge/image-20201020092335615.png)
+
+为啥是jsonp的形式，是懒加载的时候，当读到import是懒加载的时候，如果全局installedchunks里面发现这个模块没有被加载的时候。就会创建一个promise，并把这个promise的resolve和reject方法暴露到这个[chunks]对象中，也解释了，为啥数组代表懒加载。并创建一个script标签来加载这个模块。当这个script标签被加入到页面中，就开始放松jsonp请求。**请求得到的东西，就是一段代码，这段代码会调用webpackJsonpCallback方法。来resolve这个promise，这个时候就代表模块被加载完成。**
+
+**加载完成之后，后面的promise才会走到then，改模块的代码也就被放在全局的模块对象中，然后再在promise中的then中执行业务代码**
+
+**懒加载的原理彻底搞明白了**
+
+
+
+中间有讲webpack中**webpackJsonpCallback**函数分析
+
+
+
+
+
+直接可以看结果图：
+
+``` js
+11     button.onclick = (
+12         e => {
+13             // 注意：下边的注释不写的话，打包出来的print文件包名就不是print.bundle.js，而是0.bundle.js
+14             import(/* webpackChunkName: "print" */'./print').then(
+15                 module => {
+16                     var print = module.default;
+17                     print();
+18                 }
+19             )
+20         }
+21     );
+```
+
+翻译后
+
+![img](https://img2018.cnblogs.com/blog/1487772/201906/1487772-20190605160528100-224833558.png)
+
+![image-20201019095444178](imge/image-20201019095444178.png)
+
+
+
+**总结一下：webpack全局变量installchunks来标志模块的加载状态，0是已加载，数组正在加载，null是懒加载，undefined是未加载**
+
+**当遇到要懒加载的模块，先判断缓存变量中是否已经有了该模块，有就不再加载，，没有就创建script标签，把他的src定义成对应的文件,(会给他添加script加载失败的毁掉，onerror方法，限时失败2分钟，如果超过了，就把全局对象中installchunks中该模块标志为0未加载)。然后创建promise对象。加载完成之后，会将代码缓存到变量里面，然后触发promise的resolve，并返回一个promise。在then之后的回调拿到模块的函数代码。拿到之后在回调中，执行用户定义的业务代码。**
