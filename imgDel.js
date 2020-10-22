@@ -51,7 +51,7 @@ console.log(list)
 list.forEach(file => {
   var index= file.lastIndexOf(".");
   var ext = file.substr(index + 1);
-  console.log(ext)
+  console.log(ext=='')
   if (ext == 'md' || ext=='') {
     let tmp = file.split('/')
     tmp.pop()
