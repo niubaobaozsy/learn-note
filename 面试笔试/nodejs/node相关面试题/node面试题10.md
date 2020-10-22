@@ -62,7 +62,7 @@ function startDaemon() {
 startDaemon()
 ```
 
-
+没那么简单，这个守护进程要做哪些事情不知道
 
 ## 实现一个简单的命令行交互程序？
 

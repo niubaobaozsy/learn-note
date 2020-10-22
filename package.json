@@ -1,0 +1,27 @@
+{
+  "name": "learn-note",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/niubaobaozsy/learn-note.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/niubaobaozsy/learn-note/issues"
+  },
+  "homepage": "https://github.com/niubaobaozsy/learn-note#readme",
+  "devDependencies": {
+    "husky": "^4.3.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "node ./imgDel.js"
+    }
+  }
+}
