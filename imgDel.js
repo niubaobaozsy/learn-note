@@ -42,6 +42,10 @@ function checkImg(path) {
     })
     // git show
   })
+  execSync('git add .')
+  execSync("git commit -m 'del-img' ")
+  execSync('git pull')
+  execSync('HUSKY_SKIP_HOOKS=1 git push')
 
 }
 let a = execSync('git diff --name-only HEAD~ HEAD')
