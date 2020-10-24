@@ -34,7 +34,23 @@
       console.log(arr);
     }
     arg2arr(1, 2, 3);
-
+    // promise.all,就是这样实现就是容易忘记了api本身怎么调，以后工作中可以理解+记忆，省去翻api的时间
+    function myPromiseAll(arr) {
+      // resolve,reject这个是promise传入的，promise是个可以传入一个处理函数的类
+      return new Promise((resolve, reject) => {
+        let result = []
+        arr.forEach(item => {
+          item.then((value) => {
+            result.push(value)
+            if (result.length == arr.length) {
+              resolve(result)
+            }
+          }, (err) => {
+            reject(err)
+          })
+        })
+      })
+    }
   </script>
 
 </body>

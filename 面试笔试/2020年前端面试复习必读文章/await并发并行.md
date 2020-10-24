@@ -157,3 +157,17 @@ function spawn(genF) {
   });
 }
 ```
+
+---
+
+## promise原理
+
+**Promise里的关键是要保证，then方法传入的参数 onFulfilled 和 onRejected，必须在then方法被调用的那一轮事件循环之后的新执行栈中执行。**
+
+可以结合`例1`中的代码来看，首先`new Promise`时，传给`promise`的函数发送异步请求，接着调用`promise`对象的`then`属性，注册请求成功的回调函数，然后当异步请求发送成功时，调用`resolve(results.id)`方法, 该方法执行`then`方法注册的回调数组。
+
+
+
+---
+
+## await和async和promise的关系

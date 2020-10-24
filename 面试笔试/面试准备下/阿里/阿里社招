@@ -1,0 +1,1500 @@
+作者：Hugh
+链接：https://www.nowcoder.com/discuss/325197
+来源：牛客网
+
+一般阿里社招都是招3-5年的P6+高级工程师，但在某boss上有个阿里的技术专家私聊了我要我简历，我说我只有一年经历，但是这boss说，没关系，他喜欢基础好的，让我可以试一试，于是我也抱着试一试的心态发了简历。当初自己一年经验也没有想过有这个面试机会。 
+ 简历发过去之后，boss就给我打了电话，让我简单的介绍一下自己，我就噼里啪啦说了一些，还说了一些题外话。然后boss就开始问我问题。 
+
+ 由于面了四轮，所以最开始的面试记忆有点模糊了。 
+
+###  电话面试 
+
+ 1.说一下你了解CSS盒模型。 
+
+> **当浏览器对一个HTML文档进行布局的时候，会把每一个元素都渲染成一个矩形的盒子，盒模型就是对这些元素的形状进行一个抽象。**
+>
+> 盒模型的组成部分是由四个部分组成：content(内容区域) padding(内边距) border(边框区域) margin(外边距区域)
+>
+> ```text
+> box-sizing: border-box(标准盒模型) content-box（IE盒模型）
+> ```
+>
+> 在 标准盒子模型中，width 和 height 指的是内容区域的宽度和高度。增加内边距、边框和外边距不会影响内容区域的尺寸，但是会增加元素框的总尺寸。
+>
+> IE盒子模型中，width 和 height 指的是内容区域+border+padding的宽度和高度。
+>
+> （4）JS如何设置、获取盒模型对应的宽和高？这一步，已经有很多人答不上来了。 
+>
+> 缺点：通过这种方式，只能获取行内样式，不能获取内嵌的样式和外链的样式。
+>
+> 方式二（通用型）element.style.width/height;
+>
+> // window.getComputedStyle(element).width/height;
+>
+> `**Element.getBoundingClientRect()**` 方法返回元素的大小及其相对于视口的位置。同一个并且有width属性
+>
+> ```js
+>     //   let tmp = dom.getBoundingClientRect()
+>     //   mask.style.width = (tmp.width)+'px'
+>     //   mask.style.height = (tmp.height)+'px'
+>     //   mask.style.top = tmp.top+'px'
+>     //   mask.style.left = tmp.left+'px'
+> ```
+>
+> （5）实例题：根据盒模型解释边距重叠。前四个方面是逐渐递增，第五个方面，却鲜有人知。
+>
+> 边距重叠什么是边距重叠呢?
+>
+> 边界重叠是指两个或多个盒子(可能相邻也可能嵌套)的相邻边界(其间没有任何非空内容、补白、边框)重合在一起而形成一个单一边界。
+>
+> ### 空元素的边界重叠
+>
+> 假设有一个空元素，它有外边距，但是没有边框或填充。在这种情况下，上外边距与下外边距就碰到了一起，它们会发生合并：
+>
+> 
+>
+> ![img](https://user-gold-cdn.xitu.io/2019/3/11/1696b9adbb8950e3?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+>
+> 
+>
+> （6）BFC（边距重叠解决方案）或IFC。如果能回答第五条，就会引出第六条。BFC是面试频率较高的。
+>
+> 解决上述问题的其中一个办法就是创建 BFC。BFC 的全称为 `Block Formatting Context`，即块级格式化上下文。
+>
+> - 处于同一个 BFC 中的元素相互影响，可能会发生 margin collapse；
+> - BFC 在页面上是一个独立的容器，容器里面的子元素不会影响到外面的元素，反之亦然；
+> - 计算 BFC 的高度时，考虑 BFC 所包含的所有元素，包括浮动元素也参与计算；
+> - 浮动盒的区域不会叠加到 BFC 上；
+
+
+
+ 2.说一下box-sizing的应用场景。 
+
+我们需要添加一个box-sizing：border-box在上盒子的属性中，这时上盒子在拥有5px的border同时不会超出大盒子的边距
+
+![img](https://upload-images.jianshu.io/upload_images/3080615-a12a8bb1cb7afb64.png?imageMogr2/auto-orient/strip|imageView2/2/w/1200/format/webp)
+
+在浏览器的默认计算方式下，块状元素的宽度计算方式为：左右border+左右padding+左右marging+内容宽度width。如果我们不想要浏览器按照这种计算方式计算宽度，则要用到CSS3中的box-sizing:border-box，固定了盒子的尺寸，无论怎么调整边距都不会改变盒子的大小，不会造成布局错位。
+
+
+
+ 3.说一下你了解的弹性FLEX布局. 
+
+使用flex布局的容器（flex container），它内部的元素自动成为flex项目（flex item）。（块级元素和行内元素都可以设置）
+
+**flex-direction**:**row(主轴为水平方向)/column(主轴为竖直方向)/row-reverse(从右到左水平方向)/column-reverse(从下至上竖直方向)**
+
+**flex-wrap:nowrap(自动缩小项目，不换行****)/wrap(换行，且第一行在上方)/wrap-reverse(换行**，**第一行在下面****)**
+
+**flex-flow:row nowrap/row wrap/column wrap-reverse...，**默认值为**row nowrap**，即横向排列 不换行。flex-flow是flex-direction和flex-wrap的简写形式
+
+**justify-content:flex-start(左对齐)/flex-end(右对齐)/center(居中对齐)/space- between(两端对齐)/space-around(沿轴线均匀分布)**
+
+**align-items:flex-start(顶端对齐****)/flex-end(底部对齐****)/center(竖直方向上居中对齐****)/baseline(基线对齐****)/stretch(当item未设置高度时，item将和容器等高对齐****)**
+
+ 4.说一下一个未知宽高元素怎么上下左右垂直居中。 
+
+```js
+子父盒子开启绝对定位
+子盒子{
+    position: absolute;
+    left:50%;
+    top:50%;
+    transform: translate3d(-50%,-50% ,0);
+}
+flex
+justify-content center
+align-items:center
+
+```
+
+ 5.说一下原型链，对象，构造函数之间的一些联系。 
+
+> 构造函数是用来创建对象的，然后每个构造函数都有一个prototype原型对象，通过new创建的对象，会有一个隐式原型对象，指向创建他的构造函数的原型对象。原型对象也是个对象他也有他的原型对象，形成了原型链。
+>
+> 然后就是特殊的原型链，就是那张图，复习下，背下
+>
+> ```js
+> function Foo() 
+> 
+> Foo.__proto__ == Function.prototype
+> 
+> Foo.prototype.__proto__ == Object.prototype
+> Object.__proto__==Function.prototype
+> 
+> Object.prototype.__proto__ ==null （对象的原型是谁创建的，是null）
+> 
+> Function.prototype.__proto ==Object.prototype
+> Function.__proto__ = Function.prototype(函数是函数创建的)
+> ```
+
+**对象原型（ __ proto __ ）**和**构造函数（prototype）原型对象**里面都有一个属性 **constructor** 属性 ，constructor 我们称为构造函数，因为它指回构造函数本身。
+
+
+```js
+function _new () {
+  // arguments实际上是一个类数组对象，需要转成数组
+  let args = [].slice.call(arguments)
+  // 第一个参数是构造函数，把它拿出来
+  let constructor = args.shift()
+  // Object.create()返回一个新对象，这个对象的构造函数的原型指向Foo
+  let context = Object.create(constructor.prototype)
+  // 在返回的context对象环境中执行构造函数，为新的context添加属性
+  let result = constructor.apply(context, args)
+  // 如果Foo显示的返回了一个对象，那么应该直接返回这个对象，而不用理会以上所有的操作，一般不会发生这种情况，但是new的实现的确是这样的逻辑
+  // 这里之所以判断类型是否为object还要添加 != null 的判断，是因为null的typeof结果也是‘object’
+  // 不同的对象在底层都表示为二进制，在Javascript中二进制前三位都为0的话会被判断为Object类型，null的二进制表示全为0，自然前三位也是0，所以执行typeof时会返回"object"
+  // 防止构造函数有返回对象
+  return (typeof result === 'object' && result != null) ? result : context
+}
+ 
+function Foo (name) {
+  this.name = name
+}
+ 
+Foo.prototype.getName = function() {
+  console.log(this.name)
+}
+ 
+var a = _new(Foo, 'tom')
+a.getName()
+ 
+复制代码
+```
+
+实际上new操作符， 就是通过Object.ctreate()创建一个新的对象，这个对象的原型指向构造函数，并且在新建对象的上下文环境中执行构造函数，初始化新建对象的属性
+
+**简单来说就是，每一个对象都有一个原型，每一个原型又是一个对象，所以原型又有自己的原型，这样一环扣一环形成一条链，就叫原型链。**
+
+**1.9 JavaScript** **的成员查找机制(规则)**
+
+  ① 当访问一个对象的属性（包括方法）时，首先查找这个**对象自身**有没有该属性。
+
+  ② 如果没有就查找它的原型（也就是 **__**proto__ 指向的 **prototype 原型对象**）。
+
+  ③ 如果还没有就查找原型对象的原型（**Object的原型对象**）。
+
+  ④ 依此类推一直找到 Object 为止（**null**）。
+
+  ⑤ **__**proto__ 对象原型的意义就在于为对象成员查找机制提供一个方向，或者说一条路线。
+
+
+
+ 6.DOM事件的绑定的几种方式 
+
+addEventListener()是标准的绑定事件监听函数的方法可以多个，但是onclick这种只能有一个
+
+一个在dom中直接绑定，一个在js代码中绑定，js中有两种，一种是onclick一种是addeventListener
+
+ 7.说一下你[项目]()中用到的技术栈，以及觉得得意和出色的点，以及让你头疼的点，怎么解决的。
+
+1，优化了webpack，做了一些自动化打包工具，规范的代码，代码分层，字典统一，分模块分层，写过一些公用组件
+
+写了一个通用的业务模板
+
+单据有固定流程，单据信息和底部流程操作是一样，中间内容不一样
+
+然后就把提单当成一个生命周期，利用vue-router，来确定不同的router对应的那些内容用那些组件，外层有个公用的模板父组件。在这个父组件里面，然后在每个单据的流程中，通过ref调用子组件中的钩子，来做一些每个单据特殊的工作，对于异步获取，采用async await来实现。
+
+这样开发单据内容时，只需要考虑每个单据流程中要做的特殊操作，和每个单据特殊的内容。
+
+全局的组件，还有全局的公用函数，
+
+ 8.有没有了解http2.0,websocket,https，说一下你的理解以及你所了解的特性。 
+
+https ok不用复习
+
+websocket  复习下
+
+>  Connection: Upgrade
+>  Upgrade: websocket
+>  Sec-WebSocket-Protocol: chat, superchat
+>  Sec-WebSocket-Version: 13
+>  Sec-WebSocket-key: XXXX
+>  Sec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk=
+>
+> key是浏览器自动生成，然后服务器对这个进行编码加密，保持心跳，隔一段时间进行确定是否在线
+
+http2.0 复习下
+
+> ## HTTP2相对于HTTP1.x有什么优势和特点？C:\learn-note\面试笔试\计算机网路&&浏览器\http协议.md
+>
+> 1。不再是文本传输，而是二进制传输
+>
+> 2，进行头部压缩，
+>
+> 我再用通俗的语言解释下，头部压缩需要在支持 HTTP/2 的浏览器和服务端之间：
+>
+> - 维护一份相同的静态字典（Static Table），包含常见的头部名称，以及特别常见的头部名称与值的组合；
+> - 维护一份相同的动态字典（Dynamic Table），可以动态地添加内容；
+> - 支持基于静态哈夫曼码表的哈夫曼编码（Huffman Coding）；
+>
+> 编码+只发送动态差异头部信息
+>
+> 3，服务器推送
+>
+> 4，多路复用
+>
+> - 同域名下所有通信都在单个连接上完成。
+> - 单个连接可以承载任意数量的双向数据流。
+> - 数据流以消息的形式发送，而消息又由一个或多个帧组成，多个帧之间可以乱序发送，因为根据帧首部的流标识可以重新组装
+>
+> 同一个域名，就在一个http2连接上进行，然后可以同事发多个数据流，通过流标识组装，一个请求响应是一个流
+
+ 第一轮电面大约面了50分钟，就记起来这么多，还有一些细节问题可能淡忘了，总体来说，面的都是以基础为主，然后boss说把我简历推荐给内部，进行正式的社招流程。 
+
+
+
+###  一轮技术面 
+
+ 这次就直接省略自我介绍了。 
+
+ 1.webpack的入口文件怎么配置，多个入口怎么分割啥的，我也没太听清楚。
+
+entry，配置多个入口相，代码分割可以用optimization.splitChunks ，懒加载
+
+> ```
+> splitChunks: {
+>     chunks: "all",
+>     cacheGroups: {
+>       vendors: {
+>         test: /[\\/]node_modules[\\/]/,  // 匹配node_modules目录下的文件
+>         priority: -10   // 优先级配置项
+>       },
+>       default: {
+>         minChunks: 2,
+>         priority: -20,   // 优先级配置项
+>         reuseExistingChunk: true
+>       }
+>     }
+>   }
+> 复制代码
+> ```
+>
+> 在默认设置中，
+>
+> - 会将 node_mudules 文件夹中的模块打包进一个叫 vendors的bundle中，
+> - 所有引用超过两次的模块分配到 default bundle 中 更可以通过 priority 来设置优先级。
+>
+> 将一些重复使用的包达成一个单独的文件中，优化打包体积
+>
+> ![img](https://user-gold-cdn.xitu.io/2018/7/31/164efb0fedb0bef7?w=2148&h=1130&f=jpeg&s=269718)
+>
+> webpack，默认的分包配置
+>
+> - 新的 chunk 是否被共享或者是来自 node_modules 的模块
+> - 新的 chunk 体积在压缩之前是否大于 30kb
+> - 按需加载 chunk 的并发请求数量小于等于 5 个
+> - 页面初始加载时的并发请求数量小于等于 3 个
+
+ 2.我看到你的[项目]()用到了Babel的一个插件：transform-runtime以及stage-2，你说一下他们的作用。
+
+> babel 在转译的过程中，对 syntax 的处理可能会使用到 helper 函数，对 api 的处理会引入 polyfill。
+>
+> 默认情况下，babel 在每个需要使用 helper 的地方都会定义一个 helper，导致最终的产物里有大量重复的 helper；引入 polyfill 时会直接修改全局变量及其原型，造成原型污染。
+>
+> @babel/plugin-transform-runtime 的作用是将 helper 和 polyfill 都改为从一个统一的地方引入，并且引入的对象和全局变量是完全隔离的，这样解决了上面的两个问题。
+
+> babel不太会啊
+>
+> ```
+> {
+>     "presets": [
+>       "es2015",
+>       "react",
+>       "stage-0"
+>     ],
+>     "plugins": []
+>   }
+> ```
+>
+> 我们现在来说明下这个配置文件是什么意思。首先，这个配置文件是针对babel 6的。Babel 6做了一系列模块化，不像Babel 5一样把所有的内容都加载。比如需要编译ES6，我们需要设置presets为"es2015"，也就是预先加载es6编译的相关模块，如果需要编译[js](http://www.fly63.com/tag/js)x，需要预先加载"[react](http://www.fly63.com/tag/react)"这个模块。那问题来了，这个"stage-0"又代表什么呢？ 有了"react-0"，是否又有诸如"stage-1", "stage-2"等等呢？
+>
+> stage-0包含了所有的stage123
+>
+> 
+
+ **3.我看到你的webpack配置用到webpack.optimize.UglifyJsPlugin这个插件，有没有觉得压缩速度很慢，有什么办法提升速度。** 
+
+UglifyJs 是一个js 解释器、最小化器、压缩器、美化器工具集（parser, minifier, compressor or beautifier toolkit）。
+
+由于 JavaScript 是单线程模型，要想发挥多核 CPU 的能力，只能通过多进程去实现，而无法通过多线程实现。所以 happypack 应该是让 webapck 开启新的子进程，子进程处理完成之后把结果汇总到主进程中。
+
+1、因webpack提供的UglifyJS插件采用单线程压缩，速度很慢。所以将此插件替换为webpack-parallel-uglify-plugin插件，此插件可以并行运行UglifyJS插件，可有效减少构建时间。
+
+**这个插件与每个可用CPU的一个线程并行运行uglify。这可能会导致显著减少构建时间，因为最小化是CPU密集型的。**
+
+> **是替代uglify，可以多线程实现uglify。对js进行压缩shaking，优化**
+
+2、happypack，因nodejs是单线程执行编译，而happypack是启动node的多线程进行构建，进而提高构建速度
+
+> 而 Happypack 的作用就是将文件解析任务分解成多个子进程并发执行。子进程处理完任务后再将结果发送给主进程。所以可以大大提升 Webpack 的项目构件速度
+>
+> **Happypack 只是作用在 loader 上，使用多个进程同时对文件进行编译。**(多进程翻译文件子进程处理完任务后再将结果发送给主进程)  thread-loader 这两个是一样
+
+看看我用的是那些插件来进行多进程，缓存打包
+
+> hard-source-webpack-plugin 
+>
+> `HardSourceWebpackPlugin` 为模块提供中间缓存，缓存默认的存放路径是: `node_modules/.cache/hard-source`。
+>
+> 配置 `hard-source-webpack-plugin`，首次构建时间没有太大变化，但是第二次开始，构建时间大约可以节约 80%。
+
+现在研究这个
+
+这个要单独研究下： 细致研究下
+
+>  https://juejin.im/post/6844904093463347208#heading-17
+>
+> 这篇文章讲的很细致，很全，最好看看对应的链接文章
+
+ 4.简历上看见你了解http协议。说一下200和304的理解和区别 
+
+200是强制缓存的结构，304是协商缓存的结构
+
+ 5.DOM事件中target（触发时间的元素）和currentTarget（监听这个事件的元素）的区别 
+
+这个背一下，想个办法如何背这个
+
+ 6.说一下你平时怎么解决跨域的。以及后续JSONP的原理和实现以及cors怎么设置。
+
+把cors设置放这里背一下
+
+
+cors允许跨域
+
+| 请求头                         | 说明                                                         |
+| :----------------------------- | :----------------------------------------------------------- |
+| Origin                         | 表明预检请求或实际请求的源站 URI,不管是否跨域ORIGIN 字段总是被发送 |
+| Access-Control-Request-Method  | 将实际请求所使用的 HTTP 方法告诉服务器                       |
+| Access-Control-Request-Headers | 将实际请求所携带的首部字段告诉服务器                         |
+
+| 响应头                           | 说明                                                         |
+| :------------------------------- | :----------------------------------------------------------- |
+| Access-Control-Allow-Origin      | 指定允许访问该资源的外域 URI，对于携带身份凭证的请求不可使用通配符* |
+| Access-Control-Expose-Headers    | 指定 XMLHttpRequest的getResponseHeader 可以访问的响应头      |
+| Access-Control-Max-Age           | 指定 preflight 请求的结果能够被缓存多久                      |
+| Access-Control-Allow-Credentials | 是否允许浏览器读取 response 的内容； 当用在 preflight 预检请求的响应中时，指定实际的请求是否可使用 credentials |
+| Access-Control-Allow-Methods     | 指明实际请求所允许使用的 HTTP 方法                           |
+| Access-Control-Allow-Headers     | 指明实际请求中允许携带的首部字段                             |
+
+简单请求
+
+```http
+GET /cors HTTP/1.1
+Origin: http://api.bob.com // 简单请求里面加这个，让服务器判断是否允许跨域
+Host: api.alice.com
+Accept-Language: en-US
+Connection: keep-alive
+User-Agent: Mozilla/5.0...
+```
+
+```http
+Access-Control-Allow-Origin: http://api.bob.com
+Access-Control-Allow-Credentials: true
+Access-Control-Expose-Headers: FooBar
+Content-Type: text/html; charset=utf-8
+```
+
+复杂请求
+
+```http
+OPTIONS /cors HTTP/1.1
+Origin: http://api.bob.com
+Access-Control-Request-Method: PUT
+Access-Control-Request-Headers: X-Custom-Header
+Host: api.alice.com
+Accept-Language: en-US
+Connection: keep-alive
+User-Agent: Mozilla/5.0...
+```
+
+```http
+HTTP/1.1 200 OK
+Date: Mon, 01 Dec 2008 01:15:39 GMT
+Server: Apache/2.0.61 (Unix)
+Access-Control-Allow-Origin: http://api.bob.com
+Access-Control-Allow-Methods: GET, POST, PUT
+Access-Control-Allow-Headers: X-Custom-Header
+Content-Type: text/html; charset=utf-8
+Content-Encoding: gzip
+Content-Length: 0
+Keep-Alive: timeout=2, max=100
+Connection: Keep-Alive
+Content-Type: text/plain
+```
+
+ 7.说一下深拷贝的实现原理。 
+
+背一下
+
+1，遍历数组，或者对象，如果是基础类型，直接复制，如果是特殊格式就，做相应的处理
+
+2，对象就递归调用拷贝函数，如果是数组就一个个遍历用[]装，
+
+3，用map来判断是否有循环应用问题，不做缓存，会循环调用，会死循环
+
+```js
+// 木易杨
+function cloneDeep4(source, hash = new WeakMap()) {
+
+    if (!isObject(source)) return source; 
+    if (hash.has(source)) return hash.get(source); 
+      
+    let target = Array.isArray(source) ? [] : {};
+    hash.set(source, target);
+    
+    // ============= 新增代码
+    let symKeys = Object.getOwnPropertySymbols(source); // 查找
+    if (symKeys.length) { // 查找成功	
+        symKeys.forEach(symKey => {
+            if (isObject(source[symKey])) {
+                target[symKey] = cloneDeep4(source[symKey], hash); 
+            } else {
+                target[symKey] = source[symKey];
+            }    
+        });
+    }
+    // =============
+    for(let key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+            if (isObject(source[key])) {
+                target[key] = cloneDeep4(source[key], hash); 
+            } else {
+                target[key] = source[key];
+            }
+        }
+    }
+    return target;
+}
+```
+
+
+
+ 8.说一下[项目]()中觉得可以改进的地方以及做的很优秀的地方？
+
+写就是
+
+ 最后问了有什么需要问的地方，面试到这里基本就结束了，大约面了一个多钟头，还是蛮累的。总体来说，回答的广度和深度以及细节都还算OK，觉得这轮面试基本没什么悬念。 
+
+
+
+-----
+
+###  二轮技术面 
+
+ 过了几天，接到阿里另一个面试官的电话，上一轮面试通过了，这次是二轮技术面，说估计一个钟头。这次依然跳过自我介绍之类的，直奔主题。 
+
+ 1.有没有自己写过webpack的loader,他的原理以及啥的，记得也不太清楚。
+
+> 整理背一下
+
+ 2.有没有去研究webpack的一些原理和机制，怎么实现的。 
+
+> 明天统一复习
+
+ 3.babel把ES6转成ES5或者ES3之类的原理是什么，有没有去研究。 
+
+> 看babel那篇文章
+
+ 4.git大型[项目]()的团队合作，以及持续集成啥的。
+
+> 大范围题目，git rebase是什么，持续集成是什么，永辉项目怎么实践
+
+ 5.什么是函数柯里化？以及说一下JS的API有哪些应用到了函数柯里化的实现？ 
+
+> bind
+>
+> 柯里化是一种将使用多个参数的一个函数转换成一系列使用一个参数的函数的技术。
+>
+> 要么利用闭包，利用立即执行函数，利用参数判断是否计算
+>
+> 1，参数复用，2 ，提前返回  3，延时计算
+
+ 6.ES6的箭头函数this问题，以及拓展运算符。 
+
+ 7.JS模块化Commonjs,UMD,CMD规范的了解，以及ES6的模块化跟其他几种的区别，以及出现的意义。
+
+> 重点突破
+
+ 8.说一下Vue实现双向数据绑定的原理，以及vue.js和react.js异同点，如果让你选框架，你怎么怎么权衡这两个框架，分析一下。 
+
+
+
+ 9.我看你也写博客，说一下草稿的交互细节以及实现原理。 
+
+
+
+ 最后面试官问我有什么想问的吗，面试到这里基本就结束了，差不多面了一个小时。 
+
+-----
+
+###  三轮技术面 
+
+ 上一轮发挥感觉没前两轮发挥好，所以还是有点不自信的，没想到第三天后，就来电话了，通知我去阿里园区面试。 
+
+ 走到半路了，面试官给我打电话了，说约定的是两点，我一下子就懵逼了，短信只有一个游客访问ID，并没有通知我具体时间，反正不管谁的疏忽，我肯定是要迟到了。面试迟到了，印象肯定不好，加上满头大汗的形象也不太好，这面是估计要GG了，一进来就直奔主题，这次是两个大Boss面试我。 
+
+####  第一个面试官 
+
+ 1.先自我介绍一下，说一下[项目]()的技术栈，以及[项目]()中遇到的一些问题啥的。
+
+ 2.一个业务场景，面对产品不断迭代，以及需求的变动该怎么应对，具体技术方案实现。 
+
+ **具体业务场景，我就不一一描述，Boss在白板上画了一个大致的模块图，然后做了一些需求描述
+ 然后需求一层一层的改变，然后往下挖，主要是考察应对产品能力，以及对代码的可维护性和可拓展性这些考察，开放性问题，我觉得还考察一些沟通交流方面的能力，因为有些地方面试官故意说得很含糊，反正就是一个综合能力，以及对产品的理解，中间谈到怎么实现，也问到了一些具体的点，记得问到的有一下几个。** 
+
+ ① 怎么获取一个元素到视图顶部的距离。 
+
+ ② getBoundingClientRect获取的top和offsetTop获取的top区别 
+
+那么到这，**我们知道了getBoundingClientRect参照是视窗顶端，而JQ的offset().top参照的是文档**，两者参照对象不同。
+
+当监听的是window的滚动条时，元素的getBoundingClientRect().top会原来越小，而offset().top一直不变。
+
+上面是jq
+
+js的
+
+> ## offsetParent
+>
+> dom1.offsetParent: 表示最近的祖先定位元素。定位元素指的是position设置成relative、absolute、fixed的元素。
+>
+> ## offsetTop
+>
+> dom1.offsetTop: 表示dom1距离dom1的offsetParent元素的顶部的距离。
+>
+> ## scrollHeight
+>
+> dom1.scrollHeight: 表示dom1内容的高度，不是dom1元素的高度。。。
+>
+> ## scrollTop
+>
+> dom1.scrollTop: 表示dom1顶部由于滚动条卷起来的高度（dom1内容上方不显示的高度）。
+>
+> ## clientHeight
+>
+> dom1.clientHeight: 表示dom1的height+paddingTop+paddingBottom（标准盒子下height不包括padding和boder）
+>
+> ## clientLeft
+>
+> dom1.clientLeft: 表示指定元素客户区左部与整个元素左部之间的距离，只读属性。（既边框border的宽度，客户区高度=height+padding）。
+
+ ③事件委托 
+
+####  第二个面试官 
+
+ 1.业务场景：**比如说[百度]()的一个服务不想让阿里使用，如果识别到是阿里的请求，然后跳转到404或者拒绝服务之类的？**
+ 2.[二分查找]()的时间复杂度怎么求，是多少
+
+log2n
+
+ 3.XSS是什么，攻击原理，怎么预防。 
+
+>  跨站脚本攻击
+>
+> xss
+>
+> 就是让客户端执行攻击的脚本
+>
+> 反射，dom，都是让用户点击链接执行脚本（伪造成正常网站），反射型，是用户点了之后执行脚本，，dom型，是通过对dom的操作进行攻击，添加一个img标签`<img src="11" onerror="console.log(window.localStorage)" />`
+>
+> 恶意攻击者往Web页面里插入恶意javaScript代码，当用户浏览该页之时，嵌入其中Web里面的javaScript代码会被执行，从而达到恶意攻击用户的目的
+>
+> `HttpOnly`
+>
+> 检查输入输出
+>
+> csp
+>
+> 1.只允许本站资源
+>
+> ```
+> Content-Security-Policy： default-src ‘self’
+> ```
+>
+> 2.允许本站的资源以及任意位置的图片以及 [https://segmentfault.com](https://segmentfault.com/) 下的脚本。
+>
+> ```
+> Content-Security-Policy： default-src ‘self’; img-src *;
+> script-src https://segmentfault.com
+> ```
+
+ 4.线性顺序存储结构和链式存储结构有什么区别？以及优缺点。 
+
+线性
+
+插入数据和删除数据效率低 并且不利于扩展
+
+链式
+
+增加数据和删除数据很容易
+
+查找数据时效率低
+
+数组的优点
+
+- 随机访问性强
+- 查找速度快
+
+数组的缺点
+
+- 插入和删除效率低
+- 可能浪费内存
+- 内存空间要求高，必须有足够的连续内存空间。
+- 数组大小固定，不能动态拓展
+
+链表的优点
+
+- 插入删除速度快
+- 内存利用率高，不会浪费内存
+- 大小没有固定，拓展很灵活。
+
+链表的缺点
+
+- 不能随机查找，必须从第一个开始遍历，查找效率低
+
+ 5.**分析一下移动端日历，PC端日历以及桌面日历的一些不同和需要注意的地方**。 
+
+
+
+ 6.白板写代码，用最简洁的代码实现数组去重。 
+
+ 7.怎么实现草稿，多终端同步，以及冲突问题？ 
+
+> 场景题
+
+ 最后说目前的工作经验达不到P6水平，业务类稍弱，阿里现在社招只要P6的高级工程师，但是可以以第二梯队进去，就是以第三方签署就业协议，一年后可以转正，就是俗称的外包。多少还是有点遗憾，面了四轮面了个外包，最后放弃这份工作了。
+
+(28)
+
+----
+
+作者：希尔的SE笔记
+链接：https://www.nowcoder.com/discuss/327928
+来源：牛客网
+
+
+
+一面，电话面 
+
+1.  简单自我介绍, 做过哪些[项目](), 使用哪些技术栈 ? 
+
+1.  如何看待[前端]()框架选型 ? 
+
+> 1、保证产品质量
+>
+> （1）功能稳健：网页不白屏，不错位，不卡死；操作正常；数据精准。
+>
+> （2）体验优秀：加载体验，交互体验，视觉体验，无障碍访问。
+>
+> 2、降低人力成本
+>
+> （1）降低前期开发成本；
+>
+> （2）降低后期维护成本。
+>
+> 这个问题不是很擅长，要多多理解学习，当做专题
+
+1.  vue的如何实现双向绑定的 ? 
+
+1.  react virsualDOM 是什么? 如何实现? 说一下diff[算法]() ? 
+
+1.  工作中最出色的点, 和你最头疼的问题 如何解决的 ? 
+2.  平时如何学习, 最近接触了解了哪些新的知识 ? 
+
+ 二面 
+
+1.  简单自我介绍, 介绍一下你的[项目](), 技术栈 ? 
+2.  SSR 和 [客户端]()渲染有什么区别 , vue是如何实现绑定事件的 ?
+
+> 1
+>
+> vue事件机制原理
+>
+> https://juejin.im/post/6844903919290679304看这个
+
+1.  React Diff [算法]() ? 
+2.  简述从网页输入url到网页展示的过程发生了哪些事情 ? 
+3.  浏览器事件有哪些过程? 为什么一般在冒泡阶段, 而不是在捕获阶段注册监听? addEventListener 参数分别是什么 ? 
+
+> “DOM2级事件”规定的事件流包括三个阶段: 事件捕获阶段、处于目标阶段和事件冒泡阶段。从最不具体的元素(document) 捕获到最具体的元素，再从最具体的元素冒泡到最不具体的元素。最后在冒泡阶段对事件进行相应。
+>
+> 为事件代理(委托)提供条件，即事件代理依赖事件冒泡。
+>
+> 1. 取消事件冒泡 `event.stopPropagation()`
+> 2. 取消默认行为 `event.preventDefault()`
+> 3. 事件代理的原理：event 有个 targe 属性，永远指向最具体的元素
+>
+> 待定
+
+
+
+1.  webpack的原理, loader 和 plugin 是干什么的? 有自己手写过么 ? 
+
+1.  http报文头部有哪些字段? 有什么意义 ? 
+2.  主流框架的数据单向/双向绑定实现原理 ? 
+3.  简述转行经历, 如何学习 ?
+4.  简述公司node架构中容灾的实现 ? 
+
+> node容灾，大范围问题
+
+ 三面 
+
+1.  和一面前3问基本一致,简述[项目](),React vue区别 virsualDOM实现 
+
+> 大范围
+
+1.  移动端如何优化首页白屏时间过长 ? 
+
+> 大范围
+
+1.  js浮点数运算不精确 如何解决? 
+
+> 转成字符串计算，转成整数计算，用函数判断误差在不在允许范围内
+
+1.  静态文件的浏览器缓存如何实？ 
+
+> 1,html不缓存，然后里面js和css进行添加hash，并设置强缓存，这样只有发版有更新才会去请求js和css还有图片
+>
+> 2，或者给静态文件，添加限时的强缓存，并且用协商tag的方式来判断缓存是否失效
+
+1.  ES6 generator函数简述
+
+> Generator 函数是协程在 ES6 的实现，最大特点就是可以交出函数的执行权（即暂停执行）。
+>
+> > ```javascript
+> > function* gen(x){
+> >   var y = yield x + 2;
+> >   return y;
+> > }
+> > ```
+>
+> ```javascript
+> var g = gen(1);
+> g.next() // { value: 3, done: false }
+> g.next() // { value: undefined, done: true }
+> ```
+>
+> 调用 Generator 函数，会返回一个内部指针（即[遍历器](http://es6.ruanyifeng.com/#docs/iterator) ）g 。这是 Generator 函数不同于普通函数的另一个地方，即执行它不会返回结果，返回的是指针对象。调用指针 g 的 next 方法，会移动内部指针（即执行异步任务的第一段），指向第一个遇到的 yield 语句，上例是执行到 x + 2 为止。
+>
+> 换言之，next 方法的作用是分阶段执行 Generator 函数。每次调用 next 方法，会返回一个对象，表示当前阶段的信息（ value 属性和 done 属性）。value 属性是 yield 语句后面表达式的值，表示当前阶段的值；done 属性是一个布尔值，表示 Generator 函数是否执行完毕，即是否还有下一个阶段。
+>
+> 返回一个指针，可以执行next方法，next方法的返回信息，value和done
+>
+> 如何封装一个自执行的generator
+>
+> ```js
+> var fetch = require('node-fetch');
+> 
+> function* gen() {
+>     var r1 = yield fetch('https://api.github.com/users/github');
+>     var json1 = yield r1.json();
+>     var r2 = yield fetch('https://api.github.com/users/github/followers');
+>     var json2 = yield r2.json();
+>     var r3 = yield fetch('https://api.github.com/users/github/repos');
+>     var json3 = yield r3.json();
+> 
+>     console.log([json1.bio, json2[0].login, json3[0].full_name].join('\n'));
+> }
+> 
+> function run(gen) {
+>     var g = gen();
+> 
+>     function next(data) {
+>         var result = g.next(data);
+> 
+>         if (result.done) return;
+> 
+>         result.value.then(function(data) {
+>             next(data);
+>         });
+> 
+>     }
+> 
+>     next();
+> }
+> 
+> run(gen);
+> 复制代码只要 yield 后跟着一个 Promise 对象，我们就可以利用这个 run 函数将 Generator 函数自动执行。
+> ```
+>
+> 
+
+1.  new String('a') 和 'a' 是一样的么? 
+
+> 1.第一种和第二种方法定义出来的是原始资料类型 并储存于栈中,  并向包装对象(new ..())借来方法和属性. 2.第三种是 包装对象， 栈中储存堆指针， 堆中储存内容。
+
+1.  TCP三次握手的过程, get post请求的区别 ? 
+
+> 首先get和post在本质上都是tcp链接，但由于http协议和浏览器或者服务器的限制，从而使它们在应用过程中产生了差别，但是它们中还有一个较大的区别：get在请求时发送一个数据包，会将header和data一起发送过去，而post会产生两个数据包先发送header，服务器返回100，然后在发送data，服务器返回200
+>
+> 不ok
+
+ 四面 
+
+1.  公司的[前端]()工程化实践 
+
+> 大范围题目
+
+1.  DOM基础知识,添加元素,删除元素等等... 
+
+appendChild（） removeChild() insertBefore（new，old）
+
+1.  移动端优化方式? 离线包是如何实现的? 
+2.  最后聊了一下[项目](),聊了一下目前公司 
+
+16+8+4=28
+
+
+
+下班前至少看到这里
+
+---
+
+作者：周游
+链接：https://www.nowcoder.com/discuss/346789
+来源：牛客网
+
+
+
+#### 电话面 
+
+ 自我介绍, [项目](), 技术栈 ?
+ 如何看待[前端]()框架选型 ?
+ vue如何实现双向绑定 ？ 
+ react 虚拟DOM 是什么? 如何实现? diff[算法]() ?
+ 工作中最出色的点, 和你最头疼的问题 
+ 平时如何学习, 最近接触了哪些新的知识 ? 
+
+####  技术一面 
+
+ react和vue的比较 ? 
+ React Diff [算法]() ?
+ 观察者模式实现 ? 
+
+> 没错，我们平时对 `DOM` 的事件绑定就是一个非常典型的 **发布-订阅者模式** ，这里我们需要监听用户点击按钮这个动作，但是我们却无法知道用户什么时候去点击，所以我们订阅 按钮上的 `click` 事件，只要按钮被点击时，那么按钮就会向订阅者发布这个消息，我们就可以做对应的操作了
+>
+> 描述出来怎么实现
+>
+> 观察者是个类
+>
+> 这个类有三个方法，订阅一种事件
+>
+> 触发一个事件
+>
+> 移除一个事件，定义好这三个事件
+>
+> 问：观察者和发布订阅模式区别，如何实现发布订阅模式
+>
+> 发布-订阅模式其实是一种对象间一对多的依赖关系，当一个对象的状态发送改变时，所有依赖于它的对象都将得到状态改变的通知。
+>
+> 创建一个对象
+>
+> 在该对象上创建一个缓存列表（调度中心）
+>
+> on 方法用来把函数 fn 都加到缓存列表中（订阅者注册事件到调度中心）
+>
+> emit 方法取到 arguments 里第一个当做 event，根据 event 值去执行对应缓存列表中的函数（发布者发布事件到调度中心，调度中心处理代码）
+>
+> off 方法可以根据 event 值取消订阅（取消订阅）
+>
+> once 方法只监听一次，调用完毕后删除缓存函数（订阅一次）
+>
+> emit实现
+>
+> 在观察者模式中，观察者是知道 Subject 的，Subject 一直保持对观察者进行记录。然而，在发布订阅模式中，发布者和订阅者不知道对方的存在。它们只有通过消息代理进行通信。
+>
+> 在发布订阅模式中，组件是松散耦合的，正好和观察者模式相反。
+
+
+
+ http报文头部有哪些字段? 有什么意义 ? 
+ 移动端高清方案如何解决 ? 
+
+> - 如何保证 界面布局 一致性：不错乱，不变形
+> - 如何保证 字体大小 一致性：大屏显示更大，小屏显示更小或更多
+> - 如何保证 1px边框 一致性：不同的高清屏也在正常显示1px的高度大小
+> - 如何保证 图片清晰度 一致性：不同大小和高清屏下都能看到清晰的图片
+>
+> 如果把这几个问题按重要程度排序的话，我想应该是这样的：
+> 布局 > 字体大小 > 1px边框 > 高清图
+>
+> 了解，应该不会问我
+
+ webpack的原理, loader 和 plugin 是干什么的? 有自己手写过么 ? 
+
+> webpack专题，自己写过就是照着教程写demo
+>
+> oader 用于对模块的源代码进行转换
+>
+> webpack **插件**是一个具有 [`apply`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/apply) 方法的 JavaScript 对象。`apply` 方法会被 webpack compiler 调用，并且在**整个**编译生命周期都可以访问 compiler 对象。
+>
+> 插件可以监听webpacj整个编译周期，然后执行一些事情，然后也能拿到整个编译对象
+>
+> 对plugin了解的还不是很深
+
+ 简述从网页输入url到网页展示的过程发生了哪些事情 ? 
+ SSR 和 [客户端]()渲染有什么区别 , vue是如何实现绑定事件的 ?
+ **简述公司node架构中容灾的实现 ?** 
+ **浏览器事件有哪些过程? 为什么一般在冒泡阶段, 而不是在捕获阶段注册监听? addEventListener 参数分别是什么 ?** 
+ 面向对象如何实现? 需要复用的变量 怎么处理 ? 
+
+> 并且指定了这些 `对象` 需要完成的任务，以及这些 `对象` 如何对外界的刺激做出反应
+>
+> java就是什么都是一个类，然后这个类上定义了很多方法，实例化这个类，然后操作
+>
+> 用类的方式实现，在类中定义很多属性，然后定义很多实例方法和静态方法，也就是所有的实例用的是同一个属性。
+>
+> ```
+> class MyClass {
+>   constructor() {}
+>   set(key, value) {}
+>   get(key) {}
+>   static say(words) {
+>     alert(words)
+>   }
+> }
+> ```
+>
+> 静态方法将不在实例化对象的方法中，因此里面不能有this，使用的时候必须直接`MyClass.say()`，实例化对象不拥有这个方法。静态方法将被共享，因此所用内存减少
+>
+> 实际上，由于JavaScript的语言特性，static关键词修饰的方法相当于：
+>
+> ```js
+> class MyClass {}
+> MyClass.say = function() {}
+> ```
+>
+> 拓展：js类中静态属性（），静态方法（定义在构造函数上Myclass.pp()），私有属性（symbol只暴露get方法）如何实现
+>
+> 静态属性
+>
+> ```javascript
+> class User {
+>   static staticMethod() {
+>     alert(this === User);
+>   }
+> }
+> 
+> User.staticMethod(); // true
+> ```
+>
+> 这实际上跟直接将其作为属性赋值的作用相同：
+>
+> ```javascript
+> class User { }
+> 
+> User.staticMethod = function() {
+>   alert(this === User);
+> };
+> 
+> User.staticMethod(); // true
+> ```
+>
+> 静态的属性也是可能的，它们看起来就像常规的类属性，但前面加有 `static`：
+>
+> ```javascript
+> class Article {
+>   static publisher = "Levi Ding";
+> }
+> 
+> alert( Article.publisher ); // Levi Ding
+> ```
+>
+> 这等同于直接给 `Article` 赋值：
+>
+> ```javascript
+> Article.publisher = "Levi Ding";
+> ```
+
+ 移动端300ms延时的原因? 如何处理? 
+
+>了解
+>
+>移动浏览器 会在 `touchend` 和 `click` 事件之间，等待 300 - 350 ms，判断用户是否会进行双击手势用以缩放文字
+>
+>fastClick 解决方案，
+>
+>原理：移动端，当用户点击屏幕时，会依次触发 `touchstart`，`touchmove`(0 次或多次)，`touchend`，`mousemove`，`mousedown`，`mouseup`，`click`。 `touchmove` 。只有当手指在屏幕发生移动的时候才会触发 `touchmove` 事件。在 `touchstart` ，`touchmove` 或者 `touchend` 事件中的任意一个调用 `event.preventDefault`，`mouse` 事件 以及 `click` 事件将不会触发。
+>
+>了解https://segmentfault.com/a/1190000019281808
+>
+>这300ms带来的卡顿慢慢变得让人难以接受
+>
+>[FastClick](https://link.jianshu.com?t=https://github.com/ftlabs/fastclick) 是 [FT Labs](https://link.jianshu.com?t=http://labs.ft.com/) 专门为解决移动端浏览器 300 毫秒点击延迟问题所开发的一个轻量级的库。FastClick的实现原理是在检测到touchend事件的时候，会通过DOM自定义事件立即出发模拟一个click事件，并把浏览器在300ms之后的click事件阻止掉。
+
+ 主流框架的数据单向/双向绑定实现原理 ? 
+ 简述转行经历, 如何学习 ? 
+
+####  技术二面 
+
+
+
+  为何换工作? 
+
+  JSbridge原理? 
+
+> 有了它 Web 和 Native 可以进行交互
+>
+> 在 JSBridge 的设计中，可以把前端看做 RPC 的客户端，把 Native 端看做 RPC 的服务器端，从而 JSBridge 要实现的主要逻辑就出现了：**通信调用（Native 与 JS 通信）** 和 **句柄解析调用**。（如果你是个前端，而且并不熟悉 RPC 的话
+>
+> JavaScript 调用 Native 的方式，主要有两种：**注入 API** 和 **拦截 URL SCHEME**。
+>
+> 注入方法，拦截js发送的url请求
+
+  Rollup和webpack区别, treeshaking是什么? 
+
+> todo: 大专题，**深入分析（源码）tree-shaking的原理** 
+>
+> 通过分别对Webpack和Rollup的介绍，不难看出，Webpack和Rollup在不同场景下，都能发挥自身优势作用。Webpack对于代码分割和静态资源导入有着“先天优势”，并且支持热模块替换(HMR)，而Rollup并不支持，所以当项目需要用到以上，则可以考虑选择Webpack。但是，Rollup对于代码的Tree-shaking和ES6模块有着算法优势上的支持，若你项目只需要打包出一个简单的bundle包，并是基于ES6模块开发的，可以考虑使用Rollup。
+
+  移动端rem布局如何实现? 
+
+> - 使用rem布局，实质都是通过动态改写html的font-size基准值，来实现不同设备下的良好统一适配；
+> - 网易与淘宝不同 的地方是 ，网易将布局视口设置成了 视觉视口，淘宝将布局视口设置成了物理像素大小，通过 scale缩放嵌入了 视觉视口中；
+> - 容器元素的字体大小都不使用rem，需要额外的media查询；
+>
+> https://segmentfault.com/a/1190000007526917
+>
+> 没看懂。需要一点基础，视口网易将布局视口设置成了 视觉视口，淘宝将布局视口设置成了物理像素大小，通过 scale缩放嵌入了 视觉视口中；
+>
+> **可以最后做为一个专题了解**
+
+---
+
+
+  TCP三次握手的过程, get post请求的区别 ?  
+
+
+  React vue区别 
+
+  virsualDOM实现 
+
+> vnode，就是对真实节点的描述对象
+>
+> VirtualDOM算法主要实现上面步骤的三个函数：element、diff、patch。
+> 1)构建虚拟DOM、
+> 2)通过虚拟DOM构建真正的DOM、
+> 3)生成新的虚拟DOM、
+> 4)比较两颗虚拟DOM树的不同、
+> 5)在真正的DOM元素上应用变量
+
+ 静态文件的浏览器缓存如何实现? 
+ [前端]()跨域方案
+ http 请求包含哪些字段 分别是什么意思 
+ js 有哪些数据类型 如何判断? null 和 undefined区别 应用场景? 
+
+> ```
+> Object.prototype.toString.call(``''``) 
+> ```
+>
+> typeof
+>
+> - 对于基本类型，除 null 以外，均可以返回正确的结果。
+> - 对于引用类型，除 function 以外，一律返回 object 类型。
+> - 对于 null ，返回 object 类型。
+> - 对于 function 返回  function 类型。
+>
+> null是一个数据类型可以当做关键字，undefined是个变量，可以被复制
+>
+> 
+
+ new String('a') 和 'a' 是一样的么? 
+ 移动端如何实现下拉到底部 跟随移动 结束后回弹的动画? 
+
+> 了解
+
+ 移动端如何优化首页白屏时间过长 ? 
+ ES6 generator函数简述 
+ 数组去重实现? 
+ js浮点数运算不精确 如何解决? 
+
+####  技术三面 
+
+ 问了一些关于转行的事情，如何转的[前端]()的以及学习路径
+ DOM基础知识,添加元素,删除元素 
+ DOM节点类型 
+
+> Document 类型**document 对象**是 HTMLDocument (继承自 Document 类型) 的一个实例，表示整个 HTML 页面
+>
+> [`**Element**`](https://developer.mozilla.org/zh-CN/docs/Web/API/Element)是非常通用的基类，所有`Document`对象下的对象都继承它。以下内容主要针对 [`**HTMLElement**`](https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLElement)类型（[**HTML文档**](https://developer.mozilla.org/zh-CN/docs/Web/HTML)）。
+>
+> Attribute 类型该类型在讨论 Element 类型的 attributes 属性已有提及。**元素的特性**在 DOM 中以 Attr 类型表示。尽管他们是节点，但特性去不被认为是 DOM 文档树的一部分。一般**通过 Elment 类型的方法增删改查元素的特性**。
+>
+> DocumentFragment 类型
+>
+> **文档片段**，在添加大量 DOM 节点时可**作为"仓库"**，再一次性添加到文档中，**以减少文档的回流和重绘**。
+>
+> Comment 类型
+>
+> 该类型表示的是**注释节点**。与 Text 类型继承自相同的基类，所以**拥有**`**splitText()**`**之外**的所有字符串操作方法。
+>
+> 文本节点由 Text 类型表示，包含的是可以照字面解释的纯文本内容。纯文本中可以包含转移后的 HTML 字符，但不能包含 HTML 代码。
+>
+> DocumentType 类型
+>
+> 包含着与文档的 doctype 有关的所有信息。对象保存在`**document.doctype**`中。
+
+ 正则表达式如何匹配一段url ?在正则表达式中有哪几种作用? 
+
+> (https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]
+>
+> 
+
+ 移动端优化方式? 离线包是如何实现的? 
+ 聊了一下[项目]()和目前公司
+
+41
+
+---
+
+作者：tsina_沈家老
+链接：https://www.nowcoder.com/discuss/365504
+来源：牛客网
+
+一面 
+
+ 自我介绍 
+ [项目]() 
+ 简单介绍[前端]()模块化，amd，cmd，commonjs es6的module 
+ commonjs 和 es6的module哪个支持异步 
+ async await 和 promise 的关系 
+
+> await 操作符用于等待一个async function返回的一个Promise
+>
+> 1，awiat返回的是一个promise，如果是同步任务，则直接执行promise.resolve
+>
+> await开始是用promise实现的，但是后面为了让同步语法for循环也能实现await方法，改用了generator来实现，添加了自执行的next（）机制
+>
+> todo： 如何执行自执行，复习下await
+>
+> ```
+> function spawn(genF) {
+>   return new Promise(function(resolve, reject) {
+>     const gen = genF();
+>     function step(nextF) {
+>       let next;
+>       try {
+>         next = nextF();
+>       } catch(e) {
+>         return reject(e);
+>       }
+>       if(next.done) {
+>         return resolve(next.value);
+>       }
+>       Promise.resolve(next.value).then(function(v) {
+>         step(function() { return gen.next(v); });
+>       }, function(e) {
+>         step(function() { return gen.throw(e); });
+>       });
+>     }
+>     step(function() { return gen.next(undefined); });
+>   });
+> }
+> ```
+>
+> await是genrator语法糖，是generator函数，用promise封装一个自动执行器，`Promise.resolve(next.value).then(function(v) {`在then中执行下一个next（）
+
+ 口述代码，实现promise.all的polyfill 
+
+> ```js
+>     // promise.all,就是这样实现就是容易忘记了api本身怎么调，以后工作中可以理解+记忆，省去翻api的时间
+>     function myPromiseAll(arr) {
+>       // resolve,reject这个是promise传入的，promise是个可以传入一个处理函数的类
+>       return new Promise((resolve, reject) => {
+>         let result = []
+>         arr.forEach(item => {
+>           item.then((value) => {
+>             result.push(value)
+>             if (result.length == arr.length) {
+>               resolve(result)
+>             }
+>           }, (err) => {
+>             reject(err)
+>           })
+>         })
+>       })
+>     }
+> ```
+>
+> 这种调用一个东西，传入一个函数的经常有，nextTick，promise setTimeOut。就是把这个事件交给对方处理，所以参数是个用户定义函数。
+
+ 复制代码 
+ flex布局，固定高度，左边定宽，右边自适应？
+
+> 右边flex
+
+ 如果子元素不能100%继承高度，怎么实现撑满？ 
+
+> flex默认是水平方向，可以设置align-items:（交叉轴撑开）stretch
+
+ 对ts的理解 
+ ts的泛型是什么作用 
+ **假如监控系统别的组需要用，并且没满足他们的需求，你会怎么处理** 
+
+> 业务场景题
+
+ 二面 
+
+ 设计一个通过拖拽，然后交换位置的组件，给思路就可以。 
+ **假如有2个团队，一个团队想用另一个团队的一个类库，并且还是想在用到的时候才加进来，怎么办？
+ 设计一个组件你会考虑哪些问题？** 
+
+> 做成一个npm包，然后利用按需应用来打包，没答全
+
+ [项目]() 
+
+ 三面（大佬面） 
+
+ 自我介绍 
+ 主要做的是哪些业务？ 
+ 带[项目]()是怎么协调资源的？ 
+
+ **基本上都是和业务相关的，还有和产品、运营如何沟通协作等** 
+
+ 四面 
+ 什么是h5? 
+ 举几个h5的新特性 
+ webview和h5的关系？ 
+ 业务主要用的是哪些方式？ 
+ 感觉四面的问题比较简单，时间也不久，就二十来分钟，可能是因为晚上快下班了吧~
+
+-----
+
+作者：胶带缠身
+链接：https://www.nowcoder.com/discuss/469527
+来源：牛客网
+
+
+
+### 电话面 
+
+  
+
+ 1、一开始让我做了个简单的自我介绍，问我现在在哪里工作，为什么要离职？ 
+
+ 2、目前手头上跟的什么[项目]()什么的。然后让我挑一个最近正在做的[项目]()，聊聊技术栈。然后我找了一个我负责构建的[项目]()，然后从[项目]()背景、人员分配、技术栈说起； 
+
+ 3、紧接着问我为什么选择这个技术栈？ 
+
+ 4、最后问我有什么问题要问他的？然后我问了一个问题，能介绍下您所在部门的业务吗？ 
+
+ 
+
+
+###  一面 
+
+  
+
+ 现场编码： 
+
+ 1、第一道题是考察正则匹配的； 
+
+ 2、第二道题是一道操作数组的题目，对数组进行[排序]()去重。这题是对ES6自带API的考察； 
+
+ 
+
+[复制代码](#)
+
+```
+function merge(arr) {` ` ``if` `(!Array.isArray(arr) || arr.length == ``0``) ``return` `[];` ` ``var ret = [];`  ` ``for` `(var i = ``0``; i < arr.length; i++) {` `  ``// 或者 ret.indexOf(arr[i] == -1)` `  ``if` `(arr.indexOf(arr[i]) == i) {` `    ``ret.push(arr[i]);` `  ``}` ` ``}` ` ` ` ``return` `ret;` `}
+```
+
+ 
+
+
+ 3、第三道题是实现函数的柯里化； 
+
+ 
+
+[复制代码](#)
+
+```
+function composeFunctions() {` `  ``var args = Array.prototype.slice.apply(arguments);` ` ` `  ``var _func = function() {` `    ``if` `(arguments.length === ``0``) {` `      ``return` `func.apply(``this``, args);` `    ``}` `    ` `    ``Array.prototype.push.apply(args, arguments);` `    ``return` `_func;` `  ``}` `  ` `  ``return` `_func;` `}
+```
+
+ 
+
+
+
+ 
+
+ 1、如何用css来实现水平垂直居中。可以用基于vertical-align配合文字基准线的方案来实现； 
+
+> 
+
+ 2、然后是Promise的用法以及实现原理。 
+
+ 3、接着是[前端]()存储方式，以及它们之间的优缺点。 
+
+> cookie
+>
+> `HTTP Cookie`（也叫`Web Cookie`或浏览器`Cookie`）是服务器发送到用户浏览器并保存在本地的一小块数据，它会在浏览器下次向同一服务器再发起请求时被携带并发送到服务器上
+>
+> localstorge
+>
+> sessionStorge
+>
+> `sessionStorage`和`localStorage`的用法是一样的，区别在于`sessionStorage`会在会话关闭也就是浏览器关闭时失效，而`localStorage`是将数据存储在本地，不受关闭浏览器影响，除非手动清除数据
+>
+> indexDb
+>
+> `IndexedDB `就是浏览器提供的本地数据库，它可以被网页脚本创建和操作。`IndexedDB `允许储存大量数据，提供查找接口，还能建立索引
+
+ 4、移动端页面适配解决方案，我的回答是淘宝的flexible.js来做屏幕适配，然后面试官询问了它的实现原理，以及浏览器中几种长度单位（rem、em、px）的特点和区别 
+
+ 5、React、Vue之间的区别和实现原理，另外问了下React中Fibber是什么？ Fibber应该是调度，可以提升react渲染的效率，然而不太清楚具体的实现原理。 
+
+ 6、JS的Event Loop。 
+
+ 7、三次握手和四次挥手。 
+
+ 8、最后问了我最近最有成就感的[项目]()，并介绍下[项目]()的技术方案，哪些地方让你特有成就感，还有遇到的困难是什么，如何解决的？ 
+
+ 
+
+
+###  二面 
+
+  
+
+ 1、首先让我做了下自我介绍，自我介绍中粗略地介绍了我目前做的业务，让我挑一个最熟悉的聊聊，具体从技术方案、遇到的问题、解决情况来阐述。 
+
+ 2、紧接着问了几个ts相关的问题； 
+
+ 3、离职的原因是什么？ 
+
+ 4、最后就问我还有什么问题吗？
+
+----
+
+***\*[阿里巴巴](https://www.nowcoder.com/jump/super-jump/word?word=阿里巴巴)\****
+
+\1. 问了些nodejs和.net/java/php有什么区别，有什么借鉴意义。
+
+\2. 第二个问题是高并发访问如何处理。
+
+> 大学问：负载均衡，静态资源预先加载，拦截恶意操作，多线程处理，
+
+\3. 如何优化页面性能。
+
+\4. Unity远离。
+
+---
+
+作者：我可以可易科
+链接：https://www.nowcoder.com/discuss/477320
+来源：牛客网
+
+
+
+***\*[阿里巴巴]()\**** 
+
+ \1. 一开始让我做自我介绍， 
+
+ \2. 然后聊了聊为什么辞职， 
+
+ \3. 然后开始问一些[前端]()的技术问题。主要问了HTML, CSS和JS的相关问题。 
+
+ \4. 问什么是盒子模型？我回答content, padding, border, margin。 
+
+ \5. 问说说你对[前端]()的认识； 
+
+ \6. 问你觉作为一个好的[前端]()需要具备的能力有哪些？我回答吃苦耐劳，技术好，沟通能力强。 
+
+ \7. 问说一下position里的元素，我回答absolute, fixed,...忘了 
+
+ \8. 问知道什么是闭包吗？
+
+----
+
+作者：我真的还想再活500年
+链接：https://www.nowcoder.com/discuss/477330
+来源：牛客网
+
+
+
+***\*[阿里巴巴]()\**** 
+
+ 总共经历了6轮，最后顺利拿到offer； 
+
+ 第一轮为电话面试，面试官非常和谐，问会[前端]()哪些技术栈，以及如何将这些技术使用到实际工作中；我主要说到[前端]()模块化、[前端]()自动化构建、[前端]()性能优化等技术点； 
+
+ 第二轮也是电话面试的形式，看面试官的心情，如何该岗位非常缺人，面试会稍微简单点，或者时间会比较短，主要考量下你的工作经验、[项目]()经验等，等待下一轮进入现场面试； 
+
+ 第三轮，现场面试，那就非常细了，细到他们都有一套面试题似得，什么原型链、继承、call和aplly的区别、模板引擎等等，持续时间至少一个小时以上，所以基本功一定要非常扎实； 
+
+ 第四轮就是你在团队的boss问问题了，主要问些智力题啊、待遇相关问题； 
+
+ 第五轮是技术部的大boss了，主要介绍下所在平台做什么事情、前景啊等等，就是让你羡慕，想加入呗，同时也会问到当前待遇和期望待遇问题； 
+
+ 最后一轮是hr面了，这轮主要是价值观不要有问题就基本过了，主要问些以前的工作经验、产出、对加班的评价、对以前老大的评价，关键要做到诚实、有积极的正能量、不玻璃心，基本就能过；
+
+---
+
+我的页面很卡你会怎么排查
+
+如果我的页面只上线三天你会怎么设计
+
+-----
+
+作者：我可以可易科
+链接：https://www.nowcoder.com/discuss/478599
+来源：牛客网
+
+
+
+***\*[阿里巴巴]()\**** 
+
+ \1. 最先是自我介绍，详细介绍工作经验，追问了很多问题，还是要好好回顾总结一下自己的东西。 
+
+ \2. web[前端]()优化； 
+
+ \3.  事件冒泡（选项卡的实现）； 
+
+ \4. CSS布局相关 ； 
+
+ \5. 应该用float吗？ 
+
+> 
+
+ \6. 模块化编程； 
+
+ \7. 为什么有闭包； 
+
+ \8. 延迟请求； 
+
+ \9. 问详细描述你能记住的html标签
+
+----
+
+1，弄成一个独立模块，
+
+----
+
+稳:
+笔试题是手写防抖
+
+稳:
+另外一道我记得也简单，我忘记了
+
+稳:
+webpack问的比较细，因为我简历写了
+
+稳:
+vue源码实现原理，diff简介
+
+shuing:
+好，我也写了webpack，我好好看看
+
+稳:
+web安全
+
+重点是项目场景题，多问问其他大佬，看看有没有思路。
+
+---
+
+https://ac.nowcoder.com/discuss/454033?channel=channelB&source_id=discuss_terminal_discuss_sim
+
+要吐了，面试题太多，看吐了

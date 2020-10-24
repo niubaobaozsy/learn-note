@@ -20,6 +20,8 @@ websocket是Html5 提供的一个浏览器与服务器间进行全双工通讯�
    Sec-WebSocket-Protocol: chat, superchat
    Sec-WebSocket-Version: 13
    Sec-WebSocket-key: XXXX
+   Sec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk=
+  
   复制代码
   ```
 
@@ -55,7 +57,7 @@ websocket是Html5 提供的一个浏览器与服务器间进行全双工通讯�
   上面依次介绍下
 
   1. HTTP/1.1 101 Switching Protocols  就是返回101状态码
-  2. **Sec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk= 对Sec-WebSocket-key的加密 同意握手建立链接 客户端收到 Sec-WebSocket-Accept后 将本地的Sec-WebSocket-key 编码做一个对比来验证**
+  2. **Sec-WebSocket-Accept: HSmrc0sMlYUkAGmm5OPpG2HaGWk= 对Sec-WebSocket-key的加密 同意握手建立链接 客户端收到 Sec-WebSocket-Accept后 将本地的·Sec-WebSocket-key 编码做一个对比来验证**
 
 ## 七、连接保持+心跳
 

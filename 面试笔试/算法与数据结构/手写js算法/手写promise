@@ -146,6 +146,40 @@ then的链式调用，每调用一个then，都是一个新的promise。
 // 每个this单独的回调，所以，回调这中只需要一个元素就行
 console.log('then'+this.onFulfilledCallbacks.length)
 这个变量，只会有一个回调函数
+
+
+不对，是then中把成功和失败的回调函数放入回调队列中，当异步任务结束，触发resolve方法，把成功回调的函数执行。
+
+上述代码的思路也很简单，就是通过setTimeout机制，将resolve中执行回调的逻辑放置到JS任务队列末尾，以保证在resolve执行时，then方法的回调函数已经注册完成.
+
+所以，为啥说promise中then是个微任务
+then函数是同步的，他会讲回调函数放入队列中。但是在new promise中，resolve方法的调用，一定是个异步任务
+加入延时机制
+细心的同学应该发现，上述代码可能还存在一个问题：如果在then方法注册回调之前，resolve函数就执行了，怎么办？比如promise内部的函数是同步函数：
+我现在支持下面这种延迟。这样就保证then的回调函数都注册完成之后，resolve再执行
+// 例3
+function getUserId() {
+    return new Promise(function (resolve) {
+        resolve(9876);
+    });
+}
+getUserId().then(function (id) {
+    // 一些处理
+});
+这显然是不允许的，Promises/A+规范明确要求回调需要通过异步方式执行，用以保证一致可靠的执行顺序。因此我们要加入一些处理，保证在resolve执行之前，then方法已经注册完所有的回调。我们可以这样改造下resolve函数:
+
+function resolve(value) {
+    setTimeout(function() {
+        callbacks.forEach(function (callback) {
+            callback(value);
+        });
+    }, 0)
+} 
+上述代码的思路也很简单，就是通过setTimeout机制，将resolve中执行回调的逻辑放置到JS任务队列末尾，以保证在resolve执行时，then方法的回调函数已经注册完成.
+
+但是，这样好像还存在一个问题，可以细想一下：如果Promise异步操作已经成功，这时，在异步操作成功之前注册的回调都会执行，但是在Promise异步操作成功这之后调用的then注册的回调就再也不会执行了，这显然不是我们想要的。
+
+
 ```
 
 ![image-20200919110115686](imge/image-20200919110115686.png)
