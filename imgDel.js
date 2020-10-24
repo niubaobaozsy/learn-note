@@ -30,8 +30,7 @@ function checkImg(path) {
       let img = path.pop()
       path.pop()
       let url = path.join('/')
-      console.log(url)
-      console.log(file)
+      console.log('current dir:' + url)
       // git grep 命令会执行 perl 的正则匹配所有满足冲突条件的文件,  用node进程执行命令，返回的结果是0，1如何拿到git show里面打印的内容？
       try {
         results = execSync(`git grep -r "${img}" "${url}"`, { encoding: 'utf-8' })
@@ -39,7 +38,7 @@ function checkImg(path) {
       } catch (e) {
         fs.unlinkSync(`./${file}`);
         flag = true
-        console.log(file)
+        console.log('del img: ' + file)
       }
     })
     console.log(flag)
@@ -69,7 +68,6 @@ list.forEach(file => {
       let tmp = file.split('/')
       tmp.pop()
       path = tmp.join('/')
-      console.log(path)
       checkImg(path)
     }
   }
