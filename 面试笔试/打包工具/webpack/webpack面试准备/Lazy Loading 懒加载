@@ -203,3 +203,7 @@ null：key对应的文件延迟加载；
 **总结一下：webpack全局变量installchunks来标志模块的加载状态，0是已加载，数组正在加载，null是懒加载，undefined是未加载**
 
 **当遇到要懒加载的模块，先判断缓存变量中是否已经有了该模块，有就不再加载，，没有就创建script标签，把他的src定义成对应的文件,(会给他添加script加载失败的毁掉，onerror方法，限时失败2分钟，如果超过了，就把全局对象中installchunks中该模块标志为0未加载)。然后创建promise对象。加载完成之后，会将代码缓存到变量里面，然后触发promise的resolve，并返回一个promise。在then之后的回调拿到模块的函数代码。拿到之后在回调中，执行用户定义的业务代码。**
+
+**就创建一个promise，并将resolve、reject、promise构成的数组存储在上边说过的installedChunks缓存对象属性中。然后创建一个script标签加载对应的文件**
+
+文件最后，就调用放在全局变量中的resolve执行

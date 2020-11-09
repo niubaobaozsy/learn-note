@@ -54,3 +54,5 @@
       return dataString;
     }
 ```
+
+ajax就是xmlhttprequest

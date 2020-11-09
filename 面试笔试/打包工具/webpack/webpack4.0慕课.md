@@ -627,9 +627,46 @@ true等价于上面的配置
 
 loader就是一个函数，并且不能是箭头函数，因为webpack会给这个函数绑定this。如果是箭头函数，就无法使用wbepack提供的一些方法。
 
+**loader的this是什么**
+
+```js
+const options = loaderUtils.getOptions(this)
+  return source.replace('dell', options.name);
+```
+
+可以看出有很多的配置，还有内置的一些方法，关于翻译文件的
+
+
+
+没有成功，
+
+一般都用loader-utils来开发loader，可以方便拿到很多信息
+
+> 没搜到，打印下
+
+**plugin为啥要用那种方式写**
+
+一般都是`new Plugin()`这种形式使用
+
+compiler和compilcation
+> 看到这里可能会问compiler是啥，compilation又是啥？、
+
+- **Compiler 对象包含了 Webpack 环境所有的的配置信息**，包含 options，loaders，plugins 这些信息，这个对象在 Webpack 启动时候被实例化，它是全局唯一的，可以简单地把它理解为 Webpack 实例；
+- **Compilation 对象包含了当前的模块资源、编译生成资源、变化的文件等**。**当 Webpack 以开发模式运行时，每当检测到一个文件变化，一次新的 Compilation 将被创建**。Compilation 对象也提供了很多事件回调供插件做扩展。通过 Compilation 也能读取到 Compiler 对象。
+
+#### Compiler 和 Compilation 的区别在于：
+
+Compiler 代表了整个 Webpack 从启动到关闭的生命周期，而 Compilation 只是代表了一次新的编译。
+
+深入了解下loader和plugin
+
 ![1583916474429](imge/1583916474429.png)![1583916535796](imge/1583916535796.png)
 
-官网文档中，api处，有关于loader所有的API，有所有的this中可以用的变量![1583916854489](imge/1583916854489.png)
+官网文档中，api处，有关于loader所有的API，有所有的this中可以用的变量
+
+
+
+![1583916854489](imge/1583916854489.png)
 
 ![1583916946214](imge/1583916946214.png)
 

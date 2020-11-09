@@ -2,15 +2,15 @@
 
 ----
 
-15.1 Node上如何处理异常情况？（Ps.我回答的是开发调试。。。找js文件）
+**15.1 Node上如何处理异常情况？（Ps.我回答的是开发调试。。。找js文件）**
 
 1，try catch
 
-2，domain收集错误，回调中收集异常
+**2，domain收集错误，回调中收集异常**
 
 15.2 已经上线的项目，出问题，怎么样去处理异常？
 
-
+**异常收集系统**（看下前端监控专题）
 
 收集异常，然后进行处理
 
@@ -28,7 +28,7 @@ xhr.onload = function () {
 
 
 
-圣杯布局是啥
+**圣杯布局是啥**不用flex的解法
 
 左右定宽，中间自适应
 
@@ -61,12 +61,12 @@ css样式：
 		}
 
 		.left {
-			position:relative;
+			position:relative;// 抄在小抄上面
 			width: 100px;
 			float: left;
-			left:-100px;
+			left:-100px;// 
 			height: 80px;
-			margin-left: -100%;
+			margin-left: -100%;// 
 			background: yellow;
 		}
 
@@ -299,6 +299,8 @@ nginx反向代理**正向代理代理客户端，反向代理代理服务器。*
 
  git reset HEAD <filename>
 
+git revert 
+
 ##### 16、你了解React吗？
 
 因为不是很了解，这里我就谈及了mvvm和mvc的区别，也说明了为啥选择学习Vue，作为学生目前了解不是很深入
@@ -442,5 +444,9 @@ todo: 看不懂这一串：?=^.{3,255}$)，面试前一定要搞懂
 
 
 src:要加载的资源 href：外链
+
+
+
+1，正则表达式
 
 ​                                    

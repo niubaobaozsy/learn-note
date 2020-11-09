@@ -1,0 +1,107 @@
+```js
+ fs.readFile('./big.file', (err, data) => {
+        if(err) throw err;
+        res.end(data);
+    })
+```
+
+```js
+const fs = require('fs');
+const server = require('http').createServer();
+
+server.on('request', (req, res) => {
+  const src = fs.createReadStream('./big.file');
+  src.pipe(res);
+});
+
+server.listen(8000);
+```
+
+> 把一个流通过pipe方法导入，不用先放内存里面，节省了很多内存
+
+在 Node.js 中有四种基本的流类型：Readable（可读流），Writable（可写流），Duplex（双向流），Transform（转换流）。
+
+- 可读流是数据可以被消费的源的抽象。一个例子就是 fs.createReadStream 方法。
+- 可读流是数据可以被写入目标的抽象。一个例子就是 fs.createWriteStream 方法。
+- 双向流即是可读的也是可写的。一个例子是 TCP socket。
+- 转换流是基于双向流的，可以在读或者写的时候被用来更改或者转换数据。一个例子是 zlib.createGzip 使用 gzip 算法压缩数据。你可以将转换流想象成一个函数，它的输入是可写流，输出是可读流。你或许也听过将转换流成为“通过流（through streams）”。
+
+所有的流都是 EventEmitter 的实例。触发它们的事件可以读或者写入数据，然而，我们可以使用 pipe 方法消费流的数据。
+
+## Stream 事件
+
+除了从一个可读源流读取和往一个目标流中写入数据，pipe 方式自动管理一些事情。例如，处理错误，文件末尾，或者当一个流比另一个快或者满的情形。
+
+然而，流可以被事件直接消费。这里有一个 pipe 方法读取数据等价的使用事件消费流的代码：
+
+```js
+# readable.pipe(writable)
+readable.on('data', (chunk) => {
+  writable.write(chunk);
+});
+readable.on('end', () => {
+  writable.end();
+});
+```
+
+
+
+**pipe会自动接管，两个流读写不一致问题，不用去监听事件**
+
+```js
+fs.createReadStream(file)
+  .pipe(zlib.createGzip())
+  .pipe(reportProgress)
+  .pipe(fs.createWriteStream(file + '.zz'))
+  .on('finish', () => console.log('Done'));
+```
+
+结合流的应用没有结束。例如，如果我们需要在 gzip 之前或者之后加密文件，我们需要做的就是以一种我们需要的顺序 pipe 到另一个 transform 流。我们可以使用 Node 的 crypto 模块：
+
+```js
+const crypto = require('crypto');
+// ...
+fs.createReadStream(file)
+  .pipe(zlib.createGzip())
+  .pipe(crypto.createCipher('aes192', 'a_secret'))
+  .pipe(reportProgress)
+  .pipe(fs.createWriteStream(file + '.zz'))
+  .on('finish', () => console.log('Done'));
+```
+
+---
+
+如果你了解 [生产者和消费者问题](https://zh.wikipedia.org/zh-hans/生产者消费者问题) 的解法，那理解 stream 就基本没有压力了，它不仅仅是资料的起点和落点，还包含了一系列状态控制，可以说一个 stream 就是一个状态管理单元
+
+![node-stream-non-flowing](http://www.barretlee.com/blogimgs/2017/06/06/node-stream-non-flowing.png)
+
+缓存池来做中间，生成消费
+
+```
+this._stdout,stream.write(string, errorhandler);
+```
+
+---
+
+# Node.js Stream(流)
+
+Stream 是一个抽象接口，Node 中有很多对象实现了这个接口。例如，对http 服务器发起请求的request 对象就是一个 Stream，还有stdout（标准输出）。
+
+Node.js，Stream 有四种流类型：
+
+- **Readable** - 可读操作。
+- **Writable** - 可写操作。
+- **Duplex** - 可读可写操作.
+- **Transform** - 操作被写入数据，然后读出结果。
+
+所有的 Stream 对象都是 EventEmitter 的实例。常用的事件有：
+
+- **data** - 当有数据可读时触发。
+- **end** - 没有更多的数据可读时触发。
+- **error** - 在接收和写入过程中发生错误时触发。
+- **finish** - 所有数据已被写入到底层系统时触发。
+
+pipe
+
+---
+

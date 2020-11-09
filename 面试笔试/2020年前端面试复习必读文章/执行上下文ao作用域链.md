@@ -78,6 +78,18 @@ var a=2
 
 
 
+```
+    function foo(a) {
+        console.log( a + b );
+        b = a;
+    }
+    foo( 2 );12345
+```
+
+报错：ReferenceError: b is not defined （lhs左查询，给左边变量赋值，rhs右边的变量，只是查询这个值）
+
+给变量赋值，这个值不在会报错，如果只是查询这个值，没查到会全局创建
+
 - 核心重点：变量和函数在内的所有声明都会在任何代码被执行前首先 被处理。
 - 函数运行的瞬间，创建一个AO (Active Object 活动对象)运行载体。
 

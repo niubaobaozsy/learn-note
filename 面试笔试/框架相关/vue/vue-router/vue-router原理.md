@@ -1,4 +1,4 @@
-根据官网示例，可以看出实现 `vue-router` 大概需要经过一下几步：
+ 根据官网示例，可以看出实现 `vue-router` 大概需要经过一下几步：
 
 1、将 `VueRouter` 插件注入 `Vue` 中
 
@@ -270,7 +270,7 @@ history：浏览器动作，回调，触发popstate时间，点击跳转，调�
 
 ----
 
-对于路由注册来说，核心就是调用 `Vue.use(VueRouter)`，使得 VueRouter 可以使用 Vue。然后通过 Vue 来调用 VueRouter 的 `install` 函数。在该函数中，核心就是给组件混入钩子函数和全局注册两个路由组件。
+对于路由注册来说，核心就是调用 `Vue.use(VueRouter)`，使得 VueRouter 可以使用 Vue。然后通过 Vue 来调用 VueRouter 的 `install` 函数。在该函数中，**核心就是给组件混入钩子函数和全局注册两个路由组件。**
 
 在实例化 VueRouter 的过程中，核心是创建一个路由匹配对象，并且根据 mode 来采取不同的路由方式。
 

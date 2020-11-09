@@ -26,7 +26,7 @@ export function initState (vm: Component) {
 
 在`get`中，向依赖收集器添加了监听
 
-在mount时，实例了一个`Watcher`，将收集器的目标指向了当前`Watcher`
+**在mount时**，实例了一个`Watcher`，**将收集器的目标指向**了当前`Watcher`
 
 在`data`值发生变更时，触发`set`，触发了依赖收集器中的所有监听的更新，来触发`Watcher.update`
 

@@ -186,7 +186,6 @@ var levelOrder = function(root) {
       res.push(currentLevel);  
   }
   return res;
-
 };
 ```
 

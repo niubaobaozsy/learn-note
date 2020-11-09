@@ -63,7 +63,7 @@ exports.fork = function fork(modulePath /* , args, options */) {
 复制代码
 ```
 
-通过fork创建子进程之后，父子进程直接会创建一个IPC（进程间通信）通道，方便父子进程直接通信，在js层使用 `process.send(message)` 和 `process.on('message', msg => {})` 进行通信。而在底层，实现进程间通信的方式有很多，Node的进程间通信基于libuv实现，不同操作系统实现方式不一致。在*unix系统中采用Unix Domain Socket方式实现，Windows中使用命名管道的方式实现。
+**通过fork创建子进程之后，父子进程直接会创建一个IPC（进程间通信）通道，方便父子进程直接通信，在js层使用 `process.send(message)` 和 `process.on('message', msg => {})` 进行通信**。而在底层，实现进程间通信的方式有很多，Node的进程间通信基于libuv实现，不同操作系统实现方式不一致。在*unix系统中采用Unix Domain Socket方式实现，Windows中使用命名管道的方式实现。
 
 ![img](https://user-gold-cdn.xitu.io/2019/1/8/1682b1256ac1011e?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 

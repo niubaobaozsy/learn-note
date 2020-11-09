@@ -1,0 +1,7 @@
+axios
+
+axios再浏览器还是用的xhrhttprequest对象，node用的http模块
+
+很简单
+
+其中最核心的依赖是浏览器提供的XMLHttpRequest对象，它扮演的角色相当于秘书，使得浏览器可以发出HTTP请求与接收HTTP响应。浏览器接着做其他事情，等收到XHR返回来的数据再渲染页面。
