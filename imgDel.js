@@ -28,24 +28,24 @@ function checkImg(path) {
   })
 
 }
-let a = execSync('git diff --name-only HEAD~ HEAD')
-let list = a.toString('utf-8')
-list = list.split('\n')
-list.forEach(file => {
-  if (file !== '') {
-    let ext = file.split('/').pop()
-    ext = ext.split('.')
-    if (ext.length > 1) {
-      ext = ext[1]
-    } else {
-      ext = ''
-    }
-    if (ext == 'md' || ext == '') {
-      let tmp = file.split('/')
-      tmp.pop()
-      path = tmp.join('/')
-      checkImg(path)
-    }
-  }
-})
+// let a = execSync('git diff --name-only HEAD~ HEAD')
+// let list = a.toString('utf-8')
+// list = list.split('\n')
+// list.forEach(file => {
+//   if (file !== '') {
+//     let ext = file.split('/').pop()
+//     ext = ext.split('.')
+//     if (ext.length > 1) {
+//       ext = ext[1]
+//     } else {
+//       ext = ''
+//     }
+//     if (ext == 'md' || ext == '') {
+//       let tmp = file.split('/')
+//       tmp.pop()
+//       path = tmp.join('/')
+//       checkImg(path)
+//     }
+//   }
+// })
 // 怎么把这些字符串转数组，然后再判断是不是md，是就把对应的img文件夹下所有的图片检查下。。
